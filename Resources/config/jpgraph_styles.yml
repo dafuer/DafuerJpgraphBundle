@@ -1,0 +1,145 @@
+# Autor: David Fuertes
+# github: dafuer
+
+# Here you can define you graph styles.
+# The rules are simply: Only one level of nesting. Two level only for style tag.
+# One element one object
+# Style tag is remplaced with de values of the linked tag
+
+    
+# all options are...
+
+#generic_graph: tag_name
+#    graph.width: integer
+#    graph.height: integer
+#    graph.scale: XXXXXXXXXXXXX
+#    graph.box: boolean
+#    graph.title: string
+#    graph.title.font: string XXXX
+#    graph.xaxis.ticklabels: array # Array de valores o %XDATA% para referirse a los valores del array de X.
+#    graph.yaxis.hidezerolabel: boolean
+#    graph.yaxis.hideline: boolean
+#    graph.xgrid.show: true
+#    graph.xgrid.linestyle: "solid"
+#    graph.xgrid.color: '#E3E3E3'   
+#    graph.img.antialiasing: false
+#    graph.legend.frameweight: integer
+#    graph.margincolor: color
+#    graph.frame: [boolean,color, integer] #[draw it?, color, width]
+#
+#generic_lineplot:
+#    lineplot.color: color
+#    lineplot.weight: integer
+#    lineplot.legend: string
+#    lineplot.max_ptos_to_mark: integer #If #points < max_ptos_to_mark, marks are used. If -1 never used. if 0 never use mark. if -1 always use mark.
+#    lineplot.mark.color: color
+#    lineplot.mark.width: integer
+
+
+# You can put here your styles. If you want that the examples run properly, you can't remove example styles
+
+graph_example: 
+    graph.width: 300   
+    graph.height: 250
+    graph.scale: "textlin" 
+    graph.box: false
+    graph.antialiasing: false
+    graph.title: "My graph"
+    
+    
+
+
+graph_example2: 
+    style: [ "graph_example" ]
+    graph.width: 600   
+    graph.height: 400
+    graph.scale: "intlin" 
+    graph.box: false
+    graph.antialiasing: false
+    
+
+    
+xaxis_example: 
+    graph.xaxis.ticklabels: [ 'A', 'B', 'C', 'D' ]
+    graph.xaxis.linestyle: "solid"
+    
+lineplot_example:
+    style: [ xaxis_example , yaxis_timeserie , lineplot_mark_timeserie ]
+    lineplot.color: "#6495ED"
+    lineplot.legend: 'Line1'
+    graph.xaxis.labelangle: 0 
+
+
+
+#This are default values. All value must exist.
+
+graph_timeserie:
+    style: [  title_timeserie , xgrid_timeserie , legend_timeserie ]
+    graph.width: 300   
+    graph.height: 250
+    graph.scale: "intlin" 
+    graph.box: false
+    graph.title: ''
+    graph.img.antialiasing: false
+    graph.img.margin: [60, 20, 20, 80]
+    graph.margincolor: "#FFFFFF"
+    graph.frame: [false,'#555555', 1]
+    graph.clipping: true
+    
+   
+
+
+legend_timeserie:
+    graph.legend.frameweight: 1
+  
+xaxis_timeserie: 
+    #graph.xaxis.ticklabels: [ 'a', 'b', 'c', 'd' ]
+    graph.xaxis.title: ''
+    graph.xaxis.labelangle: 90 
+    graph.xaxis.labelformatcallback: AutoTimeCallback
+    graph.xaxis.pos: min    
+    
+yaxis_timeserie: 
+    graph.yaxis.hidezerolabel: true
+    graph.yaxis.hideline: false
+    graph.yaxis.title: ''
+    graph.yaxis.titlemargin: 45
+   
+                 
+              
+title_timeserie: 
+    graph.title: ''
+        
+xgrid_timeserie: 
+    graph.xgrid.show: true
+    graph.xgrid.linestyle: "solid"
+    graph.xgrid.color: '#E3E3E3'
+    graph.xgrid.linestyle: "solid"
+    
+ygrid_timeserie:
+    graph.ygrid.fill: [true, '#FFFFFF@0', '#CCCCDD@0']
+    
+    
+lineplot_mark_timeserie: 
+    lineplot.max_ptos_to_mark: -1
+    lineplot.mark.color: %lineplot_color%
+    lineplot.mark.width: 3
+    lineplot.mark.type: MARK_X
+    
+    
+lineplot_timeserie:
+    style: [ xaxis_timeserie , yaxis_timeserie , lineplot_mark_timeserie, ygrid_timeserie]
+    lineplot.color: "#6495ED"
+    lineplot.weight: 1
+    lineplot.legend: ''
+    #lineplot.reescale: true
+    graph.yscale.autoticks: true
+    graph.xaxis.labelformatcallback:  AutoTimeCallback
+    graph.xaxis.labelangle: 90    
+
+errorlineplot_timeserie:
+    style: [ xaxis_timeseriet , yaxis_timeserie , lineplot_mark_timeserie, ygrid_timeserie]
+    lineplot.color: "#6495ED"
+    lineplot.weight: 1
+    lineplot.legend: ''
+    

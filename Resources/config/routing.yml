@@ -1,0 +1,26 @@
+# Autor: David Fuertes
+# github: dafuer
+
+#JpgraphBundle_homepage:
+#    pattern:  /jpgraph
+#    defaults: { _controller: DafuerJpgraphBundle:Default:index }
+
+
+JpgraphBundle_test1:
+    pattern:  /graph/test1
+    defaults: { _controller: DafuerJpgraphBundle:Default:test1 }
+    
+JpgraphBundle_graph_test1:
+    pattern:  /graph/graphtest1
+    defaults: { _controller: DafuerJpgraphBundle:Default:graphtest1 }
+    
+JpgraphBundle_graph_draw:
+    pattern:  /graph/draw
+    defaults: { _controller: DafuerJpgraphBundle:Default:draw }
+    
+JpgraphBundle_graph_style_show:
+    pattern:  /graph/style/{style_name}/show
+    defaults: { _controller: DafuerJpgraphBundle:Default:styleshow }
+    
+
+    

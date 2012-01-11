@@ -1,0 +1,10 @@
+
+parameters:
+    jpgraph.class: Dafuer\JpgraphBundle\Jpgrapher
+    jpgraph.config_file: '%kernel.root_dir%/config/jpgraph_styles.yml'
+
+services:
+    jpgraph:
+        class: %jpgraph.class%
+        arguments: [%jpgraph.config_file%]
+
