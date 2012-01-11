@@ -4,8 +4,8 @@ How to install
 - add deps
 
 [DafuerJpgraphBundle]
-    git=http://github.com/Dafuer/DafuerJpgraphBundle.git
-    target=/bundles/Dafuer/JpgraphBundle
+    git=http://github.com/dafuer/DafuerJpgraphBundle.git
+    target=bundles/Dafuer/JpgraphBundle
 
 - vendor install
 
