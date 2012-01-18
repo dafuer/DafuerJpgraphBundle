@@ -29,3 +29,10 @@ DafuerJpgraphBundle:
 
 - Download and unzip Jpgraph library in vendor/jpgraph
 
+
+
+
+Note: If you want to disable imageantialias you must open the file /vendor/jpgraph/src/gd_image.inc.php, find the function SetAntiAliasing and comment this line out like this:
+1
+// JpGraphError::RaiseL(25128);//('The function imageantialias() is not available in your PHP installation. Use the GD version that comes with PHP and not the standalone version.')
+Update (20110215): Comment out just this line, not the whole function :)

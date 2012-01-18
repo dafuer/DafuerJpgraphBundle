@@ -22,5 +22,13 @@ JpgraphBundle_graph_style_show:
     pattern:  /graph/style/{style_name}/show
     defaults: { _controller: DafuerJpgraphBundle:Default:styleshow }
     
+JpgraphBundle_graph_viewer:
+    pattern:  /graph/viewer
+    defaults: { _controller: DafuerJpgraphBundle:Default:viewer }
+    
+JpgraphBundle_graph_insertgraph:
+    pattern:  /graph/insertgraph
+    defaults: { _controller: DafuerJpgraphBundle:Default:insertgraph }
+    
 
     

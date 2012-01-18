@@ -1,0 +1,150 @@
+<script src="{{ asset('js/jquery-1.6.2.min.js') }}" type="text/javascript"></script>
+<h1>Graph Viewer</h1>
+<BR/>
+<BR/>
+
+
+<div id="forms_container"></div>
+
+<BR/>
+<div style="text-align: right" width="100%">
+    <input type="button" value="Add Graph" onClick="clickAddForm()" />
+    <br/>
+    <BR/>
+    <input type="button" value="Remove Graph" onClick="clickRemoveForm()" />
+</div>
+
+<BR/>
+
+{# echo link_to_function("Generate url","refreshURL()") #}
+<br/>
+<span style="font-size: small">You can use this link to return to this page displaying the same graphics</span>
+<br/>
+<textarea id="url" cols="50" rows="5">
+</textarea>
+
+
+
+
+
+<script type="text/javascript">
+// Number of initial forms
+var num=0;
+
+function clickAddForm(urlopts){
+
+    urlopts = urlopts || null;
+    
+    if(urlopts==null){
+        var ph= document.getElementById('graphviewercombineform0_graphviewerform0_ph');
+        var first= document.getElementById('graphviewercombineform0_graphviewerform0_first');
+        var last= document.getElementById('graphviewercombineform0_graphviewerform0_last');
+        var dataserie= document.getElementById('graphviewercombineform0_graphviewerform0_dataserie');
+
+
+        urlopts="";
+        if(ph!=null && ph.value!="") urlopts+="&ph="+ph.value;
+        if(first!=null && first.value!="") urlopts+="&first="+first.value;
+        if(last!=null && last.value!="") urlopts+="&last="+last.value;
+        if(dataserie!=null && dataserie.value!="") urlopts+="&dataserie="+dataserie.value;
+    }
+     
+    $("#forms_container").append(addForm(urlopts));
+}
+
+
+function addForm(urlopts){
+    urlopts = urlopts || null;;
+
+      var url='{{ path("JpgraphBundle_graph_insertgraph") }}'+'?num='+num;
+
+     if(urlopts!=null && urlopts!="") url+=urlopts;
+
+
+  var r = $.ajax({
+    type: 'GET',
+    url: url,
+    async: false
+  }).responseText;
+
+  num++;
+
+  return r;    
+}
+
+function clickRemoveForm(urlopts){
+    if(num>1){
+        num--;
+        var table=document.getElementById('table_for_graphviewercombineform'+num );
+        var padre=table.parentNode;
+        var removed=padre.removeChild(table);
+    }
+}
+</script>
+
+
+<script type="text/javascript">
+{% if numofgraphs is null %}
+    clickAddForm('{{ url|raw }}');
+{% else %}
+   {% for concreteurl in url %}  ?>
+        clickAddForm('{{ concreteurl }}');
+    {% endfor %}
+{% endif %}
+</script>
+
+
+
+{#
+<script type="text/javascript">
+
+
+function loading(element){
+    div=document.getElementById(element);
+    div.innerHTML='<?php echo image_tag('loading.gif') ?>';
+}
+
+
+
+</script>
+
+<script type="text/javascript">
+    function refreshURL(){
+        // Para obtener la URL total la genero a partir de todas las graficas que haya
+        textarea= document.getElementById('url');
+        textarea.innerHTML="http://www.caelis.uva.es/data/viewer?";
+        var url=new String();
+        for(var i=0;i<num;i++){
+            tempurl=new String();
+            //obtengo el div
+            div=document.getElementById('graphviewercombineform'+i);
+            //El primer elemento del div es la imagen, la obtengo y me quedo con su url
+            tempurl=new String(div.firstChild.src);
+            //Me quedo con la parte de la url que corresponde a los parametros y obvio la par de www.caelis.uva.es
+            tempurl=tempurl.slice(tempurl.indexOf("?"),tempurl.length);
+            //Cambio ? por &
+            tempurl=tempurl.replace("?", "&");
+            //Anyado a cada grafica su numero de grafica
+            tempurl=tempurl.replace(/&/g, "&"+i);
+            url+=tempurl;
+
+        }
+        // Elimino el primer caracter (&) y concateno la opcion del numero de graficas
+        url=url.slice(1,url.length)+"&numofgraphs="+i;
+        textarea.innerHTML+=url;
+    }
+</script>
+
+
+
+#}
+
+
+
+
+
+
+
+
+
+
