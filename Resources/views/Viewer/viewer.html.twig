@@ -1,0 +1,51 @@
+
+<script type="text/javascript" src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+<script type="text/javascript" src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
+
+<h1>Graph Viewer</h1>
+<BR/>
+<BR/>
+
+
+<div id="forms_container"></div>
+
+<BR/>
+<div style="text-align: right" width="100%">
+    <input type="button" value="Add Graph" onClick="addGraph('{{ path(insertgraphroute) }}')" />
+    <br/>
+    <BR/>
+    <input type="button" value="Remove Graph" onClick="removeGraph('{{ path(insertgraphroute) }}')" />
+</div>
+
+<BR/>
+
+{# echo link_to_function("Generate url","refreshURL()") #}
+<br/>
+<span style="font-size: small">You can use this link to return to this page displaying the same graphics</span>
+<br/>
+<input type="button" value="Generate URL" onClick="refreshURL()" /><BR />
+<textarea id="url" cols="50" rows="5">
+</textarea>
+
+
+<script src="{{ asset('bundles/dafuerjpgraph/js/viewer.js') }}" type="text/javascript"></script>
+
+       
+<script type="text/javascript">
+    {% if numofgraphs is null or numofgraphs == 1 %}
+        addGraph('{{ path(insertgraphroute) }}', {{ combined }});
+    {% else %}
+        {% for i in range(0,numofgraphs-1) %}  
+            addGraph('{{ path(insertgraphroute) }}', {{ combined[i] }});
+        {% endfor %}
+    {% endif %}
+
+
+    {{ js|raw }}
+
+    update_all();
+</script>
+
+
+
+

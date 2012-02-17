@@ -30,6 +30,7 @@ DafuerJpgraphBundle:
 - Download and unzip Jpgraph library in vendor/jpgraph
 
 
+- Dinamic graphs need jquery library import before to call it.
 
 
 Note: If you want to disable imageantialias you must open the file /vendor/jpgraph/src/gd_image.inc.php, find the function SetAntiAliasing and comment this line out like this:

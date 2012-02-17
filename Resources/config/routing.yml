@@ -14,21 +14,52 @@ JpgraphBundle_graph_test1:
     pattern:  /graph/graphtest1
     defaults: { _controller: DafuerJpgraphBundle:Default:graphtest1 }
     
-JpgraphBundle_graph_draw:
-    pattern:  /graph/draw
-    defaults: { _controller: DafuerJpgraphBundle:Default:draw }
+JpgraphBundle_graph_drawtimeseries:
+    pattern:  /graph/drawtimeseries
+    defaults: { _controller: DafuerJpgraphBundle:Default:drawtimeseries }
+    options:
+        expose: true
+        
+JpgraphBundle_graph_query:
+    pattern:  /graph/query
+    defaults: { _controller: DafuerJpgraphBundle:Default:query }
+    options:
+        expose: true   
+        
+JpgraphBundle_graph_query:
+    pattern:  /graph/imggraph
+    defaults: { _controller: DafuerJpgraphBundle:Default:imggraph }
+ 
+JpgraphBundle_graph_imgerrordraw:
+    pattern:  /graph/imgerrordraw/{style}
+    defaults: { _controller: DafuerJpgraphBundle:Default:imgerrordraw } 
+
+JpgraphBundle_graph_imgerror:
+    pattern:  /graph/imgerror/{style}
+    defaults: { _controller: DafuerJpgraphBundle:Default:imgerror } 
+        
+JpgraphBundle_graph_viewdrawtimeseries:
+    pattern:  /graph/viewdrawtimeseries
+    defaults: { _controller: DafuerJpgraphBundle:Default:viewdrawtimeseries }
+
     
 JpgraphBundle_graph_style_show:
     pattern:  /graph/style/{style_name}/show
     defaults: { _controller: DafuerJpgraphBundle:Default:styleshow }
     
 JpgraphBundle_graph_viewer:
-    pattern:  /graph/viewer
-    defaults: { _controller: DafuerJpgraphBundle:Default:viewer }
+    pattern:  /graph/viewer/{insertgraphroute}
+    #defaults: { _controller: ViewerController:viewerAction }
+    defaults: { _controller: DafuerJpgraphBundle:Viewer:viewer }
     
 JpgraphBundle_graph_insertgraph:
-    pattern:  /graph/insertgraph
-    defaults: { _controller: DafuerJpgraphBundle:Default:insertgraph }
-    
+    pattern:  /graph/insertgraph/{form}/{combined}
+    #defaults: { _controller: ViewerController:insertgraphAction }
+    defaults: { _controller: DafuerJpgraphBundle:Viewer:insertgraph }
+    options:
+        expose: true       
 
-    
+ 
+JpgraphBundle_graph_query:
+    pattern:  /graph/query
+    defaults: { _controller: DafuerJpgraphBundle:Default:query } 

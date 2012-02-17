@@ -1,0 +1,43 @@
+
+<table width="100%" style="border-width: 1px;border-color: black;border-style: solid; text-align: left" id="table_for_{{ formname }}">
+    <tr>
+        <td>
+            <form id="form_{{ formname }}">
+                <div id="more_{{ formname }}"></div>
+                {# % render formviewpath with { 'form':form } % #}
+            
+                <input type="button" onclick="update('{{ formname }}',true)" name="{{ formname }}[update]" value="Update" />
+                
+                <input type="button" onclick="addSingleFormTo('{{ formname }}','{{ formviewpath }}')" name="{{ formname }}[add]" value="Add Values" />
+                <input type="button" onclick="removeSingleFormTo('{{ formname }}')" name="{{ formname }}[remove]" value="Remove Values" />
+                <input type="checkbox" id="autoupdate_{{ formname }}" name="{{ formname }}[autoupdate]" checked="" />
+                <label for="autoupdate_{{ formname }}" >Auto update graph</label>
+            </form>
+            {# include_partial('data/viewercombineform', array('form'=>$graphviewercombineform,'vars'=>$vars /*igual no se usa*/, 'combine'=>$combine, 'urlopts'=>$url)) #}
+        </td>
+        <td><div style="z-index: 9" id="div_{{ formname }}" style="border-width: 1px"></div></td>
+    </tr>
+</table>
+
+
+
+
+<script type="text/javascript">
+    singleformsnum['{{ formname }}']=0;    
+
+    {#combined['{{ formname }}']=0+singleformsnum['{{ formname }}'];#}
+
+    setUpdateListener('{{ formname }}');
+
+    {% if combined is null %}
+    addSingleFormTo('{{ formname }}','{{ formviewpath }}');
+    {% else %}
+        {% for i in range(0,combined-1) %}   
+
+            addSingleFormTo('{{ formname }}','{{ formviewpath }}');
+        {% endfor %} 
+
+    {% endif %} 
+</script>
+
+

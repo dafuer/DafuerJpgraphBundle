@@ -13,7 +13,9 @@ use Symfony\Component\Yaml\Yaml;
 class Jpgrapher {
 
     private $config_file;
+    //private $viewer_file;
     private $options;
+    //private $viewer;
 
     public function getCallFunctions() {
         $callbacks = array();
@@ -29,10 +31,16 @@ class Jpgrapher {
         return $callbacks;
     }
 
-    public function __construct($config_file) {
+    public function __construct($config_file){ //, $viewer_file) {
         $this->config_file = $config_file;
+        //$this->viewer_file = $viewer_file;
         $this->options = Yaml::parse($this->config_file);
+        //$this->viewer = Yaml::parse($this->viewer_file);
     }
+
+    /*public function getViewerOptions() {
+        return $this->viewer;
+    }*/
 
     public function readStyle($style_tag, $values=array()) {
         if (!isset($this->options[$style_tag]))
@@ -83,7 +91,7 @@ class Jpgrapher {
     }
 
     public function createGraph($style_name, $custom=array()) {
-        require_once (__DIR__ . '/../../../jpgraph/src/jpgraph.php');
+        
         if (!isset($this->options[$style_name])) {
             throw new \Exception('JpgraphBundle says: ' . $style_name . ' style does not exists.');
         } else {
@@ -91,40 +99,66 @@ class Jpgrapher {
             $values = $this->getOptions($style_name, $custom);
 
             // Now create graph and define style values before obtained.
-            if (!isset($values['graph.width']))
-                throw new \Exception('JpgraphBundle says: Variable graph.width must be defined.');
-            if (!isset($values['graph.height']))
-                throw new \Exception('JpgraphBundle says: Variable graph.height must be defined.');
-            $graph = new \Graph($values['graph.width'], $values['graph.height']);
-            if (isset($values['graph.scale']))
-                $graph->SetScale($values['graph.scale']);
-            if (isset($values['graph.title']))
-                $graph->title->Set($values['graph.title']);
-            if (isset($values['graph.box']))
-                $graph->SetBox($values['graph.box']);
-            if (isset($values['graph.xgrid.show']))
-                $graph->xgrid->Show($values['graph.xgrid.show']);
-            if (isset($values['graph.xgrid.color']))
-                $graph->xgrid->SetColor($values['graph.xgrid.color']);
-            if (isset($values['graph.xgrid.linestyle']))
-                $graph->xgrid->SetLineStyle($values["graph.xgrid.linestyle"]);
-            if (isset($values['graph.img.antialiasing']))
-                $graph->img->SetAntiAliasing($values['graph.img.antialiasing']);
-            if (isset($values['graph.legend.frameweight']))
-                $graph->legend->SetFrameWeight($values['graph.legend.frameweight']);
-            if (isset($values['graph.frame'][0]) && isset($values['graph.frame'][1]))
-                $graph->SetFrame($values['graph.frame'][0], $values['graph.frame'][1], $values['graph.frame'][2]);
-            if (isset($values['graph.clipping']))
-                $graph->SetClipping($values['graph.clipping']);
-            if (isset($values['graph.xaxis.labelangle']))
-                $graph->xaxis->SetLabelAngle($values["graph.xaxis.labelangle"]);
-            if (isset($values['graph.img.margin']))
-                $graph->img->SetMargin($values['graph.img.margin'][0],$values['graph.img.margin'][1],$values['graph.img.margin'][2],$values['graph.img.margin'][3]);
-
+            if (!isset($values['graph_width']))
+                throw new \Exception('JpgraphBundle says: Variable graph_width must be defined.');
+            if (!isset($values['graph_height']))
+                throw new \Exception('JpgraphBundle says: Variable graph_height must be defined.');
+            if (!isset($values['graph']))
+                throw new \Exception('JpgraphBundle says: Variable graph must be defined.');
+            if($values['graph']=="graph"){
+                require_once (__DIR__ . '/../../../jpgraph/src/jpgraph.php');
+                $graph = new \Graph($values['graph_width'], $values['graph_height']);
+            }
             
+            
+            if (isset($values['graph_scale']))
+                $graph->SetScale($values['graph_scale']);
+            if (isset($values['graph_title']))
+                $graph->title->Set($values['graph_title']);
+            if (isset($values['graph_box']))
+                $graph->SetBox($values['graph_box']);
+            if (isset($values['graph_xgrid_show']))
+                $graph->xgrid->Show($values['graph_xgrid_show']);
+            if (isset($values['graph_xgrid_color']))
+                $graph->xgrid->SetColor($values['graph_xgrid_color']);
+            if (isset($values['graph_xgrid_linestyle']))
+                $graph->xgrid->SetLineStyle($values["graph_xgrid_linestyle"]);
+            if (isset($values['graph_img_antialiasing']))
+                $graph->img->SetAntiAliasing($values['graph_img_antialiasing']);
+            if (isset($values['graph_legend_frameweight']))
+                $graph->legend->SetFrameWeight($values['graph_legend_frameweight']);
+            if (isset($values['graph_frame'][0]) && isset($values['graph_frame'][1]))
+                $graph->SetFrame($values['graph_frame'][0], $values['graph_frame'][1], $values['graph_frame'][2]);
+            if (isset($values['graph_clipping']))
+                $graph->SetClipping($values['graph_clipping']);
+            if (isset($values['graph_xaxis_labelangle']))
+                $graph->xaxis->SetLabelAngle($values["graph_xaxis_labelangle"]);
+            if (isset($values['graph_img_margin']))
+                $graph->img->SetMargin($values['graph_img_margin'][0], $values['graph_img_margin'][1], $values['graph_img_margin'][2], $values['graph_img_margin'][3]);
+
+
             return $graph;
         }
     }
+
+    /*
+    public function createErrorGraph($style_name, $custom=array()) {
+        require_once (__DIR__ . '/../../../jpgraph/src/jpgraph.php');
+        if (!isset($this->options[$style_name])) {
+            throw new \Exception('JpgraphBundle says: ' . $style_name . ' style does not exists.');
+        } else {
+            // Setting up variable values
+            $values = $this->getOptions($style_name, $custom);
+
+
+            $graph = new \Graph(10, 200);
+            $graph->SetMargin(0, 0, 0, 0);
+            $graph->SetScale('intlin', 0, 2, 0, 2);
+            return $graph;
+        }
+    }*/
+    
+    
 
     function graphDaySeries($graph_style, $line_style, $ydata, $xdata, $custom_graph=array(), $custom_lineplot=array(), $graph=null) { //, $title, $title_x=null, $title_y=null, $error=null, $width=null, $height=null, $max_ptos_to_mark=null, $color=null, $min_yscale=null, $max_yscale=null, $min_xscale=null, $max_xscale=null, $graph=null) {
         if (count($xdata) > 0) {
@@ -148,7 +182,7 @@ class Jpgrapher {
             if (is_array($xdata[$indice])) {
                 foreach ($xdata as $i => $value) {
                     // Si hay establecidos maximos y minimos en las escalas adapto los datos
-                    $lineplot = $this->createLinePlot($line_style, $graph, $ydata[$i], $xdata[$i], $custom_lineplot); 
+                    $lineplot = $this->createLinePlot($line_style, $graph, $ydata[$i], $xdata[$i], $custom_lineplot);
                 }
             } else {
                 $lineplot = $this->createLinePlot($line_style, $graph, $ydata[$i], $xdata[$i], $custom_lineplot);
@@ -158,14 +192,14 @@ class Jpgrapher {
         } else {
 
             if (is_null($graph)) {  // Si no me pasan una grafica a la que añadir la linea creo una nueva para devolver el error
-                $graph = new CanvasGraph(10, 10, 'auto');
-                $graph->SetMargin(0, 0, 0, 0);
+                $graph = $this->createErrorGraph($graph_style, $custom_graph);
             }
 
             return $graph;
         }
     }
 
+    
     public function createLinePlot($style_name, $graph, $ydata, $xdata=null, $custom=array()) {
         require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_line.php');
         if (!isset($this->options[$style_name])) {
@@ -181,63 +215,78 @@ class Jpgrapher {
                 $lineplot = new \LinePlot($ydata, $xdata);
             }
 
-            $graph->Add($lineplot);
+            // El eje
+           if(isset($values['graph_yaxis_number'])){
+                if($values['graph_yaxis_number']==-1){
+                    if (isset($values['graph_yaxis_title']))
+                        $graph->yaxis->title->Set($values["graph_yaxis_title"]);
+                    if (isset($values['graph_yaxis_titlemargin']))
+                        $graph->yaxis->SetTitleMargin($values["graph_yaxis_titlemargin"]);
+                    if (isset($values['graph_yaxis_hideline']))
+                        $graph->yaxis->HideLine($values['graph_yaxis_hideline']);
 
-            if (isset($values['lineplot.color']))
-                $lineplot->SetColor($values['lineplot.color']);
-            if (isset($values['lineplot.legend']))
-                $lineplot->SetLegend($values['lineplot.legend']);
-            if (isset($values['lineplot.weight']))
-                $lineplot->SetWeight($values['lineplot.weight']);
+                    if (isset($values['graph_ygrid_fill']))
+                        $graph->ygrid->SetFill($values['graph_ygrid_fill'][0], $values['graph_ygrid_fill'][1], $values['graph_ygrid_fill'][2]);
+                    
+                    $graph->Add($lineplot);
+                }else{
+                    // First, I find maxium index allowed to prevent a exception
+                    $index=0;
+                    for($i=0;$i<$values['graph_yaxis_number'];$i++){
+                        if(!isset($graph->ynaxis)) break;
+                    }
+                    if($i>0) $index=$i-1;
+                    
+                    $graph->SetYScale($index,'lin');
+                    $graph->AddY($index,$lineplot);
+                    //$graph->ynaxis[0]->SetColor('teal');                    
+                }
+            }         
 
-            if (isset($values['graph.xaxis.ticklabels']))
-                $graph->xaxis->SetTickLabels($values["graph.xaxis.ticklabels"]);  
-            
-            if (isset($values['lineplot.xaxis.title']))
-                $graph->xaxis->title->Set($values["graph.xaxis.title"]);
-            
-            if (isset($values['lineplot.xaxis.pos']))
-                $graph->xaxis->SetPos($values["graph.xaxis.pos"]);            
+            if (isset($values['lineplot_color']))
+                $lineplot->SetColor($values['lineplot_color']);
+            if (isset($values['lineplot_legend']))
+                $lineplot->SetLegend($values['lineplot_legend']);
+            if (isset($values['lineplot_weight']))
+                $lineplot->SetWeight($values['lineplot_weight']);
+
+            if (isset($values['graph_xaxis_ticklabels']))
+                $graph->xaxis->SetTickLabels($values["graph_xaxis_ticklabels"]);
+
+            if (isset($values['lineplot_xaxis_title']))
+                $graph->xaxis->title->Set($values["graph_xaxis_title"]);
+
+            if (isset($values['lineplot_xaxis_pos']))
+                $graph->xaxis->SetPos($values["graph_xaxis_pos"]);
 
 
 
 
-            if (isset($values['graph.yaxis.title']))
-                $graph->yaxis->title->Set($values["graph.yaxis.title"]);
-            if (isset($values['graph.yaxis.titlemargin']))
-                $graph->yaxis->SetTitleMargin($values["graph.yaxis.titlemargin"]);            
-            if (isset($values['graph.yaxis.hideline']))
-                $graph->yaxis->HideLine($values['graph.yaxis.hideline']);
-            
-            if (isset($values['graph.ygrid.fill']))
-                $graph->ygrid->SetFill($values['graph.ygrid.fill'][0], $values['graph.ygrid.fill'][1], $values['graph.ygrid.fill'][2]);
 
-            
-            
-            if (isset($values['lineplot.max_ptos_to_mark'])) {
-                if ($values['lineplot.max_ptos_to_mark'] == -1 || count($xdata) < $values['lineplot.max_ptos_to_mark']) {
-                    $lineplot->mark->SetType(constant($values['lineplot.mark.type']));
-                    $lineplot->mark->SetWidth($values['lineplot.mark.width']);
-                    if ($values['lineplot.mark.color'] != '%lineplot_color%') {
-                        $lineplot->mark->SetColor($values['lineplot.mark.color']);
+            if (isset($values['lineplot_max_ptos_to_mark'])) {
+                if ($values['lineplot_max_ptos_to_mark'] == -1 || count($xdata) < $values['lineplot_max_ptos_to_mark']) {
+                    $lineplot->mark->SetType(constant($values['lineplot_mark_type']));
+                    $lineplot->mark->SetWidth($values['lineplot_mark_width']);
+                    if ($values['lineplot_mark_color'] != '%lineplot_color%') {
+                        $lineplot->mark->SetColor($values['lineplot_mark_color']);
                     } else {
-                        $lineplot->mark->SetColor($values['lineplot.color']);
+                        $lineplot->mark->SetColor($values['lineplot_color']);
                     }
                 }
             }
 
 
-   
-            /*if (isset($values['lineplot.reescale'])) {
-                $graph->doAutoScaleYnAxis();
-            }*/
 
-            if (isset($values['graph.yscale.autoticks']))
-                $graph->yscale->SetAutoTicks($values['graph.yscale.autoticks']);
+            /* if (isset($values['lineplot_reescale'])) {
+              $graph->doAutoScaleYnAxis();
+              } */
 
-            if (isset($values['graph.xaxis.labelformatcallback'])) {
+            if (isset($values['graph_yscale_autoticks']))
+                $graph->yscale->SetAutoTicks($values['graph_yscale_autoticks']);
+
+            if (isset($values['graph_xaxis_labelformatcallback'])) {
                 $callbacks = $this->getCallFunctions();
-                if ($values['graph.xaxis.labelformatcallback'] == 'AutoTimeCallback') {
+                if ($values['graph_xaxis_labelformatcallback'] == 'AutoTimeCallback') {
 
                     if (count($xdata) > 0) {
                         $tpo = max($xdata) - min($xdata);
@@ -250,14 +299,16 @@ class Jpgrapher {
                         }
                     }
                 } else {
-                    $graph->xaxis->SetLabelFormatCallback($callbacks[$values['graph.xaxis.labelformatcallback']]);
+                    $graph->xaxis->SetLabelFormatCallback($callbacks[$values['graph_xaxis_labelformatcallback']]);
                 }
             }
-            if (isset($values['graph.xaxis.labelangle']))
-                $graph->xaxis->SetLabelAngle($values["graph.xaxis.labelangle"]);
+            if (isset($values['graph_xaxis_labelangle']))
+                $graph->xaxis->SetLabelAngle($values["graph_xaxis_labelangle"]);
             return $lineplot;
         }
     }
+    
+    
 
     public function createErrorLinePlot($style_name, $graph, $ydata, $xdata=null, $custom=array()) {
         require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_line.php');
@@ -275,8 +326,8 @@ class Jpgrapher {
 
             $graph->Add($lineplot);
 
-            $lineplot->SetColor($values['lineplot.color']);
-            $lineplot->SetLegend($values['lineplot.legend']);
+            $lineplot->SetColor($values['lineplot_color']);
+            $lineplot->SetLegend($values['lineplot_legend']);
             $lineplot->SetWeight($values['lineplot.weight']);
 //              //$lineplot->SetColor("#293c82");
 //              //$lineplot->SetColor("red");
@@ -289,6 +340,108 @@ class Jpgrapher {
 
             return $lineplot;
         }
+    }
+
+    function strokeGraph($graph) {
+        if (count($graph->plots)) {
+            return $graph->Stroke();
+        } else {
+            return false;
+        }
+    }
+
+    function createErrorImg($style_name, $custom) {
+        require_once (__DIR__ . '/../../../jpgraph/src/jpgraph.php');
+        require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_canvas.php');
+        require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_canvtools.php');
+
+        if (!isset($this->options[$style_name])) {
+            throw new \Exception('JpgraphBundle says: ' . $style_name . ' style does not exists.');
+        } else {
+            // Setting up variable values
+            $values = $this->getOptions($style_name, $custom);
+
+            // Now create graph and define style values before obtained.
+            if (!isset($values['canvasgraph_width']))
+                throw new \Exception('JpgraphBundle says: Variable canvasgraph_width must be defined.');
+            if (!isset($values['canvasgraph_height']))
+                throw new \Exception('JpgraphBundle says: Variable canvasgraph_height must be defined.');
+
+            $graph = new \CanvasGraph($values['canvasgraph_width'], $values['canvasgraph_height'], 'auto');
+            $graph->InitFrame();
+            if (isset($values['canvasgraph_color'])){
+                $graph->img->SetColor($values['canvasgraph_color']);
+                $graph->img->FilledRectangle(0, 0, $values['canvasgraph_width'], $values['canvasgraph_height']);
+            }
+
+            $graph->Stroke();
+        }
+    }
+
+    //function parseDaySerieParameters($request, $prefix=null, $suffix=null) {
+    function parseQueryParameters($query) {
+
+        $result = array();
+
+
+
+        if (is_null($query->get('combined'))) {
+            $result = $query->all();
+        } else {
+            $parameters = $query->all();
+            $single_parameters = array();
+            foreach ($parameters as $i => $parameter) {
+                if (!is_array($parameter)) {
+                    $single_parameters[$i] = $parameter;
+                } else {
+                    foreach ($parameter as $j => $lineproperty) {
+                        $result[$j][$i] = $lineproperty;
+                    }
+                }
+            }
+            array_push($result, $single_parameters);
+        }
+
+
+        return $result;
+    }
+
+    function get_url($options, $is_initial=false, $as_array=true, $reverse=false) {
+        $url = "";
+
+        $c = 0;
+        foreach ($options as $name => $value) {
+            if ($value != "" && !is_array($value))
+                $url.=$name . "=" . $value . "&";
+            if (is_array($value)) {
+                foreach ($value as $indice => $real_value) {
+                    if ($real_value != null && $real_value != "") {
+                        if ($as_array) {
+                            if (!$reverse)
+                                $url.=$name . "[" . $indice . "]=" . $real_value . "&";
+                            else
+                                $url.=$indice . "[" . $name . "]=" . $real_value . "&";
+                        }else {
+                            if (!$reverse)
+                                $url.=$name . $indice . "=" . $real_value . "&";
+                            else
+                                $url.=$indice . $name . "=" . $real_value . "&";
+                        }
+                    }
+                }
+            }
+        }
+
+        // Quito el ultimo "&"
+        if (strlen($url) > 0)
+            $url = substr($url, 0, -1);
+
+        if ($is_initial)
+            $url = "?" . $url;
+        elseif ($url != "")
+            $url = "&" . $url;
+
+        return $url;
     }
 
 }

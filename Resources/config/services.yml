@@ -2,9 +2,11 @@
 parameters:
     jpgraph.class: Dafuer\JpgraphBundle\Jpgrapher
     jpgraph.config_file: '%kernel.root_dir%/config/jpgraph_styles.yml'
+    #jpgraph.viewer_file: '%kernel.root_dir%/config/graph_viewer.yml'
 
 services:
     jpgraph:
         class: %jpgraph.class%
-        arguments: [%jpgraph.config_file%]
+        arguments: [%jpgraph.config_file%] #, %jpgraph.viewer_file%]      
+        
 
