@@ -109,7 +109,10 @@ function addSingleFormTo(formname,ruta){//,urlopts){
     // fin
 
     $("#more_"+formname).append(r);
-    setUpdateListener(formname);       
+    setUpdateListener(formname); 
+    
+updateFormValues(formname);  
+update(formname);
 }     
 
 
@@ -217,4 +220,83 @@ function refreshURL(){
     textarea.innerHTML+=url;
 }
 
+/**
+ * Make a copy between two forms. 
+ */
+function copyForms(formfrom,formto){
+    var i;
+    
+    var elements=$("[name^="+formfrom+"]");
+
+    for (i=0;i<elements.length;i++)
+    {
+        if(typeof elements[i]  !== "undefined"){
+
+            var original=elements[i].id;
+            var reg = new RegExp(formfrom,"gi");
+            elementname=original.replace(reg, formto);
+            element=$("#"+elementname);
+
+            if(element!=null){
+                //alert(elements[i].id+"-"+elements[i].value+"-"+element.val);
+                element.val(elements[i].value);
+
+            }
+
+        }
+    }    
+    
+}
+
+
+/**
+ * Update last form from formname with penultimate values
+ */
+function updateFormValues(formname){
+    var to=formname.indexOf('_');
+    
+    var number=formname.substring(0,to);
+    
+    var singleform=singleformsnum[formname] - 1;
+    
+    if(singleform>0){
+        copyForms(formname+"_"+(singleform-1),formname+"_"+singleform);
+    }else{
+        if(number>0){
+           var max=singleformsnum[(number-1)+"_graphviewer"] - 1;
+           copyForms((number-1)+"_graphviewer_"+max,formname+"_"+singleform); 
+        }
+    }
+    
+}
+
+/**
+ * Update the last(biggest num) form with penultimate form values
+ * BUG: if you insert forms disorder does not work.
+ * Possible solution: take the form value that is created to decide which update. In this case if it coincides with the last
+ */
+/*
+function updateFormValuesLast(){
+    // Look for bigest index -1
+    fromnum=0;
+    fromsingleform=0;
+    
+    tonum=num-1;
+    tosingleform=singleformsnum[(num-1)+"_graphviewer"]-1;
+    
+    if(tosingleform-1<0){
+        if(tonum>1){
+            fromnum=tonum-1;
+            fromsingleform=0;
+        }
+    }else{
+        fromnum=tonum;
+        fromsingleform=tosingleform-1;
+    }
+    
+    alert(fromnum+'_graphviewer_'+fromsingleform+" / "+tonum+'_graphviewer_'+tosingleform);
+
+    copyForms(fromnum+'_graphviewer_'+fromsingleform,tonum+'_graphviewer_'+tosingleform);
+}
+*/
 
