@@ -2,7 +2,7 @@
 <script type="text/javascript" src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
 <script type="text/javascript" src="{{ path('fos_js_routing_js', {"callback": "fos.Router.setData"}) }}"></script>
 
-<h1>Graph Viewer</h1>
+
 <BR/>
 <BR/>
 
@@ -12,8 +12,6 @@
 <BR/>
 <div style="text-align: right" width="100%">
     <input type="button" value="Add Graph" onClick="addGraph('{{ path(insertgraphroute) }}')" />
-    <br/>
-    <BR/>
     <input type="button" value="Remove Graph" onClick="removeGraph('{{ path(insertgraphroute) }}')" />
 </div>
 
