@@ -6,8 +6,13 @@
                 
                 <div id="more_{{ formname }}"></div>
                 
+<<<<<<< HEAD
                 {% if formgraphpath is not null %}                
                     {% render formgraphpath  with {'formname': formname } %}
+=======
+                {% if formgraphpath is defined %}
+                    {% render formgraphpath with { 'form':form } %}
+>>>>>>> fa09a89f41c7520c0d27b55d151f153d489bae7e
                 {% endif %}
                 
                 <input type="button" onclick="update('{{ formname }}',true)" name="{{ formname }}[update]" value="Update" />                
