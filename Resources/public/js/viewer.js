@@ -134,20 +134,27 @@ function getURLoptions(formname){
     {
         if(typeof form.elements[i]  !== "undefined"){
             if( form.elements[i].value!=""){
+                // Find var name
                 var from=form.elements[i].name.lastIndexOf('[')+1;
                 var to=form.elements[i].name.lastIndexOf(']');
                 var elementname=form.elements[i].name.substring(from,to);
-                var concreteform=form.elements[i].name.substring(0,from-1);                
+                // Find associated form name
+                var concreteform=form.elements[i].name.substring(0,from-1);   
+                // Find number of associated form
                 to=from;
                 from=concreteform.lastIndexOf('_')+1;
                 number=form.elements[i].name.substring(from,to-1);
+                // If is number make array
                 if(isFinite(number)) number="["+number+"]";
-                else number="";
+                else number="";              
+                // Add obteined value to result
                 urlopts+="&"+elementname+number+"="+form.elements[i].value;
                 
             }
         }
     }
+    
+    
     
     return urlopts;
 }

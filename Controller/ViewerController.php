@@ -18,7 +18,7 @@ class ViewerController extends Controller {
      * Esta accion permite visualizar cualqueir gráfica con varias opciones de comportamiento en Ajax
      * @param sfWebRequest $request
      */
-    public function viewerAction($insertgraphroute) {
+    public function viewerAction($insertgraphroute,$viewerformpath=null) {
 
         
         $jpgrapher = $this->get('jpgraph');
@@ -30,29 +30,27 @@ class ViewerController extends Controller {
         
         $js=$this->js_set_form_values($this->get('request')->query->all());
         
-        return $this->render('DafuerJpgraphBundle:Viewer:viewer.html.twig', array('numofgraphs' => $numofgraphs, 'combined'=>$combined,  'insertgraphroute'=>$insertgraphroute,'js'=>$js), null);
+        return $this->render('DafuerJpgraphBundle:Viewer:viewer.html.twig', array('numofgraphs' => $numofgraphs, 'combined'=>$combined,  'insertgraphroute'=>$insertgraphroute,'js'=>$js,'viewerformpath'=>$viewerformpath), null);
     }
 
     /**
      * Esta accion permite visualizar comparar gráficas con varias opciones de comportamiento en Ajax
      * @param sfWebRequest $request
      */
-    public function insertgraphAction($formname,$formviewpath,$combined) {
-        
+    public function insertgraphAction($formname,$formviewpath,$combined,$formgraphpath=null) {        
         $jpgrapher = $this->get('jpgraph');
         $num = $this->get('request')->query->get('num');
-
+        //$insertgraphroute=$this->get('request')->query->get('insertgraphroute');
         
-        $vars = $jpgrapher->parseQueryParameters($this->get('request')->query);
-        
-        return $this->render('DafuerJpgraphBundle:Viewer:insertgraph.html.twig', array('formname' => $formname, 'formviewpath'=>$formviewpath, 'combined' => $combined, 'insertgraphroute'=>'RimaBundle_graph_insertgraph')); //'urlopts' => $url,
+     //   $formgraphpath=$this->get('request')->query->get('formgraphpath'); // General options form
+//$formgraphpath='RimaBundle:Data:graphviewergraphform';
+        $vars = $jpgrapher->parseQueryParameters($this->get('request')->query);        
+        return $this->render('DafuerJpgraphBundle:Viewer:insertgraph.html.twig', array('formname' => $formname, 'formviewpath'=>$formviewpath, 'combined' => $combined, 'formgraphpath'=>$formgraphpath)); //'insertgraphroute'=>$insertgraphroute
     }
     
     private function js_set_form_values($array){
-        //$result='<script type="text/javascript">';
         $result="";
-//        print_r($array);
-//        throw new \Exception("ea");
+
         foreach($array as $name=>$elements){
             if(is_array($elements)){
                 foreach($elements as $linenum=>$element){
@@ -68,7 +66,7 @@ class ViewerController extends Controller {
             }
         }
         
-        //$result.='</script>';       
+      
         return $result;
     }
    

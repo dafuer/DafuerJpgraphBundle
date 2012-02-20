@@ -49,12 +49,12 @@ JpgraphBundle_graph_style_show:
     
 JpgraphBundle_graph_viewer:
     pattern:  /graph/viewer/{insertgraphroute}
-    #defaults: { _controller: ViewerController:viewerAction }
     defaults: { _controller: DafuerJpgraphBundle:Viewer:viewer }
+   
+  
     
 JpgraphBundle_graph_insertgraph:
-    pattern:  /graph/insertgraph/{form}/{combined}
-    #defaults: { _controller: ViewerController:insertgraphAction }
+    pattern:  /graph/insertgraph/{form}/{combined}/{formgraphpath}
     defaults: { _controller: DafuerJpgraphBundle:Viewer:insertgraph }
     options:
         expose: true       

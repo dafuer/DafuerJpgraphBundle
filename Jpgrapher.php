@@ -137,6 +137,7 @@ class Jpgrapher {
                 $graph->img->SetMargin($values['graph_img_margin'][0], $values['graph_img_margin'][1], $values['graph_img_margin'][2], $values['graph_img_margin'][3]);
 
 
+
             return $graph;
         }
     }
@@ -342,11 +343,48 @@ class Jpgrapher {
         }
     }
 
-    function strokeGraph($graph) {
-        if (count($graph->plots)) {
-            return $graph->Stroke();
+    function strokeGraph($style_name,$custom, $graph) {
+        if (!isset($this->options[$style_name])) {
+            throw new \Exception('JpgraphBundle says: ' . $style_name . ' style does not exists.');
         } else {
-            return false;
+
+            // Setting up variable values
+            $values = $this->getOptions($style_name, $custom);
+            
+            $graph->doAutoScaleYAxis();
+            
+            $ymin=$graph->yscale->GetMinVal();
+            $ymax=$graph->yscale->GetMaxVal();
+            $xmin=$graph->xscale->GetMinVal();
+            $xmax=$graph->xscale->GetMaxVal();
+
+            if (isset($values['graph_yscale_min'])){
+               $ymin=$values['graph_yscale_min'];
+            }
+            if (isset($values['graph_yscale_max'])){
+                $ymax=$values['graph_yscale_max'];
+            }
+            if (isset($values['graph_xscale_min'])){
+                $xmin=$values['graph_xscale_min'];
+            }
+            if (isset($values['graph_xscale_max'])){
+                $xmax=$values['graph_xscale_max'];
+            }
+            
+
+            
+            $graph->SetScale($values['graph_scale'], $ymin, $ymax,$xmin,$xmax);
+          
+            
+            //echo $graph->yscale->GetMinVal();
+            //$graph->yscale->SetAutoMax(5.4);
+            
+            
+            if (count($graph->plots)) {
+                return $graph->Stroke();
+            } else {
+                return false;
+            }
         }
     }
 

@@ -173,7 +173,7 @@ class DefaultController extends Controller {
         }
 
        
-            $x = $jpgrapher->strokeGraph($graph);
+            $x = $jpgrapher->strokeGraph('graph_timeserie',$custom,$graph);
             if ($x == false) {
                 if($request->query->get('format')=='nohtml'){
                     $this->forward('DafuerJpgraphBundle:Default:imgerrordraw', array('style' => 'error_graph','custom'=>array()));
