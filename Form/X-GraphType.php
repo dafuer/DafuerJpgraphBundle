@@ -1,5 +1,5 @@
 <?php
-
+/*
 namespace Dafuer\JpgraphBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
@@ -8,20 +8,13 @@ use Symfony\Component\Form\FormBuilder;
 abstract class GraphBaseType extends AbstractType
 {
     
-    private $name;
-    
-    public function __construct($name="0_graphviewer"){
-        $this->name=$name;
-    }
 
     
     public function addScale(FormBuilder $builder, array $options){
         $builder                
-                ->add('graph_yscale_min', 'text',array())
-                ->add('graph_yscale_max','text',array())              
-        ;     
-        
-        return $this;
+                ->add('graph_yscale_min', 'integer',array())
+                ->add('graph_yscale_max','integer',array())              
+        ;        
     }    
 
     public function getDefaultOptions(array $options)
@@ -33,8 +26,10 @@ abstract class GraphBaseType extends AbstractType
     
     public function getName()
     {
-        return $this->name."_properties_0";
+        return 'graph_properties';
     }
+    
 
     
 }
+*/

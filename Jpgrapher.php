@@ -444,7 +444,7 @@ class Jpgrapher {
         return $result;
     }
 
-    function get_url($options, $is_initial=false, $as_array=true, $reverse=false) {
+    /*function get_url($options, $is_initial=false, $as_array=true, $reverse=false) {
         $url = "";
 
         $c = 0;
@@ -480,7 +480,7 @@ class Jpgrapher {
             $url = "&" . $url;
 
         return $url;
-    }
+    }*/
 
 }
 
