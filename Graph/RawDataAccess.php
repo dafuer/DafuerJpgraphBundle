@@ -28,11 +28,14 @@ class RawDataAccess {
         $this->options = Yaml::parse($this->graphindexpath);        
     }
     
+    
     public function getGraphList($role=array('IS_AUTHENTICATED_ANONYMOUSLY')){
         $result=array();
+       
+        array_push($role, 'IS_AUTHENTICATED_ANONYMOUSLY');        
         
         foreach($this->options as $graph){
-            if( in_array($graph['role'], $role) ){
+            if(  count(array_intersect($role, $graph['role']))>0 ){
                 array_merge_recursive($result, $graph['classify']);
             }
         }
