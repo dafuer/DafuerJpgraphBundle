@@ -124,16 +124,11 @@ class DefaultController extends Controller {
     
     
     public function queryAction($request,$dataaccess){
-
-        //$response = $this->forward('DafuerJpgraphBundle:Default:query', array('request' => $request));
-        //$request = $this->get('request');
-
         // This allow print img tag if it's necessary
         if ($request->query->get('format') == 'html') {
             return $this->forward('DafuerJpgraphBundle:Default:imggraph', array('request' => $request));
         }
 
-        //$request = $this->get('request');
         $jpgrapher = $this->get('jpgraph');
 
         $params = $jpgrapher->parseQueryParameters($request->query);
@@ -146,26 +141,34 @@ class DefaultController extends Controller {
             $custom = $params[0]; //[$combined];
         }
 
-
         $graph = $jpgrapher->createGraph("graph_timeserie", $custom);
-
-
+        //$graph=null;
+        
+        
         if ($request->query->get('combined') == null) {
             /* PARA MI QUE ESTO NO SE USA NUNCA Y SE PUEDE BORRAR FORZANDO A COMBINED SIEMPRE UN VALOR MINIMO DE 1 */
             
-            $graphfunct = $dataaccess->dataFunction($params['dataserie']);
+           /* $graphfunct = $dataaccess->dataFunction($params['dataserie']);
             $dataserie = $dataaccess->$graphfunct($params);
             if (count($dataserie['ydata']) > 0) {
                 $lineplot1 = $jpgrapher->createLinePlot('lineplot_timeserie', $graph, $dataserie['ydata'], $dataserie['xdata'], $params);
-            }
+            }*/
         } else {
             for ($i = 0; $i < $combined; $i++) {
                 $id=$dataaccess->getIdByDataserie($params[$i]['dataserie']);
              
                 $data=$dataaccess->getGraph($id,$params[$i]);
                
-                if(count($data['ydata']) > 0){
-                    $lineplot1 = $jpgrapher->createLinePlot('lineplot_timeserie', $graph, $data['ydata'], $data['xdata'], $params[$i]);
+                if (!is_array($data['ydata'])){
+                    if(count($data['ydata']) > 0){
+                        $lineplot = $jpgrapher->createLinePlot('lineplot_timeserie', $graph, $data['ydata'], $data['xdata'], $params[$i]);
+                    }
+                }else{
+                    if(count($data['ydata'][0]) > 0){
+                        foreach($data['ydata'] as $j=>$line){
+                            $lineplot = $jpgrapher->createLinePlot('lineplot_timeserie', $graph, $data['ydata'][$j], $data['xdata'][$j], $params[$i]);
+                        }                        
+                    }
                 }
                 
 

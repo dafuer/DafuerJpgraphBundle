@@ -44,7 +44,7 @@ class Jpgrapher {
 
     public function readStyle($style_tag, $values=array()) {
         if (!isset($this->options[$style_tag]))
-            throw new \Exception('JpgraphBundle says: ' . $style_tag . ' style does not exists.');
+            throw new \Exception('DafuerJpgraphBundle says: ' . $style_tag . ' style does not exists.');
         $has_styles = 0;
         if (isset($this->options[$style_tag]['style'])) {
             $related_styles = $this->options[$style_tag]['style'];
@@ -93,18 +93,20 @@ class Jpgrapher {
     public function createGraph($style_name, $custom=array()) {
         
         if (!isset($this->options[$style_name])) {
-            throw new \Exception('JpgraphBundle says: ' . $style_name . ' style does not exists.');
+            throw new \Exception('DafuerJpgraphBundle says: ' . $style_name . ' style does not exists.');
         } else {
             // Setting up variable values
             $values = $this->getOptions($style_name, $custom);
 
-            // Now create graph and define style values before obtained.
+            // Check mandatory vars
             if (!isset($values['graph_width']))
-                throw new \Exception('JpgraphBundle says: Variable graph_width must be defined.');
+                throw new \Exception('DafuerJpgraphBundle says: Variable graph_width must be defined.');
             if (!isset($values['graph_height']))
-                throw new \Exception('JpgraphBundle says: Variable graph_height must be defined.');
+                throw new \Exception('DafuerJpgraphBundle says: Variable graph_height must be defined.');
             if (!isset($values['graph']))
-                throw new \Exception('JpgraphBundle says: Variable graph must be defined.');
+                throw new \Exception('DafuerJpgraphBundle says: Variable graph must be defined.');
+            
+            
             if($values['graph']=="graph"){
                 require_once (__DIR__ . '/../../../jpgraph/src/jpgraph.php');
                 $graph = new \Graph($values['graph_width'], $values['graph_height']);
@@ -146,7 +148,7 @@ class Jpgrapher {
     public function createErrorGraph($style_name, $custom=array()) {
         require_once (__DIR__ . '/../../../jpgraph/src/jpgraph.php');
         if (!isset($this->options[$style_name])) {
-            throw new \Exception('JpgraphBundle says: ' . $style_name . ' style does not exists.');
+            throw new \Exception('DafuerJpgraphBundle says: ' . $style_name . ' style does not exists.');
         } else {
             // Setting up variable values
             $values = $this->getOptions($style_name, $custom);
@@ -202,19 +204,39 @@ class Jpgrapher {
 
     
     public function createLinePlot($style_name, $graph, $ydata, $xdata=null, $custom=array()) {
-        require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_line.php');
+        
         if (!isset($this->options[$style_name])) {
-            throw new \Exception('JpgraphBundle says: ' . $style_name . ' style does not exists.');
+            throw new \Exception('DafuerJpgraphBundle says: ' . $style_name . ' style does not exists.');
         } else {
 
             // Setting up variable values
             $values = $this->getOptions($style_name, $custom);
 
-            if (is_null($xdata)) {
-                $lineplot = new \LinePlot($ydata);
-            } else {
-                $lineplot = new \LinePlot($ydata, $xdata);
+            //if($graph==null) $graph=$this->createGraph ($style_name, $custom);
+            
+            // Check mandatory vars
+            if (!isset($values['lineplot']))
+                throw new \Exception('DafuerDafuerJpgraphBundle says: Variable lineplot must be defined.');          
+            
+            
+            if($values['lineplot']=="lineplot"){
+                require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_line.php');
+                if (is_null($xdata)) {
+                    $lineplot = new \LinePlot($ydata);
+                } else {
+                    $lineplot = new \LinePlot($ydata, $xdata);
+                }
             }
+
+            if($values['lineplot']=="errorlineplot"){
+                //require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_line.php');
+                if (is_null($xdata)) {
+                    $lineplot = new \LinePlot($ydata);
+                } else {
+                    $lineplot = new \LinePlot($ydata, $xdata);
+                }
+            }
+
 
             // El eje
            if(isset($values['graph_yaxis_number'])){
@@ -305,16 +327,17 @@ class Jpgrapher {
             }
             if (isset($values['graph_xaxis_labelangle']))
                 $graph->xaxis->SetLabelAngle($values["graph_xaxis_labelangle"]);
+            
             return $lineplot;
         }
     }
     
     
 
-    public function createErrorLinePlot($style_name, $graph, $ydata, $xdata=null, $custom=array()) {
+/*    public function createErrorLinePlot($style_name, $graph, $ydata, $xdata=null, $custom=array()) {
         require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_line.php');
         if (!isset($this->options[$style_name])) {
-            throw new \Exception('JpgraphBundle says: ' . $style_name . ' style does not exists.');
+            throw new \Exception('DafuerDafuerJpgraphBundle says: ' . $style_name . ' style does not exists.');
         } else {
             // Setting up variable values
             $values = $this->readOptions($style_name, $custom, 'errorlineplot_default');
@@ -341,11 +364,11 @@ class Jpgrapher {
 
             return $lineplot;
         }
-    }
+    }*/
 
     function strokeGraph($style_name,$custom, $graph) {
         if (!isset($this->options[$style_name])) {
-            throw new \Exception('JpgraphBundle says: ' . $style_name . ' style does not exists.');
+            throw new \Exception('DafuerDafuerJpgraphBundle says: ' . $style_name . ' style does not exists.');
         } else {
 
             // Setting up variable values
@@ -394,16 +417,16 @@ class Jpgrapher {
         require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_canvtools.php');
 
         if (!isset($this->options[$style_name])) {
-            throw new \Exception('JpgraphBundle says: ' . $style_name . ' style does not exists.');
+            throw new \Exception('DafuerJpgraphBundle says: ' . $style_name . ' style does not exists.');
         } else {
             // Setting up variable values
             $values = $this->getOptions($style_name, $custom);
 
             // Now create graph and define style values before obtained.
             if (!isset($values['canvasgraph_width']))
-                throw new \Exception('JpgraphBundle says: Variable canvasgraph_width must be defined.');
+                throw new \Exception('DafuerJpgraphBundle says: Variable canvasgraph_width must be defined.');
             if (!isset($values['canvasgraph_height']))
-                throw new \Exception('JpgraphBundle says: Variable canvasgraph_height must be defined.');
+                throw new \Exception('DafuerJpgraphBundle says: Variable canvasgraph_height must be defined.');
 
             $graph = new \CanvasGraph($values['canvasgraph_width'], $values['canvasgraph_height'], 'auto');
             $graph->InitFrame();
@@ -532,7 +555,7 @@ class Jpgrapher {
   if (!is_null($max_xscale))
   $mayorx = $max_xscale;
 
-  //throw new \Exception('JpgraphBundle says: ');
+  //throw new \Exception('DafuerJpgraphBundle says: ');
   $graph->SetScale('intlin', $minimoy, $mayory, $minimox, $mayorx);   //<<<<<<<------------
   $graph->yscale->SetAutoTicks();
 
