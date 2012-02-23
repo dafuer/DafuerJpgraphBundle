@@ -229,18 +229,19 @@ class Jpgrapher {
             }
 
             if($values['lineplot']=="errorlineplot"){
-                //require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_line.php');
+                require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_line.php');
+                require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_error.php');
                 if (is_null($xdata)) {
-                    $lineplot = new \LinePlot($ydata);
+                    $lineplot = new \ErrorLinePlot($ydata);
                 } else {
-                    $lineplot = new \LinePlot($ydata, $xdata);
+                    $lineplot = new \ErrorLinePlot($ydata, $xdata);
                 }
             }
 
 
             // El eje
            if(isset($values['graph_yaxis_number'])){
-                if($values['graph_yaxis_number']==-1){
+                if($values['graph_yaxis_number']==0){
                     if (isset($values['graph_yaxis_title']))
                         $graph->yaxis->title->Set($values["graph_yaxis_title"]);
                     if (isset($values['graph_yaxis_titlemargin']))
@@ -255,7 +256,7 @@ class Jpgrapher {
                 }else{
                     // First, I find maxium index allowed to prevent a exception
                     $index=0;
-                    for($i=0;$i<$values['graph_yaxis_number'];$i++){
+                    for($i=0;$i<$values['graph_yaxis_number']-1;$i++){
                         if(!isset($graph->ynaxis)) break;
                     }
                     if($i>0) $index=$i-1;
@@ -266,8 +267,21 @@ class Jpgrapher {
                 }
             }         
 
-            if (isset($values['lineplot_color']))
-                $lineplot->SetColor($values['lineplot_color']);
+            if($values['lineplot']=="lineplot"){
+                $line=$lineplot;
+            }else{
+                $line=$lineplot->line;
+            }
+            
+            if (isset($values['lineplot_color'])){
+                    $line->SetColor($values['lineplot_color']);
+            }
+
+            if ($values['lineplot']=="errorlineplot" && isset($values['errorlineplot_color'])){
+                $lineplot->SetColor($values['errorlineplot_color']);
+            }
+            
+            
             if (isset($values['lineplot_legend']))
                 $lineplot->SetLegend($values['lineplot_legend']);
             if (isset($values['lineplot_weight']))
@@ -288,14 +302,17 @@ class Jpgrapher {
 
             if (isset($values['lineplot_max_ptos_to_mark'])) {
                 if ($values['lineplot_max_ptos_to_mark'] == -1 || count($xdata) < $values['lineplot_max_ptos_to_mark']) {
-                    $lineplot->mark->SetType(constant($values['lineplot_mark_type']));
-                    $lineplot->mark->SetWidth($values['lineplot_mark_width']);
+    
+                    $line->mark->SetType(constant($values['lineplot_mark_type']));
+                    $line->mark->SetWidth($values['lineplot_mark_width']);
                     if ($values['lineplot_mark_color'] != '%lineplot_color%') {
-                        $lineplot->mark->SetColor($values['lineplot_mark_color']);
+                        $line->mark->SetColor($values['lineplot_mark_color']);
                     } else {
-                        $lineplot->mark->SetColor($values['lineplot_color']);
+                        $line->mark->SetColor($values['lineplot_color']);
                     }
                 }
+            }else{
+                
             }
 
 

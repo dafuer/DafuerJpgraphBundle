@@ -140,8 +140,25 @@ class DefaultController extends Controller {
             $combined = $request->query->get('combined');
             $custom = $params[0]; //[$combined];
         }
+     
+        $custom_fromdata=$dataaccess->getCustom($params[0]['dataserie']);
 
-        $graph = $jpgrapher->createGraph("graph_timeserie", $custom);
+        // Find style
+        if( isset($custom['style']) ){
+            $style=$custom['style'];
+        }else{
+            $style=$dataaccess->getStyle($params[0]['dataserie']);
+        }
+
+        $custom=array_merge($custom_fromdata,$custom);
+        
+        /*
+        foreach ($custom_fromdata as $asociated_name => $asociated_value) {
+            $custom[$asociated_name] = $asociated_value;
+        }
+*/
+
+        $graph = $jpgrapher->createGraph($style, $custom);
         //$graph=null;
         
         
@@ -154,29 +171,47 @@ class DefaultController extends Controller {
                 $lineplot1 = $jpgrapher->createLinePlot('lineplot_timeserie', $graph, $dataserie['ydata'], $dataserie['xdata'], $params);
             }*/
         } else {
-            for ($i = 0; $i < $combined; $i++) {
-                $id=$dataaccess->getIdByDataserie($params[$i]['dataserie']);
-             
-                $data=$dataaccess->getGraph($id,$params[$i]);
-               
-                if (!is_array($data['ydata'])){
-                    if(count($data['ydata']) > 0){
-                        $lineplot = $jpgrapher->createLinePlot('lineplot_timeserie', $graph, $data['ydata'], $data['xdata'], $params[$i]);
-                    }
-                }else{
-                    if(count($data['ydata'][0]) > 0){
-                        foreach($data['ydata'] as $j=>$line){
-                            $lineplot = $jpgrapher->createLinePlot('lineplot_timeserie', $graph, $data['ydata'][$j], $data['xdata'][$j], $params[$i]);
-                        }                        
+            for ($i = 0; $i < $combined; $i++) {           
+                $data=$dataaccess->getData($params[$i]['dataserie'],$params[$i]);
+
+                
+                if( isset($data['ydata'][0]) ){
+                    if ( !is_array($data['ydata'][0]) ){
+                        if( count($data['ydata']) > 0 ){ 
+                            //print_r($params[$i]);
+                            //throwException($e);
+ /* 
+  * ESTO AQUI ESTA MAL
+  * PERO ES LA FORMA DE QUE CAMBIE EL ESTILO
+  */                           
+$custom_fromdata=$dataaccess->getCustom($params[$i]['dataserie']);
+// Find style
+if( isset($custom['style']) ){
+    $style=$custom['style'];
+}else{
+    $style=$dataaccess->getStyle($params[$i]['dataserie']);
+}
+$custom=array_merge($custom_fromdata,$custom); 
+        
+                            $style_line=array_merge($custom,$params[$i]);
+                            $lineplot = $jpgrapher->createLinePlot($style, $graph, $data['ydata'], $data['xdata'], $style_line);
+                        }
+                    }else{
+                        if( count($data['ydata'][0]) > 0 ){
+                            foreach( $data['ydata'] as $j=>$line ){
+                                $style_line=array_merge($custom,$params[$i]);
+                                $lineplot = $jpgrapher->createLinePlot($style, $graph, $data['ydata'][$j], $data['xdata'][$j], $params[$i]);
+                            }                        
+                        }
                     }
                 }
-                
-
             }
+        
+            
         }
 
        
-            $x = $jpgrapher->strokeGraph('graph_timeserie',$custom,$graph);
+            $x = $jpgrapher->strokeGraph($style,$custom,$graph);
             if ($x == false) {
                 if($request->query->get('format')=='nohtml'){
                     $this->forward('DafuerJpgraphBundle:Default:imgerrordraw', array('style' => 'error_graph','custom'=>array()));
