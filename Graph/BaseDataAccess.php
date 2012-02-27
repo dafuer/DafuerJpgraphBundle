@@ -88,6 +88,10 @@ class BaseDataAccess {
         }
     }
     
+   /* public function getCompleteStyle($id){
+        
+    }*/
+    
     
 }
 

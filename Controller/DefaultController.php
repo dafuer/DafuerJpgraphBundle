@@ -152,14 +152,8 @@ class DefaultController extends Controller {
 
         $custom=array_merge($custom_fromdata,$custom);
         
-        /*
-        foreach ($custom_fromdata as $asociated_name => $asociated_value) {
-            $custom[$asociated_name] = $asociated_value;
-        }
-*/
 
         $graph = $jpgrapher->createGraph($style, $custom);
-        //$graph=null;
         
         
         if ($request->query->get('combined') == null) {
@@ -191,8 +185,10 @@ if( isset($custom['style']) ){
 }else{
     $style=$dataaccess->getStyle($params[$i]['dataserie']);
 }
-$custom=array_merge($custom_fromdata,$custom); 
+$custom=array_merge($custom,$custom_fromdata); 
         
+
+
                             $style_line=array_merge($custom,$params[$i]);
                             $lineplot = $jpgrapher->createLinePlot($style, $graph, $data['ydata'], $data['xdata'], $style_line);
                         }

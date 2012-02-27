@@ -133,30 +133,19 @@ class Jpgrapher {
             if (isset($values['graph_clipping']))
                 $graph->SetClipping($values['graph_clipping']);
 
-            if (isset($values['graph_img_margin']))
-                $graph->img->SetMargin($values['graph_img_margin'][0], $values['graph_img_margin'][1], $values['graph_img_margin'][2], $values['graph_img_margin'][3]);
+            if (isset($values['graph_img_margin_left']) && isset($values['graph_img_margin_right']) && isset($values['graph_img_margin_top']) && isset($values['graph_img_margin_bottom']) ){
+                $graph->img->SetMargin($values['graph_img_margin_left'], 
+                        $values['graph_img_margin_right'], 
+                        $values['graph_img_margin_top'], 
+                        $values['graph_img_margin_bottom']);
+            }
 
+            
+            
             return $graph;
         }
     }
-
-    /*
-    public function createErrorGraph($style_name, $custom=array()) {
-        require_once (__DIR__ . '/../../../jpgraph/src/jpgraph.php');
-        if (!isset($this->options[$style_name])) {
-            throw new \Exception('DafuerJpgraphBundle says: ' . $style_name . ' style does not exists.');
-        } else {
-            // Setting up variable values
-            $values = $this->getOptions($style_name, $custom);
-
-
-            $graph = new \Graph(10, 200);
-            $graph->SetMargin(0, 0, 0, 0);
-            $graph->SetScale('intlin', 0, 2, 0, 2);
-            return $graph;
-        }
-    }*/
-    
+   
     
 
     function graphDaySeries($graph_style, $line_style, $ydata, $xdata, $custom_graph=array(), $custom_lineplot=array(), $graph=null) { //, $title, $title_x=null, $title_y=null, $error=null, $width=null, $height=null, $max_ptos_to_mark=null, $color=null, $min_yscale=null, $max_yscale=null, $min_xscale=null, $max_xscale=null, $graph=null) {
@@ -278,20 +267,25 @@ class Jpgrapher {
             }
             
             
-            if (isset($values['lineplot_legend']))
+            if (isset($values['lineplot_legend'])){ 
                 $lineplot->SetLegend($values['lineplot_legend']);
-            if (isset($values['lineplot_weight']))
+            }
+            
+            if (isset($values['lineplot_weight'])){
                 $lineplot->SetWeight($values['lineplot_weight']);
-
-            if (isset($values['graph_xaxis_ticklabels']))
+            }
+            
+            if (isset($values['graph_xaxis_ticklabels'])){
                 $graph->xaxis->SetTickLabels($values["graph_xaxis_ticklabels"]);
-
-            if (isset($values['lineplot_xaxis_title']))
+            }
+            
+            if (isset($values['lineplot_xaxis_title'])){
                 $graph->xaxis->title->Set($values["graph_xaxis_title"]);
-
-            if (isset($values['lineplot_xaxis_pos']))
+            }
+            
+            if (isset($values['lineplot_xaxis_pos'])){
                 $graph->xaxis->SetPos($values["graph_xaxis_pos"]);
-
+            }
 
 
 
@@ -327,38 +321,6 @@ class Jpgrapher {
     }
     
     
-
-/*    public function createErrorLinePlot($style_name, $graph, $ydata, $xdata=null, $custom=array()) {
-        require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_line.php');
-        if (!isset($this->options[$style_name])) {
-            throw new \Exception('DafuerDafuerJpgraphBundle says: ' . $style_name . ' style does not exists.');
-        } else {
-            // Setting up variable values
-            $values = $this->readOptions($style_name, $custom, 'errorlineplot_default');
-
-            if (is_null($xdata)) {
-                $lineplot = new \LinePlot($ydata);
-            } else {
-                $lineplot = new \LinePlot($ydata, $xdata);
-            }
-
-            $graph->Add($lineplot);
-
-            $lineplot->SetColor($values['lineplot_color']);
-            $lineplot->SetLegend($values['lineplot_legend']);
-            $lineplot->SetWeight($values['lineplot.weight']);
-//              //$lineplot->SetColor("#293c82");
-//              //$lineplot->SetColor("red");
-//              $lineplot->SetColor("darkgray");
-//              $lineplot->SetCenter();
-//              $lineplot->line->setColor($color);
-//              $lineplot->line->SetWeight(1);
-//              $lineplot->SetWeight(1);
-//              $graph->Add($lineplot);             
-
-            return $lineplot;
-        }
-    }*/
 
     function strokeGraph($style_name,$custom, $graph) {
         if (!isset($this->options[$style_name])) {
@@ -417,8 +379,10 @@ class Jpgrapher {
                 $graph->xaxis->SetLabelAngle($values["graph_xaxis_labelangle"]);
             }
             
-            //if (isset($values['graph_xaxis_labelangle']))
-            //    $graph->xaxis->SetLabelAngle($values["graph_xaxis_labelangle"]);            
+            $graph->legend->SetAbsPos( 0.0,20.0,"right" ,"top"); 
+            $graph->legend->SetLayout(LEGEND_VERT);
+            $graph->legend->SetShadow('darkgray@0.5');
+            $graph->legend->SetFillColor('white@0');           
             
             
                 return $graph->Stroke();
