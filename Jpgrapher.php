@@ -110,8 +110,7 @@ class Jpgrapher {
             if($values['graph']=="graph"){
                 require_once (__DIR__ . '/../../../jpgraph/src/jpgraph.php');
                 $graph = new \Graph($values['graph_width'], $values['graph_height']);
-            }
-            
+            }           
             
             if (isset($values['graph_scale']))
                 $graph->SetScale($values['graph_scale']);
@@ -133,12 +132,9 @@ class Jpgrapher {
                 $graph->SetFrame($values['graph_frame'][0], $values['graph_frame'][1], $values['graph_frame'][2]);
             if (isset($values['graph_clipping']))
                 $graph->SetClipping($values['graph_clipping']);
-            if (isset($values['graph_xaxis_labelangle']))
-                $graph->xaxis->SetLabelAngle($values["graph_xaxis_labelangle"]);
+
             if (isset($values['graph_img_margin']))
                 $graph->img->SetMargin($values['graph_img_margin'][0], $values['graph_img_margin'][1], $values['graph_img_margin'][2], $values['graph_img_margin'][3]);
-
-
 
             return $graph;
         }
@@ -324,26 +320,7 @@ class Jpgrapher {
             if (isset($values['graph_yscale_autoticks']))
                 $graph->yscale->SetAutoTicks($values['graph_yscale_autoticks']);
 
-            if (isset($values['graph_xaxis_labelformatcallback'])) {
-                $callbacks = $this->getCallFunctions();
-                if ($values['graph_xaxis_labelformatcallback'] == 'AutoTimeCallback') {
 
-                    if (count($xdata) > 0) {
-                        $tpo = max($xdata) - min($xdata);
-
-                        $callbacks = $this->getCallFunctions();
-                        if ($tpo > 172800) {
-                            $graph->xaxis->SetLabelFormatCallback($callbacks['TimeCallbackDay']);
-                        } else {
-                            $graph->xaxis->SetLabelFormatCallback($callbacks['TimeCallbackTime']);
-                        }
-                    }
-                } else {
-                    $graph->xaxis->SetLabelFormatCallback($callbacks[$values['graph_xaxis_labelformatcallback']]);
-                }
-            }
-            if (isset($values['graph_xaxis_labelangle']))
-                $graph->xaxis->SetLabelAngle($values["graph_xaxis_labelangle"]);
             
             return $lineplot;
         }
@@ -414,13 +391,36 @@ class Jpgrapher {
 
             
             $graph->SetScale($values['graph_scale'], $ymin, $ymax,$xmin,$xmax);
-          
+          if (count($graph->plots)) {
             
-            //echo $graph->yscale->GetMinVal();
-            //$graph->yscale->SetAutoMax(5.4);
+            if (isset($values['graph_xaxis_labelformatcallback'])) { // If it has labelformatcallback
+                $callbacks = $this->getCallFunctions();
+                if ($values['graph_xaxis_labelformatcallback'] == 'AutoTimeCallback') { // If it
+
+                    $xminmax=$graph->GetXMinMax();
+                    if ($xminmax[0]!=null) {
+                        $tpo = $xminmax[1] - $xminmax[0];
+
+                        $callbacks = $this->getCallFunctions();
+                        if ($tpo > 172800) {
+                            $graph->xaxis->SetLabelFormatCallback($callbacks['TimeCallbackDay']);
+                        } else {
+                            $graph->xaxis->SetLabelFormatCallback($callbacks['TimeCallbackTime']);
+                        }
+                    }
+                } else {
+                    $graph->xaxis->SetLabelFormatCallback($callbacks[$values['graph_xaxis_labelformatcallback']]);
+                }
+            }
+            
+            if (isset($values['graph_xaxis_labelangle'])){
+                $graph->xaxis->SetLabelAngle($values["graph_xaxis_labelangle"]);
+            }
+            
+            //if (isset($values['graph_xaxis_labelangle']))
+            //    $graph->xaxis->SetLabelAngle($values["graph_xaxis_labelangle"]);            
             
             
-            if (count($graph->plots)) {
                 return $graph->Stroke();
             } else {
                 return false;
