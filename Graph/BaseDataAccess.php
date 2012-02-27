@@ -54,19 +54,7 @@ class BaseDataAccess {
         return $result;
     }
     
-    
-    /*public function getIdByDataserie($dataname){
-        //print_r( $this->options);
-        foreach($this->options as $id=>$graph){
-            if($graph['dataname']==$dataname){
-                return $id;
-            }
-        }
-        
-        return null;
-    }*/
-    
-    
+
     public function getData($id,$params){
         if(isset($this->options[$id])){
             $function=$this->options[$id]['function'];
