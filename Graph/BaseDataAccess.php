@@ -14,7 +14,7 @@ use Symfony\Component\Yaml\Yaml;
  *
  * @author david
  */
-class BaseDataAccess {
+class BaseDataAccess{
     
     protected $graphindexpath="";
     
@@ -74,6 +74,17 @@ class BaseDataAccess {
         }else{
             return array();
         }
+    }
+    
+    public function readGraph($id,$params){
+        $data=$this->getData($id, $params);
+        // For a graph, style is unique. The same for all lines
+        foreach($data['ydata'] as $i=>$values){
+            $data['style'][$i]=getStyle($id);
+        }
+        // For each line, get a custom
+        
+        
     }
     
    /* public function getCompleteStyle($id){

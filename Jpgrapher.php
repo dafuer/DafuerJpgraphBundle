@@ -432,9 +432,12 @@ class Jpgrapher {
         $result = array();
 
 
-
         if (is_null($query->get('combined'))) {
-            $result = $query->all();
+            //$result = $query->all();
+            $parameters=$query->all();
+            foreach($parameters as $name=>$value){
+                $result[0][$name]=$value;
+            }
         } else {
             $parameters = $query->all();
             $single_parameters = array();
@@ -449,7 +452,6 @@ class Jpgrapher {
             }
             array_push($result, $single_parameters);
         }
-
 
         return $result;
     }
