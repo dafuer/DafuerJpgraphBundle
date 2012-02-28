@@ -111,6 +111,16 @@ class Jpgrapher {
                 require_once (__DIR__ . '/../../../jpgraph/src/jpgraph.php');
                 $graph = new \Graph($values['graph_width'], $values['graph_height']);
             }           
+
+            
+            if (isset($values['graph_img_margin_left']) && isset($values['graph_img_margin_right']) && isset($values['graph_img_margin_top']) && isset($values['graph_img_margin_bottom']) ){
+                
+                $graph->SetMargin($values['graph_img_margin_left'], 
+                        $values['graph_img_margin_right'], 
+                        $values['graph_img_margin_top'], 
+                        $values['graph_img_margin_bottom']);
+                
+            }
             
             if (isset($values['graph_scale']))
                 $graph->SetScale($values['graph_scale']);
@@ -124,8 +134,8 @@ class Jpgrapher {
                 $graph->xgrid->SetColor($values['graph_xgrid_color']);
             if (isset($values['graph_xgrid_linestyle']))
                 $graph->xgrid->SetLineStyle($values["graph_xgrid_linestyle"]);
-            if (isset($values['graph_img_antialiasing']))
-                $graph->img->SetAntiAliasing($values['graph_img_antialiasing']);
+            //if (isset($values['graph_img_antialiasing']))
+            //    $graph->img->SetAntiAliasing($values['graph_img_antialiasing']);
             if (isset($values['graph_legend_frameweight']))
                 $graph->legend->SetFrameWeight($values['graph_legend_frameweight']);
             if (isset($values['graph_frame'][0]) && isset($values['graph_frame'][1]))
@@ -133,12 +143,7 @@ class Jpgrapher {
             if (isset($values['graph_clipping']))
                 $graph->SetClipping($values['graph_clipping']);
 
-            if (isset($values['graph_img_margin_left']) && isset($values['graph_img_margin_right']) && isset($values['graph_img_margin_top']) && isset($values['graph_img_margin_bottom']) ){
-                $graph->img->SetMargin($values['graph_img_margin_left'], 
-                        $values['graph_img_margin_right'], 
-                        $values['graph_img_margin_top'], 
-                        $values['graph_img_margin_bottom']);
-            }
+
 
             
             
@@ -383,8 +388,12 @@ class Jpgrapher {
             $graph->legend->SetLayout(LEGEND_VERT);
             $graph->legend->SetShadow('darkgray@0.5');
             $graph->legend->SetFillColor('white@0');           
-            
-            
+          
+       $graph->graph_theme=null;
+            //$graph->SetYScale("textlin");
+      // $graph->SetMargin(50,50,50,50);
+        //    $graph->plots[0]->SetLegend("kaka");
+//$graph->footer->left->Set('Left footer');
                 return $graph->Stroke();
             } else {
                 return false;
