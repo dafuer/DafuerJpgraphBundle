@@ -218,11 +218,12 @@ function setUpdateListener(formname){
 /**
  * Returns the full path to the page by adding the images generated routes
  */
-function refreshURL(){
+function refreshURL(viewerurl){
     // Para obtener la URL total la genero a partir de todas las graficas que haya
     textarea= document.getElementById('url');
-    textarea.innerHTML="http://localhost/caelis/app_dev.php/rima/graph/viewer?";
+    textarea.innerHTML=viewerurl+"?";//"http://localhost/caelis/app_dev.php/rima/graph/viewer?";
     var url=new String();
+    
     for(var i=0;i<num;i++){
         tempurl=new String();
         //obtengo el div
@@ -243,6 +244,7 @@ function refreshURL(){
         url+=tempurl;
 
     }
+    
     // Elimino el primer caracter (&) y concateno la opcion del numero de graficas
     url=url.slice(1,url.length)+"&numofgraphs="+i;
     textarea.innerHTML+=url;

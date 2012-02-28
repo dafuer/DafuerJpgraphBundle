@@ -389,11 +389,8 @@ class Jpgrapher {
             $graph->legend->SetShadow('darkgray@0.5');
             $graph->legend->SetFillColor('white@0');           
           
-       $graph->graph_theme=null;
-            //$graph->SetYScale("textlin");
-      // $graph->SetMargin(50,50,50,50);
-        //    $graph->plots[0]->SetLegend("kaka");
-//$graph->footer->left->Set('Left footer');
+            $graph->graph_theme=null;
+            
                 return $graph->Stroke();
             } else {
                 return false;

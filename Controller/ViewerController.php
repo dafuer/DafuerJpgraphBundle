@@ -16,11 +16,14 @@ class ViewerController extends Controller {
    
     /**
      * Esta accion permite visualizar cualqueir gráfica con varias opciones de comportamiento en Ajax
-     * @param sfWebRequest $request
      */
-    public function viewerAction($insertgraphroute,$viewerformpath=null) {
+    public function viewerAction($viewerpath,$insertgraphroute,$viewerformpath=null) {
 
-        
+	$router=$this->get('router');
+
+	$viewerurl=$router->generate($viewerpath,array(),true);
+     
+   
         $jpgrapher = $this->get('jpgraph');
 
         $numofgraphs = $this->get('request')->query->get('numofgraphs',1);
@@ -30,7 +33,7 @@ class ViewerController extends Controller {
         
         $js=$this->js_set_form_values($this->get('request')->query->all());
         
-        return $this->render('DafuerJpgraphBundle:Viewer:viewer.html.twig', array('numofgraphs' => $numofgraphs, 'combined'=>$combined,  'insertgraphroute'=>$insertgraphroute,'js'=>$js,'viewerformpath'=>$viewerformpath), null);
+        return $this->render('DafuerJpgraphBundle:Viewer:viewer.html.twig', array('viewerurl'=>$viewerurl, 'numofgraphs' => $numofgraphs, 'combined'=>$combined,  'insertgraphroute'=>$insertgraphroute,'js'=>$js,'viewerformpath'=>$viewerformpath), null);
     }
 
     /**
