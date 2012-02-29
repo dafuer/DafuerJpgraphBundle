@@ -28,6 +28,10 @@ class BaseDataAccess{
         $this->options = Yaml::parse($this->graphindexpath);        
     }
     
+    public function emptyResult(){
+        return array('xdata' => array(array()), 'ydata' => array(array()));
+    }
+    
     
     public function getGraphList($roles=array('IS_AUTHENTICATED_ANONYMOUSLY')){
         $result=array();
@@ -69,7 +73,7 @@ class BaseDataAccess{
     }
     
     public function getCustom($id){
-        if(isset($this->options[$id]['custom_style'])){
+        if(isset($this->options[$id]['custom_style'])){            
             return $this->options[$id]['custom_style'];
         }else{
             return array();
@@ -78,18 +82,51 @@ class BaseDataAccess{
     
     public function readGraph($id,$params){
         $data=$this->getData($id, $params);
+        
         // For a graph, style is unique. The same for all lines
         foreach($data['ydata'] as $i=>$values){
-            $data['style'][$i]=getStyle($id);
+            if(!isset($data['style'][$i])){
+                $data['style'][$i]=$this->getStyle($id);
+            }
         }
-        // For each line, get a custom
         
+        // Separate style in custom style or line style
+        $styles=$this->getCustom($id);
+        $custom=array();
+        $custom_line=array();
+        foreach($styles as $i=>$value){
+            if(is_array($value)){
+                $custom_line[$i]=$value;
+            }else{
+                $custom[$i]=$value;
+            }
+        }
         
+        // For each line, set custom style
+        foreach($data['ydata'] as $i=>$values){
+            // Prepare line style merging style line with custom style
+            if(isset($custom_line[$i])){ // If exist style line...
+                $customstyle=array_merge($custom,$custom_line[$i]);
+                
+            }else{
+                $customstyle=$custom;
+            }
+            
+            // Set custom style but it can exist custom style defined in getData function
+            if(isset($data['custom'][$i])){ 
+                $data['custom'][$i]=array_merge($customstyle,$data['custom'][$i]);
+            }else{
+                $data['custom'][$i]=$customstyle;
+            }
+        } 
+        
+        // Last, set up user parameters
+        $data['custom'][$i]=array_merge($data['custom'][$i],$params);
+
+        return $data;    
     }
     
-   /* public function getCompleteStyle($id){
-        
-    }*/
+
     
     
 }
