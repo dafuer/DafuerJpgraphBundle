@@ -14,6 +14,13 @@ abstract class BaseGraphType extends AbstractType
         $this->name=$name;
     }
 
+    public function addLegendHide(FormBuilder $builder, array $options){
+        $builder                
+                ->add('graph_title', 'text',array())          
+        ;     
+        
+        return $this;
+    }  
     
     public function addGraphTitle(FormBuilder $builder, array $options){
         $builder                

@@ -225,6 +225,15 @@ class Jpgrapher {
                 }
             }
 
+            if ($values['lineplot'] == "boxplot") {
+                require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_stock.php');
+                if (is_null($xdata)) {
+                    $lineplot = new \BoxPlot($ydata);
+                } else {
+                    $lineplot = new \BoxPlot($ydata, $xdata);
+                }
+                $lineplot->SetMedianColor("red","yellow");
+            }            
 
             // El eje
             if (isset($values['graph_yaxis_number'])) {
@@ -256,13 +265,16 @@ class Jpgrapher {
                 }
             }
 
-            if ($values['lineplot'] == "lineplot") {
+            if ($values['lineplot'] == "lineplot" ) {
                 $line = $lineplot;
-            } else {
+            } else if ($values['lineplot'] == "errorlineplot") {
                 $line = $lineplot->line;
+            } else {
+                $line=null;
             }
 
-            if (isset($values['lineplot_color'])) {
+            
+            if ( $line!=null && isset($values['lineplot_color'])) {
                 $line->SetColor($values['lineplot_color']);
             }
 
@@ -294,7 +306,7 @@ class Jpgrapher {
 
 
 
-            if (isset($values['lineplot_max_ptos_to_mark'])) {
+            if ($line!=null && isset($values['lineplot_max_ptos_to_mark'])) {
                 if ($values['lineplot_max_ptos_to_mark'] == -1 || count($xdata) < $values['lineplot_max_ptos_to_mark']) {
 
                     $line->mark->SetType(constant($values['lineplot_mark_type']));
@@ -333,7 +345,8 @@ class Jpgrapher {
             $values = $this->getOptions($style_name, $custom);
 
             $graph->doAutoScaleYAxis();
-
+            $graph->doAutoScaleXAxis();
+         
             $ymin = $graph->yscale->GetMinVal();
             $ymax = $graph->yscale->GetMaxVal();
             $xmin = $graph->xscale->GetMinVal();
