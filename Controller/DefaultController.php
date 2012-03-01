@@ -177,6 +177,9 @@ $graph->Stroke();
         $jpgrapher = $this->get('jpgraph');
 
         $params = $jpgrapher->parseQueryParameters($request->query);
+        
+        
+
 
         $combined = $request->query->get('combined',1);     
 
@@ -192,14 +195,16 @@ $graph->Stroke();
         $firststyle=$datas[0]['style'][$firstkey];
         $firstcustom=$datas[0]['custom'][$firstkey];        
 
+        $base_style=array_merge($firstcustom,$params[0]);
+        
         // Create graph
-        $graph = $jpgrapher->createGraph($firststyle, $firstcustom);
+        $graph = $jpgrapher->createGraph($firststyle, $base_style);
         
         
         // Add plots
         foreach($datas as $i=>$data){
                 foreach( $data['ydata'] as $j=>$line ){
-                    if( count($data['ydata'][$j]) > 0 ){ 
+                    if( count($data['ydata'][$j]) > 0 ){                     
                         $style_line=array_merge($data['custom'][$j],$params[$i]);
                         $lineplot = $jpgrapher->createLinePlot($data['style'][$j], $graph, $data['ydata'][$j], $data['xdata'][$j], $style_line);
                     }                        
@@ -208,7 +213,7 @@ $graph->Stroke();
          
         
         //Stroke the graph        
-        $x = $jpgrapher->strokeGraph($firststyle,$firstcustom,$graph);
+        $x = $jpgrapher->strokeGraph($firststyle,$base_style,$graph);
         if ($x == false) {
             if($request->query->get('format')=='nohtml'){
                 $this->forward('DafuerJpgraphBundle:Default:imgerrordraw', array('style' => 'error_graph','custom'=>array()));

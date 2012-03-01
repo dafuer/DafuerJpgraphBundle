@@ -235,6 +235,18 @@ class Jpgrapher {
                 $lineplot->SetMedianColor("red","yellow");
             }            
 
+            if ($values['lineplot'] == "barplot") {
+                require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_bar.php');
+                
+                // No tiene sentido xdata en este caso. se puede olvidar.
+                if (is_null($xdata)) {
+                    $lineplot = new \BarPlot($ydata);
+                } else {
+                    $lineplot = new \BarPlot($ydata,$xdata);
+                }
+               
+            }                
+            
             // El eje
             if (isset($values['graph_yaxis_number'])) {
                 if ($values['graph_yaxis_number'] == 0) {
