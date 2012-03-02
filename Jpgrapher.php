@@ -39,9 +39,7 @@ class Jpgrapher {
         //$this->viewer = Yaml::parse($this->viewer_file);
     }
 
-    /* public function getViewerOptions() {
-      return $this->viewer;
-      } */
+
 
     public function readStyle($style_tag, $values = array()) {
         if (!isset($this->options[$style_tag]))
@@ -152,7 +150,7 @@ class Jpgrapher {
         }
     }
 
-    function graphDaySeries($graph_style, $line_style, $ydata, $xdata, $custom_graph = array(), $custom_lineplot = array(), $graph = null) { //, $title, $title_x=null, $title_y=null, $error=null, $width=null, $height=null, $max_ptos_to_mark=null, $color=null, $min_yscale=null, $max_yscale=null, $min_xscale=null, $max_xscale=null, $graph=null) {
+    function graphDaySeries($graph_style, $line_style, $ydata, $xdata, $custom_graph = array(), $custom_lineplot = array(), $graph = null) { 
         if (count($xdata) > 0) {
 
             if (is_null($graph)) {  // Si no me pasan una grafica a la que añadir la linea creo una nueva
@@ -239,13 +237,25 @@ class Jpgrapher {
                 require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_bar.php');
                 
                 // No tiene sentido xdata en este caso. se puede olvidar.
-                if (is_null($xdata)) {
+               // if (is_null($xdata)) {
                     $lineplot = new \BarPlot($ydata);
-                } else {
-                    $lineplot = new \BarPlot($ydata,$xdata);
-                }
+                //} else {
+                //    $lineplot = new \BarPlot($ydata,$xdata);
+               /// }
                
-            }                
+            } 
+            
+            if ($values['lineplot'] == "scatterplot") {
+                require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_scatter.php');
+                
+                
+                //if (is_null($xdata)) {
+                //    $lineplot = new \BarPlot($ydata);
+                //} else {
+                    $lineplot = new \ScatterPlot($ydata,$xdata);
+                //}
+               
+            }             
             
             // El eje
             if (isset($values['graph_yaxis_number'])) {
@@ -277,7 +287,7 @@ class Jpgrapher {
                 }
             }
 
-            if ($values['lineplot'] == "lineplot" ) {
+            if ($values['lineplot'] == "lineplot" || $values['lineplot'] == "scatterplot" ) {
                 $line = $lineplot;
             } else if ($values['lineplot'] == "errorlineplot") {
                 $line = $lineplot->line;
@@ -333,6 +343,13 @@ class Jpgrapher {
                 
             }
 
+            if (isset($values['lineplot_mark_callback'])) {
+                $line->mark->SetCallback($values["lineplot_mark_callback"]);
+            }
+            
+            if (isset($values['lineplot_mark_callbackyx'])) {
+                $line->mark->SetCallbackYX($values["lineplot_mark_callbackyx"]);
+            }            
 
 
             /* if (isset($values['lineplot_reescale'])) {
@@ -428,7 +445,8 @@ class Jpgrapher {
                     $graph->legend->Hide($values['graph_legend_hide']);
                 }
 
-
+                $graph->SetClipping(true);
+                $graph->xaxis->SetPos( 'min' );
                 $graph->graph_theme = null;
                 return $graph->Stroke();
             } else {
