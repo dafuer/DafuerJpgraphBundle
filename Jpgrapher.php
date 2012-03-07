@@ -146,6 +146,7 @@ class Jpgrapher {
 
 
 
+
             return $graph;
         }
     }
@@ -267,9 +268,15 @@ class Jpgrapher {
                     if (isset($values['graph_yaxis_hideline']))
                         $graph->yaxis->HideLine($values['graph_yaxis_hideline']);
 
-                    if (isset($values['graph_ygrid_fill']))
+                    // This code here has not effect
+                    if (isset($values['graph_ygrid_fill'])){
                         $graph->ygrid->SetFill($values['graph_ygrid_fill'][0], $values['graph_ygrid_fill'][1], $values['graph_ygrid_fill'][2]);
-
+                        //DEPTH_BACK, Under plots
+                        //DEPTH_FRONT, On top of plots      
+                        $graph->ygrid->Show(); 
+                        $graph->SetGridDepth(DEPTH_BACK);                        
+                    }
+                    
                     $graph->Add($lineplot);
                 }else {
                     // First, I find maxium index allowed to prevent a exception
@@ -373,8 +380,11 @@ class Jpgrapher {
             // Setting up variable values
             $values = $this->getOptions($style_name, $custom);
 
-            $graph->doAutoScaleYAxis();
-            $graph->doAutoScaleXAxis();
+            if(count($graph->plots)>0){
+                $graph->doAutoScaleYAxis();
+                $graph->doAutoScaleXAxis();
+            }
+
          
             $ymin = $graph->yscale->GetMinVal();
             $ymax = $graph->yscale->GetMaxVal();
@@ -397,7 +407,7 @@ class Jpgrapher {
 
 
             $graph->SetScale($values['graph_scale'], $ymin, $ymax, $xmin, $xmax);
-            if (count($graph->plots)) {
+            if (count($graph->plots)>0) {
 
                 if (isset($values['graph_xaxis_labelformatcallback'])) { // If it has labelformatcallback
                     $callbacks = $this->getCallFunctions();
@@ -444,6 +454,7 @@ class Jpgrapher {
                 if (isset($values['graph_legend_hide'])) {
                     $graph->legend->Hide($values['graph_legend_hide']);
                 }
+
 
                 $graph->SetClipping(true);
                 $graph->xaxis->SetPos( 'min' );

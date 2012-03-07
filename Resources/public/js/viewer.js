@@ -111,8 +111,8 @@ function addSingleFormTo(formname,ruta){//,urlopts){
     $("#more_"+formname).append(r);
     setUpdateListener(formname); 
     
-updateFormValues(formname);  
-update(formname);
+    updateFormValues(formname);  
+    update(formname);
 }     
 
 
@@ -210,6 +210,7 @@ function setUpdateListener(formname){
             $(form.elements[i]).change(function() {
                 update(formname);
             });
+            $(form.elements[i]).watermark('Default Value');
         }
     }
 }
@@ -300,6 +301,7 @@ function updateFormValues(formname){
     }
     
 }
+
 
 
 /**

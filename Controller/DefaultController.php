@@ -24,43 +24,26 @@ class DefaultController extends Controller {
     public function graphtest2Action(){
         // Example of a stock chart
 include (__DIR__."/../../../../jpgraph/src/jpgraph.php");
-include (__DIR__."/../../../../jpgraph/src/jpgraph_stock.php");
-
-// Data must be in the format : open,close,min,max,median
-/*$datay = array(
-    34,42,27,45,36,
-    55,25,14,59,40,
-    15,40,12,47,23,
-    62,38,25,65,57,
-    38,49,32,64,45);*/
-
-
-$datay=array ( 
- 0.0479965  , 0.0565306 , 0.0631499 , 0.0880246 , 0.103169  , 0.123259  , 0.147395  , 0.144342  , 0.097898 , 0.0751801 , 0.0618202 , 0.0471663 
-, 0.339784  , 0.530402 , 0.536373 , 0.471064 , 0.445079 , 0.534895 , 0.48771  , 0.413452 , 0.470833 , 0.477945 , 0.371704 , 0.281344 
-, 0.0226323 , 0.0267109, 0.036691 , 0.0588914, 0.0740865, 0.0807634, 0.0775961, 0.0533679, 0.0566997 , 0.0583638 , 0.0456748 , 0.0351102 
-, 0.543015  , 0.813115 , 0.657319 , 0.693436 , 0.567075 , 0.694265 , 0.637278 , 0.575441 , 0.824624 , 0.684181 , 0.543286 , 0.511298 
-, 0.12455   , 0.192384 , 0.164784 , 0.227751 , 0.225446 , 0.277104 , 0.275583 , 0.270724 , 0.286963 , 0.214318 , 0.119508 , 0.108224 );
-      
-
-
-// Setup a simple graph
-$graph = new \Graph(300,200);
+include (__DIR__."/../../../../jpgraph/src/jpgraph_line.php");
+$datay = array(1.23,1.9,1.6,3.1,3.4,2.8,2.1,1.9);
+$graph = new \Graph(300,200,"auto");
 $graph->SetScale("textlin");
-$graph->SetMarginColor('lightblue');
-$graph->title->Set('Box Stock chart example');
 
-// Create a new stock plot
-$p1 = new \BoxPlot($datay);
+$graph->img->SetMargin(40,40,40,40);    
+$graph->SetShadow();
+$graph->ygrid->SetFill(true, "red@0.9", "blue@0.9");
+$graph->SetGridDepth(DEPTH_FRONT);
 
-// Width of the bars (in pixels)
-$p1->SetWidth(9);
+$graph->title->Set("Example of filled line plot");
+$graph->title->SetFont(FF_FONT1,FS_BOLD);
 
-// Uncomment the following line to hide the horizontal end lines
-//$p1->HideEndLines();
-
-// Add the plot to the graph and send it back to the browser
+$p1 = new \LinePlot($datay);
+$p1->SetFillColor("orange");
+$p1->mark->SetType(MARK_FILLEDCIRCLE);
+$p1->mark->SetFillColor("red");
+$p1->mark->SetWidth(4);
 $graph->Add($p1);
+
 $graph->Stroke();
     }
     

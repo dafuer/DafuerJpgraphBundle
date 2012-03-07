@@ -31,6 +31,7 @@ DafuerJpgraphBundle:
 
 
 - Dinamic graphs need jquery library import before to call it.
+- Forms use jquery-watermark (http://code.google.com/p/jquery-watermark/)
 
 
 Note: If you want to disable imageantialias you must open the file /vendor/jpgraph/src/gd_image.inc.php, find the function SetAntiAliasing and comment this line out like this:
