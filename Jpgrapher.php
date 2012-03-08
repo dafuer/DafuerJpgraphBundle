@@ -151,44 +151,6 @@ class Jpgrapher {
         }
     }
 
-    function graphDaySeries($graph_style, $line_style, $ydata, $xdata, $custom_graph = array(), $custom_lineplot = array(), $graph = null) { 
-        if (count($xdata) > 0) {
-
-            if (is_null($graph)) {  // Si no me pasan una grafica a la que añadir la linea creo una nueva
-                $graph = $this->createGraph($graph_style, $custom_graph);
-            } else {// Esto sifnifica que la grafica viene para que añada la linea
-                // Compruebo que la grafica tenga algo pintado (que no sea un cuadro blanco)
-                if ($graph->img->width < 15)
-                    $graph = $this->createGraph($graph_style, $custom_graph);
-            }
-
-
-            $indice = 0;
-            // Obtengo un indice valido
-            foreach ($xdata as $i => $value) {
-                $indice = $i;
-                break;
-            }
-
-            if (is_array($xdata[$indice])) {
-                foreach ($xdata as $i => $value) {
-                    // Si hay establecidos maximos y minimos en las escalas adapto los datos
-                    $lineplot = $this->createLinePlot($line_style, $graph, $ydata[$i], $xdata[$i], $custom_lineplot);
-                }
-            } else {
-                $lineplot = $this->createLinePlot($line_style, $graph, $ydata[$i], $xdata[$i], $custom_lineplot);
-            }
-
-            return $graph;
-        } else {
-
-            if (is_null($graph)) {  // Si no me pasan una grafica a la que añadir la linea creo una nueva para devolver el error
-                $graph = $this->createErrorGraph($graph_style, $custom_graph);
-            }
-
-            return $graph;
-        }
-    }
 
     public function createLinePlot($style_name, $graph, $ydata, $xdata = null, $custom = array()) {
 
@@ -520,6 +482,46 @@ class Jpgrapher {
 
         return $result;
     }
+    
+   
+    function graphDaySeries($graph_style, $line_style, $ydata, $xdata, $custom_graph = array(), $custom_lineplot = array(), $graph = null) { 
+        if (count($xdata) > 0) {
+
+            if (is_null($graph)) {  // Si no me pasan una grafica a la que añadir la linea creo una nueva
+                $graph = $this->createGraph($graph_style, $custom_graph);
+            } else {// Esto sifnifica que la grafica viene para que añada la linea
+                // Compruebo que la grafica tenga algo pintado (que no sea un cuadro blanco)
+                if ($graph->img->width < 15)
+                    $graph = $this->createGraph($graph_style, $custom_graph);
+            }
+
+
+            $indice = 0;
+            // Obtengo un indice valido
+            foreach ($xdata as $i => $value) {
+                $indice = $i;
+                break;
+            }
+
+            if (is_array($xdata[$indice])) {
+                foreach ($xdata as $i => $value) {
+                    // Si hay establecidos maximos y minimos en las escalas adapto los datos
+                    $lineplot = $this->createLinePlot($line_style, $graph, $ydata[$i], $xdata[$i], $custom_lineplot);
+                }
+            } else {
+                $lineplot = $this->createLinePlot($line_style, $graph, $ydata[$i], $xdata[$i], $custom_lineplot);
+            }
+
+            return $graph;
+        } else {
+
+            if (is_null($graph)) {  // Si no me pasan una grafica a la que añadir la linea creo una nueva para devolver el error
+                $graph = $this->createErrorGraph($graph_style, $custom_graph);
+            }
+
+            return $graph;
+        }
+    }    
 
 }
 
