@@ -1,5 +1,5 @@
 <?php
-
+ 
 namespace Dafuer\JpgraphBundle;
 
 use Symfony\Component\Yaml\Yaml;
