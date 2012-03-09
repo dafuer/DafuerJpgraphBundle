@@ -73,7 +73,7 @@ class BaseDataAccess{
     }
     
     public function getCustom($id){
-        if(isset($this->options[$id]['custom_style'])){            
+        if(isset($this->options[$id]['custom_style'])){    
             return $this->options[$id]['custom_style'];
         }else{
             return array();
@@ -84,6 +84,7 @@ class BaseDataAccess{
         $data=$this->getData($id, $params);
         
         // For a graph, style is unique. The same for all lines
+        // BUG HERE: it's lie
         foreach($data['ydata'] as $i=>$values){
             if(!isset($data['style'][$i])){
                 $data['style'][$i]=$this->getStyle($id);
@@ -95,8 +96,10 @@ class BaseDataAccess{
         $custom=array();
         $custom_line=array();
         foreach($styles as $i=>$value){
-            if(is_array($value)){
-                $custom_line[$i]=$value;
+            if($i=="graph_plots" ){ // && is_array($value)){    
+                foreach($value as $line_name=>$line_style){
+                    $custom_line[$line_name]=$line_style;
+                }
             }else{
                 $custom[$i]=$value;
             }

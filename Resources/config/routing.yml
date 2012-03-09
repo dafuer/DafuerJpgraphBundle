@@ -10,15 +10,11 @@ JpgraphBundle_graph_drawtimeseries:
     options:
         expose: true
         
-JpgraphBundle_graph_query:
-    pattern:  /graph/query
-    defaults: { _controller: DafuerJpgraphBundle:Default:query }
-    options:
-        expose: true   
+
         
-JpgraphBundle_graph_query:
-    pattern:  /graph/imggraph
-    defaults: { _controller: DafuerJpgraphBundle:Default:imggraph }
+#JpgraphBundle_graph_query:
+#    pattern:  /graph/imggraph
+#    defaults: { _controller: DafuerJpgraphBundle:Default:imggraph }
  
 JpgraphBundle_graph_imgerrordraw:
     pattern:  /graph/imgerrordraw/{style}

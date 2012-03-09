@@ -1,0 +1,28 @@
+
+<h1>Show Query Style</h1>
+
+
+{% for style in styles %}
+    <table class="records_list">
+        <thead>
+            <tr>
+                <th>option</th>
+                <th>value</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for option,value in style %}
+            <tr>
+                <td>{{ option }}</td>
+                <td>{{ value }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="2">No options</td>
+            </tr>        
+        {% endfor %}
+        </tbody>
+    </table>
+    <BR/>
+    <BR/>
+{% endfor %}

@@ -121,8 +121,14 @@ class Jpgrapher {
                 $graph->SetMargin($values['graph_img_margin_left'], $values['graph_img_margin_right'], $values['graph_img_margin_top'], $values['graph_img_margin_bottom']);
             }
 
-            if (isset($values['graph_scale']))
+            if (isset($values['graph_scale'])){  
+                $yt=substr($values['graph_scale'],-3,3);
+                $xt=substr($values['graph_scale'],0,3);
+                if( $yt == 'dat' || $xt=='dat' ) {
+                    require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_date.php');
+                }
                 $graph->SetScale($values['graph_scale']);
+            }
             if (isset($values['graph_title']))
                 $graph->title->Set($values['graph_title']);
             if (isset($values['graph_box']))
@@ -188,36 +194,25 @@ class Jpgrapher {
 
             if ($values['lineplot'] == "boxplot") {
                 require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_stock.php');
-                if (is_null($xdata)) {
+                if (!isset($xdata)) {
                     $lineplot = new \BoxPlot($ydata);
                 } else {
                     $lineplot = new \BoxPlot($ydata, $xdata);
                 }
                 $lineplot->SetMedianColor("red","yellow");
-            }            
+            }      
+            
 
             if ($values['lineplot'] == "barplot") {
                 require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_bar.php');
                 
-                // No tiene sentido xdata en este caso. se puede olvidar.
-               // if (is_null($xdata)) {
-                    $lineplot = new \BarPlot($ydata);
-                //} else {
-                //    $lineplot = new \BarPlot($ydata,$xdata);
-               /// }
-               
+                $lineplot = new \BarPlot($ydata);
             } 
             
             if ($values['lineplot'] == "scatterplot") {
                 require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_scatter.php');
                 
-                
-                //if (is_null($xdata)) {
-                //    $lineplot = new \BarPlot($ydata);
-                //} else {
-                    $lineplot = new \ScatterPlot($ydata,$xdata);
-                //}
-               
+                $lineplot = new \ScatterPlot($ydata,$xdata);
             }             
             
             // El eje
