@@ -1,22 +1,8 @@
 # Autor: David Fuertes
 # github: dafuer
 
-#JpgraphBundle_homepage:
-#    pattern:  /jpgraph
-#    defaults: { _controller: DafuerJpgraphBundle:Default:index }
 
 
-JpgraphBundle_test1:
-    pattern:  /graph/test1
-    defaults: { _controller: DafuerJpgraphBundle:Default:test1 }
-    
-JpgraphBundle_graph_test1:
-    pattern:  /graph/graphtest1
-    defaults: { _controller: DafuerJpgraphBundle:Default:graphtest1 }
-    
-JpgraphBundle_graph_test2:
-    pattern:  /graph/graphtest2
-    defaults: { _controller: DafuerJpgraphBundle:Default:graphtest2 }
     
 JpgraphBundle_graph_drawtimeseries:
     pattern:  /graph/drawtimeseries

@@ -1,0 +1,11 @@
+JpgraphBundle_examples_test1:
+    pattern:  /test1
+    defaults: { _controller: DafuerJpgraphBundle:Examples:test1 }
+    
+JpgraphBundle_examples_drawtest1:
+    pattern:  /drawtest1
+    defaults: { _controller: DafuerJpgraphBundle:Examples:drawtest1 }
+    
+JpgraphBundle_examples_drawtest2:
+    pattern:  /drawtest2
+    defaults: { _controller: DafuerJpgraphBundle:Examples:drawtest2 }

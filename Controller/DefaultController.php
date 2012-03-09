@@ -17,58 +17,10 @@ class DefaultController extends Controller {
         return $this->render('DafuerJpgraphBundle:Default:index.html.twig', array());
     }
 
-    public function test1Action() {
-        return $this->render('DafuerJpgraphBundle:Default:test1.html.twig', array());
-    }
 
-    public function graphtest2Action(){
-        // Example of a stock chart
-include (__DIR__."/../../../../jpgraph/src/jpgraph.php");
-include (__DIR__."/../../../../jpgraph/src/jpgraph_line.php");
-$datay = array(1.23,1.9,1.6,3.1,3.4,2.8,2.1,1.9);
-$graph = new \Graph(300,200,"auto");
-$graph->SetScale("textlin");
 
-$graph->img->SetMargin(40,40,40,40);    
-$graph->SetShadow();
-$graph->ygrid->SetFill(true, "red@0.9", "blue@0.9");
-$graph->SetGridDepth(DEPTH_FRONT);
 
-$graph->title->Set("Example of filled line plot");
-$graph->title->SetFont(FF_FONT1,FS_BOLD);
-
-$p1 = new \LinePlot($datay);
-$p1->SetFillColor("orange");
-$p1->mark->SetType(MARK_FILLEDCIRCLE);
-$p1->mark->SetFillColor("red");
-$p1->mark->SetWidth(4);
-$graph->Add($p1);
-
-$graph->Stroke();
-    }
     
-    public function graphtest1Action() {
-        $datay1 = array(20, 15, 23, 15);
-        $datay2 = array(12, 9, 42, 8);
-        $datay3 = array(5, 17, 32, 24);
-
-        // Obtain jpgraphBundle service
-        $jpgrapher = $this->get('jpgraph');
-
-
-        $graph = $jpgrapher->createGraph("graph_example2");
-
-        // Create the first line
-        $lineplot1 = $jpgrapher->createLinePlot('lineplot_example', $graph, $datay1);
-
-        // Create the second line
-        $lineplot2 = $jpgrapher->createLinePlot('lineplot_example', $graph, $datay2, null, array("lineplot.color" => "#B22222"));
-
-        // Create the third line
-        $lineplot3 = $jpgrapher->createLinePlot('lineplot_example', $graph, $datay3, null, array("lineplot.color" => "#FF1493"));
-
-        $graph->Stroke();
-    }
 
     public function drawtimeseriesAction() {
         // Falta alguna forma de customizar el color, obtener estilos por la url, etc..
@@ -189,7 +141,7 @@ $graph->Stroke();
                 foreach( $data['ydata'] as $j=>$line ){
                     if( count($data['ydata'][$j]) > 0 ){                     
                         $style_line=array_merge($data['custom'][$j],$params[$i]);
-                        $lineplot = $jpgrapher->createLinePlot($data['style'][$j], $graph, $data['ydata'][$j], $data['xdata'][$j], $style_line);
+                        $lineplot = $jpgrapher->createGraphPlot($data['style'][$j], $graph, $data['ydata'][$j], $data['xdata'][$j], $style_line);
                     }                        
                 }            
         }

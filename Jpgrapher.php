@@ -152,7 +152,7 @@ class Jpgrapher {
     }
 
 
-    public function createLinePlot($style_name, $graph, $ydata, $xdata = null, $custom = array()) {
+    public function createGraphPlot($style_name, $graph, $ydata, $xdata = null, $custom = array()) {
 
         if (!isset($this->options[$style_name])) {
             throw new \Exception('DafuerJpgraphBundle says: ' . $style_name . ' style does not exists.');
@@ -506,10 +506,10 @@ class Jpgrapher {
             if (is_array($xdata[$indice])) {
                 foreach ($xdata as $i => $value) {
                     // Si hay establecidos maximos y minimos en las escalas adapto los datos
-                    $lineplot = $this->createLinePlot($line_style, $graph, $ydata[$i], $xdata[$i], $custom_lineplot);
+                    $lineplot = $this->createGraphPlot($line_style, $graph, $ydata[$i], $xdata[$i], $custom_lineplot);
                 }
             } else {
-                $lineplot = $this->createLinePlot($line_style, $graph, $ydata[$i], $xdata[$i], $custom_lineplot);
+                $lineplot = $this->createGraphPlot($line_style, $graph, $ydata[$i], $xdata[$i], $custom_lineplot);
             }
 
             return $graph;
