@@ -106,11 +106,34 @@ class GraphController extends Controller {
             }
         }   
 
+        foreach($styles as $name=>$style){
+            $styles[$name]=$this->stylestostring($style);
+        }
+        
         return $this->render('DafuerJpgraphBundle:Graph:stylequeryshow.html.twig', array('styles'=>$styles));
     }
     
     
-    
+    /**
+     * This function convert each attribute of style in a string
+     * @param type $styles Array of style properties.
+     */
+    private function stylestostring($styles){
+        $result=array();
+        foreach($styles as $name=>$value){
+            if (is_bool($value)){
+                $result[$name]=$value?'true':'false';
+            } else if (is_array($value)){
+                 $result[$name]=print_r($value,true);
+            } else if (is_callable($value)){
+                 $result[$name]="closure";                 
+            }else{
+                $result[$name]=$value;
+            }
+        }
+        return $result;
+    }
+   
     public function styleshowAction($style_name) {
 
         // Obtain jpgraphBundle service

@@ -28,6 +28,13 @@ class Jpgrapher {
         $callbacks['TimeCallbackTime'] = function ($aVal) {
                     return Date('H:i:s', $aVal); //return Date ('Y-m-d',$aVal);
                 };
+                
+        $callbacks['CallbackMonthNumber'] = function ($aVal) {
+                    $m=array( "" , "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" );                   
+                    
+                    if (isset($m[$aVal])) return $m[$aVal];
+                    return "";
+        };         
 
         return $callbacks;
     }
@@ -112,7 +119,7 @@ class Jpgrapher {
 
             if ($values['graph'] == "graph") {
                 require_once (__DIR__ . '/../../../jpgraph/src/jpgraph.php');
-                $graph = new \Graph($values['graph_width'], $values['graph_height']);
+                $graph = new \Graph ($values['graph_width'], $values['graph_height']);
             }
 
 
@@ -360,28 +367,35 @@ class Jpgrapher {
             if (isset($values['graph_xscale_max'])) {
                 $xmax = $values['graph_xscale_max'];
             }
-
+            
 
 
             $graph->SetScale($values['graph_scale'], $ymin, $ymax, $xmin, $xmax);
+            
             if (count($graph->plots)>0) {
 
                 if (isset($values['graph_xaxis_labelformatcallback'])) { // If it has labelformatcallback
-                    $callbacks = $this->getCallFunctions();
-                    if ($values['graph_xaxis_labelformatcallback'] == 'AutoTimeCallback') { // If it
-                        $xminmax = $graph->GetXMinMax();
-                        if ($xminmax[0] != null) {
-                            $tpo = $xminmax[1] - $xminmax[0];
+                    
+                    if(is_callable($values['graph_xaxis_labelformatcallback'])){
+                        $graph->xaxis->SetLabelFormatCallback($values['graph_xaxis_labelformatcallback']);
+                    }else{
 
-                            $callbacks = $this->getCallFunctions();
-                            if ($tpo > 172800) {
-                                $graph->xaxis->SetLabelFormatCallback($callbacks['TimeCallbackDay']);
-                            } else {
-                                $graph->xaxis->SetLabelFormatCallback($callbacks['TimeCallbackTime']);
+                        $callbacks = $this->getCallFunctions();
+                        if ($values['graph_xaxis_labelformatcallback'] == 'AutoTimeCallback') { // If it
+                            $xminmax = $graph->GetXMinMax();
+                            if ($xminmax[0] != null) {
+                                $tpo = $xminmax[1] - $xminmax[0];
+
+                                $callbacks = $this->getCallFunctions();
+                                if ($tpo > 172800) {
+                                    $graph->xaxis->SetLabelFormatCallback($callbacks['TimeCallbackDay']);
+                                } else {
+                                    $graph->xaxis->SetLabelFormatCallback($callbacks['TimeCallbackTime']);
+                                }
                             }
+                        } else {
+                            $graph->xaxis->SetLabelFormatCallback($callbacks[$values['graph_xaxis_labelformatcallback']]);
                         }
-                    } else {
-                        $graph->xaxis->SetLabelFormatCallback($callbacks[$values['graph_xaxis_labelformatcallback']]);
                     }
                 }
 
@@ -412,6 +426,14 @@ class Jpgrapher {
                     $graph->legend->Hide($values['graph_legend_hide']);
                 }
 
+                if (isset($values['graph_axis_tickposition'])) {
+                    $graph->xaxis->SetTickPositions($values['graph_axis_tickposition']);
+                }                
+                
+
+//$graph->xaxis->SetTextTickInterval(1);
+//$graph->xgrid->Show(true);
+                
 
                 $graph->SetClipping(true);
                 $graph->xaxis->SetPos( 'min' );
