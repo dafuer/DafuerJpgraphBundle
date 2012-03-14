@@ -128,6 +128,11 @@ class Jpgrapher {
                 $graph->SetMargin($values['graph_img_margin_left'], $values['graph_img_margin_right'], $values['graph_img_margin_top'], $values['graph_img_margin_bottom']);
             }
 
+            if (isset($values['graph_margincolor'])){
+                $graph->SetMarginColor($values['graph_margincolor']);  
+                $graph->SetColor($values['graph_margincolor']);
+            }            
+       
             if (isset($values['graph_scale'])){  
                 $yt=substr($values['graph_scale'],-3,3);
                 $xt=substr($values['graph_scale'],0,3);
@@ -136,10 +141,14 @@ class Jpgrapher {
                 }
                 $graph->SetScale($values['graph_scale']);
             }
-            if (isset($values['graph_title']))
+            
+
+            if (isset($values['graph_title'])){
                 $graph->title->Set($values['graph_title']);
-            if (isset($values['graph_box']))
+            }
+            if (isset($values['graph_box'])){
                 $graph->SetBox($values['graph_box']);
+            }
             if (isset($values['graph_xgrid_show']))
                 $graph->xgrid->Show($values['graph_xgrid_show']);
             if (isset($values['graph_xgrid_color']))
@@ -433,7 +442,7 @@ class Jpgrapher {
 
 //$graph->xaxis->SetTextTickInterval(1);
 //$graph->xgrid->Show(true);
-                
+
 
                 $graph->SetClipping(true);
                 $graph->xaxis->SetPos( 'min' );
