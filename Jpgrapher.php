@@ -28,13 +28,14 @@ class Jpgrapher {
         $callbacks['TimeCallbackTime'] = function ($aVal) {
                     return Date('H:i:s', $aVal); //return Date ('Y-m-d',$aVal);
                 };
-                
+
         $callbacks['CallbackMonthNumber'] = function ($aVal) {
-                    $m=array( "" , "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" );                   
-                    
-                    if (isset($m[$aVal])) return $m[$aVal];
+                    $m = array("", "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
+
+                    if (isset($m[$aVal]))
+                        return $m[$aVal];
                     return "";
-        };         
+                };
 
         return $callbacks;
     }
@@ -45,8 +46,6 @@ class Jpgrapher {
         $this->options = Yaml::parse($this->config_file);
         //$this->viewer = Yaml::parse($this->viewer_file);
     }
-
-
 
     public function readStyle($style_tag, $values = array()) {
         if (!isset($this->options[$style_tag]))
@@ -119,7 +118,7 @@ class Jpgrapher {
 
             if ($values['graph'] == "graph") {
                 require_once (__DIR__ . '/../../../jpgraph/src/jpgraph.php');
-                $graph = new \Graph ($values['graph_width'], $values['graph_height']);
+                $graph = new \Graph($values['graph_width'], $values['graph_height']);
             }
 
 
@@ -128,25 +127,22 @@ class Jpgrapher {
                 $graph->SetMargin($values['graph_img_margin_left'], $values['graph_img_margin_right'], $values['graph_img_margin_top'], $values['graph_img_margin_bottom']);
             }
 
-            if (isset($values['graph_margincolor'])){
-                $graph->SetMarginColor($values['graph_margincolor']);  
-                $graph->SetColor($values['graph_margincolor']);
-            }            
-       
-            if (isset($values['graph_scale'])){  
-                $yt=substr($values['graph_scale'],-3,3);
-                $xt=substr($values['graph_scale'],0,3);
-                if( $yt == 'dat' || $xt=='dat' ) {
+
+
+            if (isset($values['graph_scale'])) {
+                $yt = substr($values['graph_scale'], -3, 3);
+                $xt = substr($values['graph_scale'], 0, 3);
+                if ($yt == 'dat' || $xt == 'dat') {
                     require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_date.php');
                 }
                 $graph->SetScale($values['graph_scale']);
             }
-            
 
-            if (isset($values['graph_title'])){
+
+            if (isset($values['graph_title'])) {
                 $graph->title->Set($values['graph_title']);
             }
-            if (isset($values['graph_box'])){
+            if (isset($values['graph_box'])) {
                 $graph->SetBox($values['graph_box']);
             }
             if (isset($values['graph_xgrid_show']))
@@ -172,7 +168,6 @@ class Jpgrapher {
             return $graph;
         }
     }
-
 
     public function createGraphPlot($style_name, $graph, $ydata, $xdata = null, $custom = array()) {
 
@@ -215,22 +210,22 @@ class Jpgrapher {
                 } else {
                     $lineplot = new \BoxPlot($ydata, $xdata);
                 }
-                $lineplot->SetMedianColor("red","yellow");
-            }      
-            
+                $lineplot->SetMedianColor("red", "yellow");
+            }
+
 
             if ($values['lineplot'] == "barplot") {
                 require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_bar.php');
-                
+
                 $lineplot = new \BarPlot($ydata);
-            } 
-            
+            }
+
             if ($values['lineplot'] == "scatterplot") {
                 require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_scatter.php');
-                
-                $lineplot = new \ScatterPlot($ydata,$xdata);
-            }             
-            
+
+                $lineplot = new \ScatterPlot($ydata, $xdata);
+            }
+
             // El eje
             if (isset($values['graph_yaxis_number'])) {
                 if ($values['graph_yaxis_number'] == 0) {
@@ -242,16 +237,16 @@ class Jpgrapher {
                         $graph->yaxis->HideLine($values['graph_yaxis_hideline']);
 
                     // This code here has not effect
-                    if (isset($values['graph_ygrid_fill'])){
+                    if (isset($values['graph_ygrid_fill'])) {
                         $graph->ygrid->SetFill($values['graph_ygrid_fill'][0], $values['graph_ygrid_fill'][1], $values['graph_ygrid_fill'][2]);
                         //DEPTH_BACK, Under plots
                         //DEPTH_FRONT, On top of plots      
-                        $graph->ygrid->Show(); 
-                        $graph->SetGridDepth(DEPTH_BACK);                        
+                        $graph->ygrid->Show();
+                        $graph->SetGridDepth(DEPTH_BACK);
                     }
-                    
+
                     $graph->Add($lineplot);
-                }else {
+                } else {
                     // First, I find maxium index allowed to prevent a exception
                     $index = 0;
                     for ($i = 0; $i < $values['graph_yaxis_number'] - 1; $i++) {
@@ -267,16 +262,16 @@ class Jpgrapher {
                 }
             }
 
-            if ($values['lineplot'] == "lineplot" || $values['lineplot'] == "scatterplot" ) {
+            if ($values['lineplot'] == "lineplot" || $values['lineplot'] == "scatterplot") {
                 $line = $lineplot;
             } else if ($values['lineplot'] == "errorlineplot") {
                 $line = $lineplot->line;
             } else {
-                $line=null;
+                $line = null;
             }
 
-            
-            if ( $line!=null && isset($values['lineplot_color'])) {
+
+            if ($line != null && isset($values['lineplot_color'])) {
                 $line->SetColor($values['lineplot_color']);
             }
 
@@ -308,7 +303,7 @@ class Jpgrapher {
 
 
 
-            if ($line!=null && isset($values['lineplot_max_ptos_to_mark'])) {
+            if ($line != null && isset($values['lineplot_max_ptos_to_mark'])) {
                 if ($values['lineplot_max_ptos_to_mark'] == -1 || count($xdata) < $values['lineplot_max_ptos_to_mark']) {
 
                     $line->mark->SetType(constant($values['lineplot_mark_type']));
@@ -326,10 +321,10 @@ class Jpgrapher {
             if (isset($values['lineplot_mark_callback'])) {
                 $line->mark->SetCallback($values["lineplot_mark_callback"]);
             }
-            
+
             if (isset($values['lineplot_mark_callbackyx'])) {
                 $line->mark->SetCallbackYX($values["lineplot_mark_callbackyx"]);
-            }            
+            }
 
 
             /* if (isset($values['lineplot_reescale'])) {
@@ -353,12 +348,12 @@ class Jpgrapher {
             // Setting up variable values
             $values = $this->getOptions($style_name, $custom);
 
-            if(count($graph->plots)>0){
+            if (count($graph->plots) > 0) {
                 $graph->doAutoScaleYAxis();
                 $graph->doAutoScaleXAxis();
             }
 
-         
+
             $ymin = $graph->yscale->GetMinVal();
             $ymax = $graph->yscale->GetMaxVal();
             $xmin = $graph->xscale->GetMinVal();
@@ -376,18 +371,30 @@ class Jpgrapher {
             if (isset($values['graph_xscale_max'])) {
                 $xmax = $values['graph_xscale_max'];
             }
-            
+
 
 
             $graph->SetScale($values['graph_scale'], $ymin, $ymax, $xmin, $xmax);
-            
-            if (count($graph->plots)>0) {
+
+            // Mandatory: The color margin must be defined after set scale
+            if (isset($values['graph_margincolor'])) {
+                //frame with not implemented yet 
+                $graph->SetFrame(true, $values['graph_margincolor'], 0);
+                $graph->SetColor($values['graph_margincolor']);
+                $graph->SetMarginColor($values['graph_margincolor']);
+                
+                // not implemented yet 
+                //$graph->SetBackgroundGradient('darkred:0.7', 'black', 2, BGRAD_MARGIN);
+            }
+        
+
+
+            if (count($graph->plots) > 0) {
 
                 if (isset($values['graph_xaxis_labelformatcallback'])) { // If it has labelformatcallback
-                    
-                    if(is_callable($values['graph_xaxis_labelformatcallback'])){
+                    if (is_callable($values['graph_xaxis_labelformatcallback'])) {
                         $graph->xaxis->SetLabelFormatCallback($values['graph_xaxis_labelformatcallback']);
-                    }else{
+                    } else {
 
                         $callbacks = $this->getCallFunctions();
                         if ($values['graph_xaxis_labelformatcallback'] == 'AutoTimeCallback') { // If it
@@ -430,22 +437,22 @@ class Jpgrapher {
                 if (isset($values['graph_legend_fillcolor'])) {
                     $graph->legend->SetFillColor($values['graph_legend_fillcolor']);
                 }
- 
+
                 if (isset($values['graph_legend_hide'])) {
                     $graph->legend->Hide($values['graph_legend_hide']);
                 }
 
                 if (isset($values['graph_axis_tickposition'])) {
                     $graph->xaxis->SetTickPositions($values['graph_axis_tickposition']);
-                }                
-                
+                }
+
 
 //$graph->xaxis->SetTextTickInterval(1);
 //$graph->xgrid->Show(true);
 
 
                 $graph->SetClipping(true);
-                $graph->xaxis->SetPos( 'min' );
+                $graph->xaxis->SetPos('min');
                 $graph->graph_theme = null;
                 return $graph->Stroke();
             } else {
@@ -508,9 +515,8 @@ class Jpgrapher {
 
         return $result;
     }
-    
-   
-    function graphDaySeries($graph_style, $line_style, $ydata, $xdata, $custom_graph = array(), $custom_lineplot = array(), $graph = null) { 
+
+    function graphDaySeries($graph_style, $line_style, $ydata, $xdata, $custom_graph = array(), $custom_lineplot = array(), $graph = null) {
         if (count($xdata) > 0) {
 
             if (is_null($graph)) {  // Si no me pasan una grafica a la que añadir la linea creo una nueva
@@ -547,7 +553,7 @@ class Jpgrapher {
 
             return $graph;
         }
-    }    
+    }
 
 }
 
