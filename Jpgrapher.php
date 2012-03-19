@@ -412,6 +412,7 @@ class Jpgrapher {
                         } else {
                             $graph->xaxis->SetLabelFormatCallback($callbacks[$values['graph_xaxis_labelformatcallback']]);
                         }
+                        
                     }
                 }
 

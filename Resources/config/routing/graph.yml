@@ -9,3 +9,11 @@ JpgraphBundle_graph_query:
 JpgraphBundle_graph_stylequeryshow:
     pattern:  /query
     defaults: { _controller: DafuerJpgraphBundle:Graph:stylequeryshow }
+
+JpgraphBundle_graph_imgerrordraw:
+    pattern:  /graph/imgerrordraw/{style}
+    defaults: { _controller: DafuerJpgraphBundle:Graph:imgerrordraw } 
+
+JpgraphBundle_graph_imgerror:
+    pattern:  /graph/imgerror/{style}
+    defaults: { _controller: DafuerJpgraphBundle:Graph:imgerror } 
