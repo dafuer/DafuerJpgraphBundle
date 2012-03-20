@@ -301,6 +301,13 @@ class Jpgrapher {
             }
 
 
+            if(isset($values['lineplot_fillcolor'])){
+                if ($values['lineplot_fillcolor'] != '%lineplot_color%') {
+                    $line->SetFillColor($values['lineplot_fillcolor']);
+                } else {
+                    $line->SetFillColor($values['lineplot_color']);
+                } 
+            }
 
 
             if ($line != null && isset($values['lineplot_max_ptos_to_mark'])) {
