@@ -454,15 +454,12 @@ class Jpgrapher {
                     $graph->xaxis->SetTickPositions($values['graph_axis_tickposition']);
                 }
                 
+                
                 if (isset($values['graph_scale'])) {
                     $xt = substr($values['graph_scale'], 0, 3);
                     if($xt=='dat'){ // I can call xscale type date methods
                         // SetDateAlign not implemented yet
                         //$graph->xaxis->scale->SetDateAlign(YEARADJ_1,YEARADJ_1);
-                        
-                        if($values['graph_xaxis_scale_ticks']){
-                            $graph->xaxis->scale->ticks->Set($values['graph_xaxis_scale_ticks']);
-                        }
 
                         if($values['graph_xaxis_scale_dateformat']){
                             $graph->xaxis->scale->SetDateFormat($values['graph_xaxis_scale_dateformat']);
@@ -480,6 +477,13 @@ class Jpgrapher {
                     $graph->xaxis->scale->ticks->SupressFirst($values['graph_xaxis_scale_ticks_supressfirst']);
                 }
                 
+                if(isset($values['graph_xaxis_scale_ticks'])){
+                    $graph->xaxis->scale->ticks->Set($values['graph_xaxis_scale_ticks']);
+                }       
+                
+                if(isset($values['graph_yaxis_scale_ticks'])){
+                    $graph->yaxis->scale->ticks->Set($values['graph_yaxis_scale_ticks']);
+                }                
               
                 
 //$graph->xaxis->SetTextTickInterval(1);
