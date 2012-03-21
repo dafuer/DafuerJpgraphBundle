@@ -161,6 +161,7 @@ class Jpgrapher {
                 $graph->SetClipping($values['graph_clipping']);
 
 
+         
 
             return $graph;
         }
@@ -470,7 +471,17 @@ class Jpgrapher {
                     }
                 }                
            
-
+                if (isset($values['graph_yaxis_scale_ticks_supressfirst'])) {
+                    $graph->yaxis->scale->ticks->SupressFirst($values['graph_yaxis_scale_ticks_supressfirst']);
+                }
+                
+           
+                if (isset($values['graph_xaxis_scale_ticks_supressfirst'])) {
+                    $graph->xaxis->scale->ticks->SupressFirst($values['graph_xaxis_scale_ticks_supressfirst']);
+                }
+                
+              
+                
 //$graph->xaxis->SetTextTickInterval(1);
 //$graph->xgrid->Show(true);
 
