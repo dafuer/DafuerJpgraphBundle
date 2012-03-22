@@ -461,7 +461,7 @@ class Jpgrapher {
                         // SetDateAlign not implemented yet
                         //$graph->xaxis->scale->SetDateAlign(YEARADJ_1,YEARADJ_1);
 
-                        if($values['graph_xaxis_scale_dateformat']){
+                        if(isset($values['graph_xaxis_scale_dateformat'])){
                             $graph->xaxis->scale->SetDateFormat($values['graph_xaxis_scale_dateformat']);
                         }                        
                               
