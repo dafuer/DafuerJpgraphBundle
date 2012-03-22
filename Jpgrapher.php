@@ -104,6 +104,8 @@ class Jpgrapher {
         if (!isset($this->options[$style_name])) {
             throw new \Exception('DafuerJpgraphBundle says: ' . $style_name . ' style does not exists.');
         } else {
+            require_once (__DIR__ . '/../../../jpgraph/src/jpgraph.php');
+            
             // Setting up variable values
             $values = $this->getOptions($style_name, $custom);
 
@@ -117,13 +119,16 @@ class Jpgrapher {
 
 
             if ($values['graph'] == "graph") {
-                require_once (__DIR__ . '/../../../jpgraph/src/jpgraph.php');
                 $graph = new \Graph($values['graph_width'], $values['graph_height']);
             }
 
+            if ($values['graph'] == "piegraph") {
+                require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_pie.php');
+                $graph = new \PieGraph($values['graph_width'], $values['graph_height']);
+            }            
+            
 
             if (isset($values['graph_img_margin_left']) && isset($values['graph_img_margin_right']) && isset($values['graph_img_margin_top']) && isset($values['graph_img_margin_bottom'])) {
-
                 $graph->SetMargin($values['graph_img_margin_left'], $values['graph_img_margin_right'], $values['graph_img_margin_top'], $values['graph_img_margin_bottom']);
             }
 
@@ -166,6 +171,61 @@ class Jpgrapher {
             return $graph;
         }
     }
+    
+    
+//    public function createPieGraph($style_name, $custom = array()) {
+//        if (!isset($this->options[$style_name])) {
+//            throw new \Exception('DafuerJpgraphBundle says: ' . $style_name . ' style does not exists.');
+//        } else {
+//            // Setting up variable values
+//            $values = $this->getOptions($style_name, $custom);
+//
+//            // Check mandatory vars
+//            if (!isset($values['graph_width']))
+//                throw new \Exception('DafuerJpgraphBundle says: Variable graph_width must be defined.');
+//            if (!isset($values['graph_height']))
+//                throw new \Exception('DafuerJpgraphBundle says: Variable graph_height must be defined.');
+//            if (!isset($values['graph']))
+//                throw new \Exception('DafuerJpgraphBundle says: Variable graph must be defined.');
+//
+//
+//            if ($values['graph'] == "graph") {
+//                require_once (__DIR__ . '/../../../jpgraph/src/jpgraph.php');
+//                $graph = new \PieGraph($values['graph_width'], $values['graph_height']);
+//            }
+//
+//
+//            if (isset($values['graph_img_margin_left']) && isset($values['graph_img_margin_right']) && isset($values['graph_img_margin_top']) && isset($values['graph_img_margin_bottom'])) {
+//                $graph->SetMargin($values['graph_img_margin_left'], $values['graph_img_margin_right'], $values['graph_img_margin_top'], $values['graph_img_margin_bottom']);
+//            }
+//            
+//        }
+//    }
+//    
+//    public function createPiePlot($style_name, $graph, $ydata, $xdata = null, $custom = array()) {
+//        if (!isset($this->options[$style_name])) {
+//            throw new \Exception('DafuerJpgraphBundle says: ' . $style_name . ' style does not exists.');
+//        } else {
+//
+//            // Setting up variable values
+//            $values = $this->getOptions($style_name, $custom);
+//
+//            //if($graph==null) $graph=$this->createGraph ($style_name, $custom);
+//            // Check mandatory vars
+//            if (!isset($values['lineplot']))
+//                throw new \Exception('DafuerDafuerJpgraphBundle says: Variable lineplot must be defined.');
+//
+//
+//            if ($values['lineplot'] == "lineplot") {
+//                require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_line.php');
+//                
+//                $lineplot = new \LinePlot($ydata);
+//            }    
+//            
+//          return $lineplot;   
+//        }
+//    }
+    
 
     public function createGraphPlot($style_name, $graph, $ydata, $xdata = null, $custom = array()) {
 
@@ -216,13 +276,23 @@ class Jpgrapher {
 
                 $lineplot = new \BarPlot($ydata);
             }
-
+           
             if ($values['lineplot'] == "scatterplot") {
                 require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_scatter.php');
 
                 $lineplot = new \ScatterPlot($ydata, $xdata);
             }
 
+            
+            if ($values['lineplot'] == "pieplot") {
+                require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_pie.php');
+                $lineplot = new \PiePlot($ydata);                
+                $graph->Add($lineplot);
+                if(isset($values['lineplot_slicecolors'])){
+                    $lineplot->SetSliceColors($values['lineplot_slicecolors']);
+                }
+            }
+            
             // El eje
             if (isset($values['graph_yaxis_number'])) {
                 if ($values['graph_yaxis_number'] == 0) {
@@ -353,34 +423,34 @@ class Jpgrapher {
             // Setting up variable values
             $values = $this->getOptions($style_name, $custom);
 
-            if (count($graph->plots) > 0) {
-                $graph->doAutoScaleYAxis();
-                $graph->doAutoScaleXAxis();
+            if($values['graph']!='piegraph'){
+                if (count($graph->plots) > 0) {
+                    $graph->doAutoScaleYAxis();
+                    $graph->doAutoScaleXAxis();
+                }
+
+
+                $ymin = $graph->yscale->GetMinVal();
+                $ymax = $graph->yscale->GetMaxVal();
+                $xmin = $graph->xscale->GetMinVal();
+                $xmax = $graph->xscale->GetMaxVal();
+
+                if (isset($values['graph_yscale_min'])) {
+                    $ymin = $values['graph_yscale_min'];
+                }
+                if (isset($values['graph_yscale_max'])) {
+                    $ymax = $values['graph_yscale_max'];
+                }
+                if (isset($values['graph_xscale_min'])) {
+                    $xmin = $values['graph_xscale_min'];
+                }
+                if (isset($values['graph_xscale_max'])) {
+                    $xmax = $values['graph_xscale_max'];
+                }
+
+                $graph->SetScale($values['graph_scale'], $ymin, $ymax, $xmin, $xmax);
             }
-
-
-            $ymin = $graph->yscale->GetMinVal();
-            $ymax = $graph->yscale->GetMaxVal();
-            $xmin = $graph->xscale->GetMinVal();
-            $xmax = $graph->xscale->GetMaxVal();
-
-            if (isset($values['graph_yscale_min'])) {
-                $ymin = $values['graph_yscale_min'];
-            }
-            if (isset($values['graph_yscale_max'])) {
-                $ymax = $values['graph_yscale_max'];
-            }
-            if (isset($values['graph_xscale_min'])) {
-                $xmin = $values['graph_xscale_min'];
-            }
-            if (isset($values['graph_xscale_max'])) {
-                $xmax = $values['graph_xscale_max'];
-            }
-
-
-
-            $graph->SetScale($values['graph_scale'], $ymin, $ymax, $xmin, $xmax);
-
+            
             // Mandatory: The color margin must be defined after set scale
             if (isset($values['graph_margincolor'])) {
                 //frame with not implemented yet 
@@ -394,7 +464,7 @@ class Jpgrapher {
         
 
 
-            if (count($graph->plots) > 0) {
+            if ( count($graph->plots) > 0 || $values['graph']=='piegraph') {
 
                 if (isset($values['graph_xaxis_labelformatcallback'])) { // If it has labelformatcallback
                     if (is_callable($values['graph_xaxis_labelformatcallback'])) {
@@ -489,10 +559,12 @@ class Jpgrapher {
 //$graph->xaxis->SetTextTickInterval(1);
 //$graph->xgrid->Show(true);
 
-
-                $graph->SetClipping(true);
-                $graph->xaxis->SetPos('min');
-                $graph->graph_theme = null;
+                if($values['graph']!='piegraph'){
+                    $graph->SetClipping(true);
+                    $graph->xaxis->SetPos('min');
+                    $graph->graph_theme = null;
+                }
+                
                 return $graph->Stroke();
             } else {
                 return false;

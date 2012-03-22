@@ -15,7 +15,7 @@ class GraphController extends Controller {
 
     /**
      * This action generate a graph from request parameters.
-     * MORE DOCUMENTATION ABOUT IT!
+     * HERE MORE DOCUMENTATION ABOUT IT!
      */
     public function queryAction($request, $dataaccess) {
         // This allow print img tag if it's necessary
@@ -52,7 +52,9 @@ class GraphController extends Controller {
             foreach ($data['ydata'] as $j => $line) {
                 if (count($data['ydata'][$j]) > 0) {
                     $style_line = array_merge($data['custom'][$j], $params[$i]);
-                    $lineplot = $jpgrapher->createGraphPlot($data['style'][$j], $graph, $data['ydata'][$j], $data['xdata'][$j], $style_line);
+                    if(isset($data['xdata'][$j])) $xdata=$data['xdata'][$j];
+                    else $xdata=null;
+                    $lineplot = $jpgrapher->createGraphPlot($data['style'][$j], $graph, $data['ydata'][$j], $xdata, $style_line);
                 }
             }
         }
@@ -73,6 +75,7 @@ class GraphController extends Controller {
         }
     }
 
+    
     /**
      * This action shows real properties applied a graph
      */
