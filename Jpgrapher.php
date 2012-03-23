@@ -294,6 +294,7 @@ class Jpgrapher {
             }
             
             // El eje
+            
             if (isset($values['graph_yaxis_number'])) {
                 if ($values['graph_yaxis_number'] == 0) {
                     if (isset($values['graph_yaxis_title']))
@@ -424,6 +425,9 @@ class Jpgrapher {
             $values = $this->getOptions($style_name, $custom);
 
             if($values['graph']!='piegraph'){
+
+                // Setup scales
+                
                 if (count($graph->plots) > 0) {
                     $graph->doAutoScaleYAxis();
                     $graph->doAutoScaleXAxis();
@@ -489,10 +493,23 @@ class Jpgrapher {
                     }
                 }
 
+                
+                // Setup axis
+                
                 if (isset($values['graph_xaxis_labelangle'])) {
                     $graph->xaxis->SetLabelAngle($values["graph_xaxis_labelangle"]);
                 }
 
+                if (isset($values['graph_yaxis_title'])){
+                    $graph->yaxis->title->Set($values["graph_yaxis_title"]);
+                }
+                if (isset($values['graph_yaxis_titlemargin'])){
+                    $graph->yaxis->SetTitleMargin($values["graph_yaxis_titlemargin"]);
+                }
+                if (isset($values['graph_yaxis_hideline'])){
+                    $graph->yaxis->HideLine($values['graph_yaxis_hideline']);                
+                }
+                
                 if (isset($values['graph_legend_abspos_x']) &&
                         isset($values['graph_legend_abspos_y']) &&
                         isset($values['graph_legend_abspos_halign']) &&
