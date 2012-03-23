@@ -147,6 +147,20 @@ class Jpgrapher {
             if (isset($values['graph_title'])) {
                 $graph->title->Set($values['graph_title']);
             }
+            
+            // Set up title font
+            if(isset($values['graph_title_font_family'])){
+                if(isset($values['graph_title_font_style'])){
+                    if(isset($values['graph_title_font_size'])){
+                        $graph->title->SetFont(constant($values['graph_title_font_family']),constant($values['graph_title_font_style']),$values['graph_title_font_size']);
+                    }else{
+                        $graph->title->SetFont(constant($values['graph_title_font_family']),constant($values['graph_title_font_style']));
+                    }
+                }else{
+                    $graph->title->SetFont(constant($values['graph_title_font_family']));
+                }
+            }
+            
             if (isset($values['graph_box'])) {
                 $graph->SetBox($values['graph_box']);
             }
@@ -357,17 +371,7 @@ class Jpgrapher {
                 $lineplot->SetWeight($values['lineplot_weight']);
             }
 
-            if (isset($values['graph_xaxis_ticklabels'])) {
-                $graph->xaxis->SetTickLabels($values["graph_xaxis_ticklabels"]);
-            }
 
-            if (isset($values['lineplot_xaxis_title'])) {
-                $graph->xaxis->title->Set($values["graph_xaxis_title"]);
-            }
-
-            if (isset($values['lineplot_xaxis_pos'])) {
-                $graph->xaxis->SetPos($values["graph_xaxis_pos"]);
-            }
 
 
             if(isset($values['lineplot_fillcolor'])){
@@ -496,6 +500,8 @@ class Jpgrapher {
                 
                 // Setup axis
                 
+                // Y- Axis
+                
                 if (isset($values['graph_xaxis_labelangle'])) {
                     $graph->xaxis->SetLabelAngle($values["graph_xaxis_labelangle"]);
                 }
@@ -509,6 +515,31 @@ class Jpgrapher {
                 if (isset($values['graph_yaxis_hideline'])){
                     $graph->yaxis->HideLine($values['graph_yaxis_hideline']);                
                 }
+                
+                // X-Axis
+                
+                if (isset($values['graph_xaxis_ticklabels'])) {
+                    $graph->xaxis->SetTickLabels($values["graph_xaxis_ticklabels"]);
+                }
+
+                if (isset($values['graph_xaxis_title'])) {
+                    if(isset($values['graph_xaxis_title_position'])){
+                        $graph->xaxis->SetTitle($values["graph_xaxis_title"],$values['graph_xaxis_title_position']);
+                    }else{
+                        $graph->xaxis->SetTitle($values["graph_xaxis_title"]);
+                    }
+                } 
+                
+                if (isset($values['graph_xaxis_titlemargin'])){
+                    $graph->xaxis->SetTitleMargin($values["graph_xaxis_titlemargin"]);
+                }
+
+                // ¿?
+                if (isset($values['lineplot_xaxis_pos'])) {
+                    $graph->xaxis->SetPos($values["graph_xaxis_pos"]);
+                }                
+                
+                // Set legend
                 
                 if (isset($values['graph_legend_abspos_x']) &&
                         isset($values['graph_legend_abspos_y']) &&
@@ -533,13 +564,13 @@ class Jpgrapher {
                     $graph->legend->Hide($values['graph_legend_hide']);
                 }
 
-                if (isset($values['graph_axis_tickposition'])) {
+                /*if (isset($values['graph_axis_tickposition'])) {
                     $graph->xaxis->SetTickPositions($values['graph_axis_tickposition']);
                 }
 
                 if (isset($values['graph_axis_tickposition'])) {
                     $graph->xaxis->SetTickPositions($values['graph_axis_tickposition']);
-                }
+                }*/
                 
                 
                 if (isset($values['graph_scale'])) {
