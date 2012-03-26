@@ -534,10 +534,10 @@ class Jpgrapher {
                     $graph->xaxis->SetTitleMargin($values["graph_xaxis_titlemargin"]);
                 }
                 
-                /*if (isset($values['graph_axis_tickposition'])) {
+                if (isset($values['graph_axis_tickposition'])) {
                     $graph->xaxis->SetTickPositions($values['graph_axis_tickposition']);
                 }
-                 */
+                 
                 
 //$graph->xaxis->SetTickPositions(array(0,  2.5),array(1,  2));
                 // ¿?
