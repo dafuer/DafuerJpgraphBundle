@@ -268,7 +268,7 @@ class Jpgrapher {
             if ($values['lineplot'] == "errorlineplot") {
                 require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_line.php');
                 require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_error.php');
-                if (is_null($xdata)) {
+                if (is_null($xdata) || count($xdata)==0) {
                     $lineplot = new \ErrorLinePlot($ydata);
                 } else {
                     $lineplot = new \ErrorLinePlot($ydata, $xdata);
@@ -277,7 +277,7 @@ class Jpgrapher {
 
             if ($values['lineplot'] == "boxplot") {
                 require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_stock.php');
-                if (!isset($xdata)) {
+                if (!isset($xdata)|| count($xdata)==0) {
                     $lineplot = new \BoxPlot($ydata);
                 } else {
                     $lineplot = new \BoxPlot($ydata, $xdata);

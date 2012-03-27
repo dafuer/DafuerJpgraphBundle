@@ -85,6 +85,7 @@ class BaseDataAccess{
         
         // For a graph, style is unique. The same for all lines
         // BUG HERE: it's lie
+        
         foreach($data['ydata'] as $i=>$values){
             if(!isset($data['style'][$i])){
                 $data['style'][$i]=$this->getStyle($id);
