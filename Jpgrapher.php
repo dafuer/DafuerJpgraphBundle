@@ -89,6 +89,8 @@ class Jpgrapher {
         if ($has_styles)
             unset($custom['style']);
 
+      
+        // I set the custom value
         foreach ($custom as $asociated_name => $asociated_value) {
             if ($asociated_value != "%%%") { // If value is equal %%% then remove this parameter
                 $values[$asociated_name] = $asociated_value;
@@ -96,6 +98,33 @@ class Jpgrapher {
                 unset($values[$asociated_name]);
             }
         }
+        
+        
+        // Last, I replace value of the linked attributes
+        // performance penalty
+        $finished=false;
+        while($finished==false){
+            $finished=true;
+            foreach ($values as $asociated_name => $asociated_value) {
+                if (is_string($asociated_value) && substr($asociated_value,0,1)=="%" ){// Perhaps is a especial attribute
+                    if(substr($asociated_value,-1)=="%"){ // Linked attribute
+                        $property=substr($asociated_value,1,strlen($asociated_value)-2);
+                        if(isset($values[$property])){
+                            $values[$asociated_name]=$values[$property];
+                        }else{
+                            unset($values[$asociated_name]);
+                        }
+                    }else{
+                        if ($asociated_value == "%%%") { // If value is equal %%% then remove this parameter
+                            unset($values[$asociated_name]);
+                        }                        
+                    }
+                    $finished=false;
+                }
+            }
+        }
+        
+        
         return $values;
     }
 
@@ -326,11 +355,7 @@ class Jpgrapher {
 
 
             if(isset($values['lineplot_fillcolor'])){
-                if ($values['lineplot_fillcolor'] != '%lineplot_color%') {
                     $line->SetFillColor($values['lineplot_fillcolor']);
-                } else {
-                    $line->SetFillColor($values['lineplot_color']);
-                } 
             }
 
 
@@ -338,12 +363,17 @@ class Jpgrapher {
                 if ($values['lineplot_max_ptos_to_mark'] == -1 || count($xdata) < $values['lineplot_max_ptos_to_mark']) {
 
                     $line->mark->SetType(constant($values['lineplot_mark_type']));
-                    $line->mark->SetWidth($values['lineplot_mark_width']);
-                    if ($values['lineplot_mark_color'] != '%lineplot_color%') {
-                        $line->mark->SetColor($values['lineplot_mark_color']);
-                    } else {
-                        $line->mark->SetColor($values['lineplot_color']);
+                    if(isset($values['lineplot_mark_width'])){
+                        $line->mark->SetWidth($values['lineplot_mark_width']);
                     }
+                   
+                    if(isset($values['lineplot_mark_color'])){
+                        $line->mark->SetColor($values['lineplot_mark_color']);
+                    }
+                    
+                    if(isset($values['lineplot_mark_fillcolor'])){
+                        $line->mark->SetFillColor($values['lineplot_mark_fillcolor']);
+                    }                    
                 }
             } else {
                 
