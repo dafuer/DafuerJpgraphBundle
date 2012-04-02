@@ -388,7 +388,10 @@ class Jpgrapher {
                     $graph->doAutoScaleXAxis();
                 }
 
+                $yt = substr($values['graph_scale'], -3, 3);
+                $xt = substr($values['graph_scale'], 0, 3);
 
+                
                 $ymin = $graph->yscale->GetMinVal();
                 $ymax = $graph->yscale->GetMaxVal();
                 $xmin = $graph->xscale->GetMinVal();
@@ -396,28 +399,32 @@ class Jpgrapher {
 
                 if (isset($values['graph_yscale_min'])) {
                     $ymin = $values['graph_yscale_min'];
+                }else{
+                    if ($yt == 'log') {
+                        $ymin=log($ymin,10);
+                    }                    
                 }
                 if (isset($values['graph_yscale_max'])) {
                     $ymax = $values['graph_yscale_max'];
+                }else{
+                    if ($yt == 'log') {
+                        $ymax=log($ymax,10);
+                    }                    
                 }
                 if (isset($values['graph_xscale_min'])) {
                     $xmin = $values['graph_xscale_min'];
+                }else{
+                    if ($xt == 'log') {
+                        $xmin=log($xmin,10);
+                    }                    
                 }
                 if (isset($values['graph_xscale_max'])) {
                     $xmax = $values['graph_xscale_max'];
-                }
-
-                $yt = substr($values['graph_scale'], -3, 3);
-                $xt = substr($values['graph_scale'], 0, 3);
-                if ($yt == 'log') {
-                    $ymin=log($ymin);
-                    $ymax=log($ymax);
-                }
-                if ($xt == 'log') {
-                    $xmin=log($xmin,10);
-                    $xmax=log($xmax,10);                    
-                }                    
-                
+                }else{
+                    if ($xt == 'log') {
+                        $xmax=log($xmax,10);
+                    }                    
+                }       
                 
                 $graph->SetScale($values['graph_scale'], $ymin, $ymax, $xmin, $xmax);
             }
