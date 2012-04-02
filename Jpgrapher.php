@@ -140,6 +140,9 @@ class Jpgrapher {
                 if ($yt == 'dat' || $xt == 'dat') {
                     require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_date.php');
                 }
+                if ($yt == 'log' || $xt == 'log') {
+                    require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_log.php');
+                }                
                 $graph->SetScale($values['graph_scale']);
             }
 
@@ -187,58 +190,6 @@ class Jpgrapher {
     }
     
     
-//    public function createPieGraph($style_name, $custom = array()) {
-//        if (!isset($this->options[$style_name])) {
-//            throw new \Exception('DafuerJpgraphBundle says: ' . $style_name . ' style does not exists.');
-//        } else {
-//            // Setting up variable values
-//            $values = $this->getOptions($style_name, $custom);
-//
-//            // Check mandatory vars
-//            if (!isset($values['graph_width']))
-//                throw new \Exception('DafuerJpgraphBundle says: Variable graph_width must be defined.');
-//            if (!isset($values['graph_height']))
-//                throw new \Exception('DafuerJpgraphBundle says: Variable graph_height must be defined.');
-//            if (!isset($values['graph']))
-//                throw new \Exception('DafuerJpgraphBundle says: Variable graph must be defined.');
-//
-//
-//            if ($values['graph'] == "graph") {
-//                require_once (__DIR__ . '/../../../jpgraph/src/jpgraph.php');
-//                $graph = new \PieGraph($values['graph_width'], $values['graph_height']);
-//            }
-//
-//
-//            if (isset($values['graph_img_margin_left']) && isset($values['graph_img_margin_right']) && isset($values['graph_img_margin_top']) && isset($values['graph_img_margin_bottom'])) {
-//                $graph->SetMargin($values['graph_img_margin_left'], $values['graph_img_margin_right'], $values['graph_img_margin_top'], $values['graph_img_margin_bottom']);
-//            }
-//            
-//        }
-//    }
-//    
-//    public function createPiePlot($style_name, $graph, $ydata, $xdata = null, $custom = array()) {
-//        if (!isset($this->options[$style_name])) {
-//            throw new \Exception('DafuerJpgraphBundle says: ' . $style_name . ' style does not exists.');
-//        } else {
-//
-//            // Setting up variable values
-//            $values = $this->getOptions($style_name, $custom);
-//
-//            //if($graph==null) $graph=$this->createGraph ($style_name, $custom);
-//            // Check mandatory vars
-//            if (!isset($values['lineplot']))
-//                throw new \Exception('DafuerDafuerJpgraphBundle says: Variable lineplot must be defined.');
-//
-//
-//            if ($values['lineplot'] == "lineplot") {
-//                require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_line.php');
-//                
-//                $lineplot = new \LinePlot($ydata);
-//            }    
-//            
-//          return $lineplot;   
-//        }
-//    }
     
 
     public function createGraphPlot($style_name, $graph, $ydata, $xdata = null, $custom = array()) {
@@ -456,6 +407,18 @@ class Jpgrapher {
                     $xmax = $values['graph_xscale_max'];
                 }
 
+                $yt = substr($values['graph_scale'], -3, 3);
+                $xt = substr($values['graph_scale'], 0, 3);
+                if ($yt == 'log') {
+                    $ymin=log($ymin);
+                    $ymax=log($ymax);
+                }
+                if ($xt == 'log') {
+                    $xmin=log($xmin,10);
+                    $xmax=log($xmax,10);                    
+                }                    
+                
+                
                 $graph->SetScale($values['graph_scale'], $ymin, $ymax, $xmin, $xmax);
             }
             
@@ -576,7 +539,7 @@ class Jpgrapher {
                     $xt = substr($values['graph_scale'], 0, 3);
                     if($xt=='dat'){ // I can call xscale type date methods
                         // SetDateAlign not implemented yet
-                        //$graph->xaxis->scale->SetDateAlign(YEARADJ_1,YEARADJ_1);
+                        // $graph->xaxis->scale->SetDateAlign(YEARADJ_1,YEARADJ_1);
 
                         if(isset($values['graph_xaxis_scale_dateformat'])){
                             $graph->xaxis->scale->SetDateFormat($values['graph_xaxis_scale_dateformat']);
