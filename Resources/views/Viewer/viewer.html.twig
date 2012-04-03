@@ -10,17 +10,17 @@
 <div id="forms_container"></div>
 
 <BR/>
-<div style="text-align: right" width="100%"> 
+<div width="100%"> 
     
-    <input type="button" value="Add Graph" onClick="addGraph('{{ path(insertgraphroute) }}')" />
-    <input type="button" value="Remove Graph" onClick="removeGraph('{{ path(insertgraphroute) }}')" />
+    <input type="button" value="Add Graph" class="btn-success" onClick="addGraph('{{ path(insertgraphroute) }}')" />
+    <input type="button" value="Remove Graph" class="btn-danger" onClick="removeGraph('{{ path(insertgraphroute) }}')" />
 
     <BR />
     
     {% if viewerformpath is not null %}                
         {% render viewerformpath  %}
     {% endif %}   
-    <input type="button" value="Update All" onClick="update_all()" />
+    <input type="button" value="Update All" class="btn-primary" onClick="update_all()" />
                    
 </div>
 
