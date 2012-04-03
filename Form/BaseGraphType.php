@@ -16,7 +16,7 @@ abstract class BaseGraphType extends AbstractType
 
     public function addLegendHide(FormBuilder $builder, array $options){
         $builder                
-                ->add('graph_title', 'text',array())          
+                ->add('graph_title', 'text',array('attr' => array('placeholder' => "Default")))
         ;     
         
         return $this;
@@ -24,7 +24,7 @@ abstract class BaseGraphType extends AbstractType
     
     public function addGraphTitle(FormBuilder $builder, array $options){
         $builder                
-                ->add('graph_title', 'text',array())          
+                ->add('graph_title', 'text',array('attr' => array('placeholder' => "Default")))
         ;     
         
         return $this;
@@ -32,8 +32,8 @@ abstract class BaseGraphType extends AbstractType
     
     public function addScale(FormBuilder $builder, array $options){
         $builder                
-                ->add('graph_yscale_min', 'text',array())
-                ->add('graph_yscale_max','text',array())              
+                ->add('graph_yscale_min', 'text',array('attr' => array('placeholder' => "Default")))
+                ->add('graph_yscale_max','text',array('attr' => array('placeholder' => "Default")))
         ;     
         
         return $this;

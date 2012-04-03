@@ -19,16 +19,15 @@ abstract class BaseSingleElementType extends AbstractType
     
     public function addColor(FormBuilder $builder, array $options){
         $builder
-            ->add('lineplot_color', 'choice',array('choices' => array(''=>'','blue'=>'Blue','red'=>'Red')))
+            ->add('lineplot_color', 'choice',array('choices' => array(''=>'','blue'=>'Blue','red'=>'Red'),'attr' => array('placeholder' => "Default")))
         ;
-        
         return $this;
     }    
 
     
     public function addMultipleYAxis(FormBuilder $builder, array $options){
         $builder
-            ->add('graph_yaxis_number', 'choice',array('choices' => array('0'=>'Left','1'=>'Right','2'=>'Extra Rigth')))     
+            ->add('graph_yaxis_number', 'choice',array('choices' => array('0'=>'Left','1'=>'Right','2'=>'Extra Rigth'),'attr' => array('placeholder' => "Default")))     
         ;      
         return $this;
     }
