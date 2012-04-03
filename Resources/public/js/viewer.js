@@ -210,7 +210,7 @@ function setUpdateListener(formname){
             $(form.elements[i]).change(function() {
                 update(formname);
             });
-            $(form.elements[i]).watermark('Default Value');
+            //$(form.elements[i]).watermark('Default Value');
         }
     }
 }

@@ -23,9 +23,7 @@ class ViewerController extends Controller {
 
 	$viewerurl=$router->generate($viewerpath,array(),true);
 
-
-
-     $jpgrapher = $this->get('jpgraph');
+        $jpgrapher = $this->get('jpgraph');
 
         $numofgraphs = $this->get('request')->query->get('numofgraphs',1);
 

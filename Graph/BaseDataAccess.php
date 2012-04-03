@@ -36,10 +36,16 @@ class BaseDataAccess{
     public function getGraphList($roles=array('IS_AUTHENTICATED_ANONYMOUSLY')){
         $result=array();
        
+        $rolenames=array();
+        foreach($roles as $role){
+            if(is_string($role)) array_push ($rolenames,$role);
+            else                 array_push ($rolenames, $role->getRole());
+        }
+        
         array_push($roles, 'IS_AUTHENTICATED_ANONYMOUSLY');        
          //print_r($this->options);
         foreach($this->options as $key=>$graph){
-            if(  count(array_intersect($roles, $graph['roles']))>0 ){  
+            if(  count(array_intersect($rolenames, $graph['roles']))>0 ){  
                 //$result=array_merge_recursive($result, $graph['classify']);
                 $x=array($key=>$graph['description']);
                 if(isset($graph['classify']) && $graph['classify']!=''){
