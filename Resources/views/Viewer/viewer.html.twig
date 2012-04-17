@@ -10,8 +10,9 @@
 <div id="forms_container"></div>
 
 <BR/>
-<div width="100%"> 
-    
+<div class="row-fluid">
+    <div class="span12">
+<div width="100%" class="pull-right">   
     <input type="button" value="Add Graph" class="btn-success" onClick="addGraph('{{ path(insertgraphroute) }}')" />
     <input type="button" value="Remove Graph" class="btn-danger" onClick="removeGraph('{{ path(insertgraphroute) }}')" />
 
@@ -20,18 +21,22 @@
     {% if viewerformpath is not null %}                
         {% render viewerformpath  %}
     {% endif %}   
-    <input type="button" value="Update All" class="btn-primary" onClick="update_all()" />
-                   
+    <input type="button" value="Update All" class="btn-primary" onClick="update_all()" />                
 </div>
 
 <BR/>
 
 {# echo link_to_function("Generate url","refreshURL()") #}
 <br/>
-<span style="font-size: small">You can use this link to return to this page displaying the same graphics</span>
+
 <br/>
-<input type="button" value="Generate URL" onClick="refreshURL('{{ viewerurl }}')" /><BR />
-<textarea id="url" cols="50" rows="5">
+<div class="control-group">
+    <div class="controls">
+        <input type="button" value="Generate URL" onClick="refreshURL('{{ viewerurl }}')" class="btn-info" /><BR />
+        <p class="help-block">You can use this link to return to this page displaying the same graphics.</p>
+    </div>
+</div>
+<textarea id="url" cols="200" rows="5">
 </textarea>
 
 
@@ -54,6 +59,7 @@
      
 </script>
 
-
+    </div>
+</div>
 
 
