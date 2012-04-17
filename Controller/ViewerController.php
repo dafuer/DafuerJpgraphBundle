@@ -15,7 +15,7 @@ class ViewerController extends Controller {
 
    
     /**
-     * Esta accion permite visualizar cualqueir gráfica con varias opciones de comportamiento en Ajax
+     * Esta accion permite visualizar cualquier gráfica con varias opciones de comportamiento en Ajax
      */
     public function viewerAction($viewerpath,$insertgraphroute,$viewerformpath=null) {
 
@@ -42,10 +42,7 @@ class ViewerController extends Controller {
     public function insertgraphAction($formname,$formviewpath,$combined,$formgraphpath=null) {        
         $jpgrapher = $this->get('jpgraph');
         $num = $this->get('request')->query->get('num');
-        //$insertgraphroute=$this->get('request')->query->get('insertgraphroute');
         
-     //   $formgraphpath=$this->get('request')->query->get('formgraphpath'); // General options form
-//$formgraphpath='RimaBundle:Data:graphviewergraphform';
         $vars = $jpgrapher->parseQueryParameters($this->get('request')->query);        
         return $this->render('DafuerJpgraphBundle:Viewer:insertgraph.html.twig', array('formname' => $formname, 'formviewpath'=>$formviewpath, 'combined' => $combined, 'formgraphpath'=>$formgraphpath)); //'insertgraphroute'=>$insertgraphroute
     }
