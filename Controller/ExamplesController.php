@@ -32,7 +32,7 @@ class ExamplesController extends Controller {
         // Obtain jpgraphBundle service
         $jpgrapher = $this->get('jpgraph');
 
-
+        // Create graph from a determinate style
         $graph = $jpgrapher->createGraph("graph_example2");
 
         // Create the first line
