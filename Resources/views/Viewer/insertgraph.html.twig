@@ -1,10 +1,10 @@
 
 
 
-<table width="100%" style="border-width: 1px;border-color: black;border-style: solid; text-align: left" id="table_for_{{ formname }}">
+<table width="100%" style="border-width: 1px;border-color: black;border-style: solid; text-align: left;" id="table_for_{{ formname }}">
     <tr>
         <td>
-            <form id="form_{{ formname }}" class="form-horizontal">
+            <form id="form_{{ formname }}" class="form-horizontal" style="padding: 5px">
                 <div id="more_{{ formname }}"></div>
                 
                 {% if formgraphpath is not null %}                
@@ -14,8 +14,13 @@
                 <input type="button" onclick="update('{{ formname }}',true)" name="{{ formname }}[update]" value="Update" class="btn-primary" />                
                 <input type="button" onclick="addSingleFormTo('{{ formname }}','{{ formviewpath }}')" name="{{ formname }}[add]" class="btn-success" value="Add Values" />
                 <input type="button" onclick="removeSingleFormTo('{{ formname }}')" name="{{ formname }}[remove]" class="btn-danger" value="Remove Values" />
-                <input type="checkbox" id="autoupdate_{{ formname }}" name="{{ formname }}[autoupdate]" checked="" />
-                <label for="autoupdate_{{ formname }}" >Auto update graph</label>
+                <br/>
+                <label class="checkbox">
+                <input type="checkbox" id="autoupdate_{{ formname }}" name="{{ formname }}[autoupdate]" checked="true">
+                Auto update graph
+                </label>
+                {#<input type="checkbox" id="autoupdate_{{ formname }}" name="{{ formname }}[autoupdate]" checked="" />
+                <label for="autoupdate_{{ formname }}" >Auto update graph</label>#}
             </form>
         </td>
         <td><div style="z-index: 9" id="div_{{ formname }}" style="border-width: 1px"></div></td>

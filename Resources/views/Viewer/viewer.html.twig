@@ -12,52 +12,50 @@
 <BR/>
 <div class="row-fluid">
     <div class="span12">
-<div width="100%" class="pull-right">   
-    <input type="button" value="Add Graph" class="btn-success" onClick="addGraph('{{ path(insertgraphroute) }}')" />
-    <input type="button" value="Remove Graph" class="btn-danger" onClick="removeGraph('{{ path(insertgraphroute) }}')" />
+        <div width="100%" class="pull-right">   
+            <input type="button" value="Add Graph" class="btn-success" onClick="addGraph('{{ path(insertgraphroute) }}')" />
+            <input type="button" value="Remove Graph" class="btn-danger" onClick="removeGraph('{{ path(insertgraphroute) }}')" />
+            <BR />
 
-    <BR />
-    
-    {% if viewerformpath is not null %}                
-        {% render viewerformpath  %}
-    {% endif %}   
-    <input type="button" value="Update All" class="btn-primary" onClick="update_all()" />                
-</div>
+            {% if viewerformpath is not null %}                
+                {% render viewerformpath  %}
+            {% endif %}   
+            
+            <input type="button" value="Update All" class="btn-primary" onClick="update_all()" />                
+        </div>
 
-<BR/>
+        <BR/>
 
-{# echo link_to_function("Generate url","refreshURL()") #}
-<br/>
+        {# echo link_to_function("Generate url","refreshURL()") #}
+        <br/>
 
-<br/>
-<div class="control-group">
-    <div class="controls">
-        <input type="button" value="Generate URL" onClick="refreshURL('{{ viewerurl }}')" class="btn-info" /><BR />
-        <p class="help-block">You can use this link to return to this page displaying the same graphics.</p>
-    </div>
-</div>
-<textarea id="url" cols="200" rows="5">
-</textarea>
+        <br/>
+        <div class="control-group">
+            <div class="controls">
+                <input type="button" value="Generate URL" onClick="refreshURL('{{ viewerurl }}')" class="btn-info" /><BR />
+                <p class="help-block">You can use this link to return to this page displaying the same graphics.</p>
+            </div>
+        </div>
+        <textarea id="url" cols="200" rows="5">
+        </textarea>
 
+        <script src="{{ asset('bundles/dafuerjpgraph/js/viewer.js') }}" type="text/javascript"></script>
 
-<script src="{{ asset('bundles/dafuerjpgraph/js/viewer.js') }}" type="text/javascript"></script>
-
-       
-<script type="text/javascript">
-    {% if numofgraphs is null or numofgraphs == 1 %}
-        addGraph('{{ path(insertgraphroute) }}', {{ combined }});
-    {% else %}
-        {% for i in range(0,numofgraphs-1) %}  
-            addGraph('{{ path(insertgraphroute) }}', {{ combined[i] }});
-        {% endfor %}
-    {% endif %}
+        <script type="text/javascript">
+            {% if numofgraphs is null or numofgraphs == 1 %}
+                addGraph('{{ path(insertgraphroute) }}', {{ combined }});
+            {% else %}
+                {% for i in range(0,numofgraphs-1) %}  
+                    addGraph('{{ path(insertgraphroute) }}', {{ combined[i] }});
+                {% endfor %}
+            {% endif %}
 
 
-    {{ js|raw }}
+            {{ js|raw }}
 
-    update_all();
-     
-</script>
+            update_all();
+
+        </script>
 
     </div>
 </div>
