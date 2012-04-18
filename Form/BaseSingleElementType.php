@@ -26,7 +26,7 @@ abstract class BaseSingleElementType extends AbstractType
 
     public function addMarks(FormBuilder $builder, array $options){
         $builder
-            ->add('lineplot_max_ptos_to_mark', 'choice',array('choices' => array(''=>'Auto','-1'=>'Always','0'=>'Never')))     
+            ->add('lineplot_marks', 'choice',array('choices' => array(''=>'Auto','-1'=>'Always','0'=>'Never')))     
         ;      
         return $this;
     }

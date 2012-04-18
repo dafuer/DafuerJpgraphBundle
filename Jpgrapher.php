@@ -359,8 +359,8 @@ class Jpgrapher {
             }
 
 
-            if ($line != null && isset($values['lineplot_max_ptos_to_mark'])) {
-                if ($values['lineplot_max_ptos_to_mark'] == -1 || count($xdata) < $values['lineplot_max_ptos_to_mark']) {
+            if ($line != null && isset($values['lineplot_marks'])) {
+                if ($values['lineplot_marks'] == -1 || count($xdata) < $values['lineplot_marks']) {
 
                     $line->mark->SetType(constant($values['lineplot_mark_type']));
                     if(isset($values['lineplot_mark_width'])){
