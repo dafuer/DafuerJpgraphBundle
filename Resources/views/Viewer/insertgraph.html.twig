@@ -11,9 +11,9 @@
                     {% render formgraphpath  with {'formname': formname } %}
                 {% endif %}
                 
-                <input type="button" onclick="update('{{ formname }}',true)" name="{{ formname }}[update]" value="Update" class="btn-primary" />                
-                <input type="button" onclick="addSingleFormTo('{{ formname }}','{{ formviewpath }}')" name="{{ formname }}[add]" class="btn-success" value="Add Values" />
-                <input type="button" onclick="removeSingleFormTo('{{ formname }}')" name="{{ formname }}[remove]" class="btn-danger" value="Remove Values" />
+                <input type="button" onclick="update('{{ formname }}','{{ graphroute }}',true)" name="{{ formname }}[update]" value="Update" class="btn-primary" />                
+                <input type="button" onclick="addSingleFormTo('{{ formname }}','{{ formviewpath }}','{{ graphroute }}')" name="{{ formname }}[add]" class="btn-success" value="Add Values" />
+                <input type="button" onclick="removeSingleFormTo('{{ formname }}','{{ graphroute }}')" name="{{ formname }}[remove]" class="btn-danger" value="Remove Values" />
                 <br/>
                 <label class="checkbox">
                 <input type="checkbox" id="autoupdate_{{ formname }}" name="{{ formname }}[autoupdate]" checked="true">
@@ -32,14 +32,14 @@
 
 <script type="text/javascript">
     singleformsnum['{{ formname }}']=0;
-    setUpdateListener('{{ formname }}');
+    setUpdateListener('{{ formname }}','{{ graphroute }}');
 
     {% if combined is null %}
-    addSingleFormTo('{{ formname }}','{{ formviewpath }}');
+    addSingleFormTo('{{ formname }}','{{ formviewpath }}','{{ graphroute }}');
     {% else %}
         {% for i in range(0,combined-1) %}   
 
-            addSingleFormTo('{{ formname }}','{{ formviewpath }}');
+            addSingleFormTo('{{ formname }}','{{ formviewpath }}','{{ graphroute }}');
         {% endfor %} 
 
     {% endif %} 

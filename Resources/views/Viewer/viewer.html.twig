@@ -21,7 +21,7 @@
                 {% render viewerformpath  %}
             {% endif %}   
             
-            <input type="button" value="Update All" class="btn-primary" onClick="update_all()" />                
+            <input type="button" value="Update All" class="btn-primary" onClick="update_all('{{ graphroute }}')" />                
         </div>
 
         <BR/>
@@ -53,7 +53,7 @@
 
             {{ js|raw }}
 
-            update_all();
+            update_all('{{ graphroute }}');
 
         </script>
 

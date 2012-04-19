@@ -49,7 +49,7 @@ function removeGraph(){
 /**
  * Update a graph
  */   
-function update(formname,force){
+function update(formname,graphroute,force){
     var actualize=false;
 
     force = force || null;
@@ -61,7 +61,7 @@ function update(formname,force){
         actualize=force;
     }
         
-    base=Routing.generate('RimaBundle_data_graph');
+    base=Routing.generate(graphroute); //'AeropaBundle_data_graph'
     if(actualize){
         jQuery.ajax(
         {
@@ -80,10 +80,11 @@ function update(formname,force){
 /**
  * Update all graphs
  */
-function update_all(){
+function update_all(graphroute){
     var i=0;
+    
     for(i=0;i<num;i++){
-        update(i+"_graphviewer",true);
+        update(i+"_graphviewer",graphroute,true);
     }
 }
 
@@ -91,7 +92,7 @@ function update_all(){
 /**
  * Add line to graph
  */
-function addSingleFormTo(formname,ruta){//,urlopts){
+function addSingleFormTo(formname,ruta,graphroute){//,urlopts){
     
     urlopts=getURLoptions(formname);
     base=Routing.generate(ruta);
@@ -109,10 +110,10 @@ function addSingleFormTo(formname,ruta){//,urlopts){
     // fin
 
     $("#more_"+formname).append(r);
-    setUpdateListener(formname); 
+    setUpdateListener(formname,graphroute); 
     
     updateFormValues(formname);  
-    update(formname);
+    update(formname,graphroute);
 }     
 
 
@@ -185,13 +186,13 @@ function getURLoptions(formname){
 /**
  * Remove a line from a graph
  */
-function removeSingleFormTo(formname){
+function removeSingleFormTo(formname,graphroute){
     if(singleformsnum[formname]>1){
         singleformsnum[formname]--;
         var table=document.getElementById(formname+"_"+singleformsnum[formname]);
         var padre=table.parentNode;
         var removed=padre.removeChild(table);
-        update(formname);
+        update(formname,graphroute);
     }
 }
 
@@ -199,7 +200,7 @@ function removeSingleFormTo(formname){
 /**
  * Add linestener methods to form elements. 
  */
-function setUpdateListener(formname){
+function setUpdateListener(formname,graphroute){
     var i;
     
     var form=document.getElementById('form_'+formname);
@@ -208,7 +209,7 @@ function setUpdateListener(formname){
     {
         if(typeof form.elements[i]  !== "undefined"){
             $(form.elements[i]).change(function() {
-                update(formname);
+                update(formname,graphroute);
             });
             //$(form.elements[i]).watermark('Default Value');
         }
@@ -222,7 +223,7 @@ function setUpdateListener(formname){
 function refreshURL(viewerurl){
     // Para obtener la URL total la genero a partir de todas las graficas que haya
     textarea= document.getElementById('url');
-    textarea.innerHTML=viewerurl+"?";//"http://localhost/caelis/app_dev.php/rima/graph/viewer?";
+    textarea.innerHTML=viewerurl+"?";
     var url=new String();
     
     for(var i=0;i<num;i++){

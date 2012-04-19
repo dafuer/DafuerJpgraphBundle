@@ -17,7 +17,7 @@ class ViewerController extends Controller {
     /**
      * Esta accion permite visualizar cualquier gráfica con varias opciones de comportamiento en Ajax
      */
-    public function viewerAction($viewerpath,$insertgraphroute,$viewerformpath=null) {
+    public function viewerAction($viewerpath,$insertgraphroute,$viewerformpath=null, $graphroute) {
 
 	$router=$this->get('router');
 
@@ -32,19 +32,19 @@ class ViewerController extends Controller {
         
         $js=$this->js_set_form_values($this->get('request')->query->all());
         
-        return $this->render('DafuerJpgraphBundle:Viewer:viewer.html.twig', array('viewerurl'=>$viewerurl, 'numofgraphs' => $numofgraphs, 'combined'=>$combined,  'insertgraphroute'=>$insertgraphroute,'js'=>$js,'viewerformpath'=>$viewerformpath), null);
+        return $this->render('DafuerJpgraphBundle:Viewer:viewer.html.twig', array('viewerurl'=>$viewerurl, 'numofgraphs' => $numofgraphs, 'combined'=>$combined,  'insertgraphroute'=>$insertgraphroute,'js'=>$js,'viewerformpath'=>$viewerformpath, 'graphroute'=>$graphroute), null);
     }
 
     /**
      * Esta accion permite visualizar comparar gráficas con varias opciones de comportamiento en Ajax
      * @param sfWebRequest $request
      */
-    public function insertgraphAction($formname,$formviewpath,$combined,$formgraphpath=null) {        
+    public function insertgraphAction($formname,$formviewpath,$combined,$formgraphpath=null,$graphroute) {        
         $jpgrapher = $this->get('jpgraph');
         $num = $this->get('request')->query->get('num');
         
         $vars = $jpgrapher->parseQueryParameters($this->get('request')->query);        
-        return $this->render('DafuerJpgraphBundle:Viewer:insertgraph.html.twig', array('formname' => $formname, 'formviewpath'=>$formviewpath, 'combined' => $combined, 'formgraphpath'=>$formgraphpath)); //'insertgraphroute'=>$insertgraphroute
+        return $this->render('DafuerJpgraphBundle:Viewer:insertgraph.html.twig', array('formname' => $formname, 'formviewpath'=>$formviewpath, 'combined' => $combined, 'formgraphpath'=>$formgraphpath, 'graphroute'=>$graphroute)); //'insertgraphroute'=>$insertgraphroute
     }
     
     private function js_set_form_values($array){

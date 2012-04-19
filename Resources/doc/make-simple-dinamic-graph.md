@@ -82,7 +82,7 @@ clim:
 class DataAccess extends BaseDataAccess {
 
     public function __construct() {
-        $this->graphindexpath = $this->graphindexpath = __DIR__ . "/graphs.yml";
+        $this->graphindexpath = __DIR__ . "/graphs.yml";
 
         parent::__construct();
     }
