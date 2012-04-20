@@ -70,6 +70,12 @@ function update(formname,graphroute,force){
             success: function(data, textStatus){
                 jQuery('#div_'+formname).html(data);
             },
+            beforeSend: function(xhr){
+                jQuery('#div_'+formname).html("Downloading");//html("<img src='../../dafuerjpgraph/images/loading.gif'></img>");
+            },
+            complete: function(xhr, status){
+                //jQuery('#div_'+formname).html("Downloading");
+            },            
             url:base+getURLoptions(formname)
         }
         );       
