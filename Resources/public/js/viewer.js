@@ -62,6 +62,9 @@ function update(formname,graphroute,force){
     }
         
     base=Routing.generate(graphroute); //'AeropaBundle_data_graph'
+    
+    //alert(base+getURLoptions(formname));
+    
     if(actualize){
         jQuery.ajax(
         {
