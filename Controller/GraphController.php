@@ -31,6 +31,9 @@ class GraphController extends Controller {
 
         $datas = array();
         for ($i = 0; $i < $combined; $i++) {
+            if (!isset($params[$i]['dataserie']) ){
+                throw $this->createNotFoundException('The product does not exist');   
+            }                 
             $datas[] = $dataaccess->readGraph($params[$i]['dataserie'], $params[$i]);
         }
 
