@@ -80,10 +80,9 @@ class BaseDataAccess{
     
     public function readGraph($id,$params){
         $data=$this->getData($id, $params);
-        
-        // For a graph, style is unique. The same for all lines
-        // BUG HERE: it's lie
-        
+                
+        if(is_null($data)) throw new \Exception("Can't read graph. Perhaps there is no parameter dataserie.");
+
         foreach($data['ydata'] as $i=>$values){
             if(!isset($data['style'][$i])){
                 $data['style'][$i]=$this->getStyle($id);
