@@ -92,7 +92,7 @@ class DataSerieAccess extends BaseDataAccess {
     public function AeroClim($params) {
         
         if (!isset($params['station']))
-            return array('xdata' => array(), 'ydata' => array());
+            return $this->emptyResult();
 
         $level=isset($params['level'])?$params['level']:20;
         $year=isset($params['year'])?$params['year']:'all';
