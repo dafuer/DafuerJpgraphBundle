@@ -138,10 +138,7 @@ class DataSerieAccess extends BaseDataAccess {
 
 Por ultimo una accion que utilice esto. Para ello debes crear un routing a una accion como la siguiente:
 
-    public function graphAction() {
-        if (!isset($params['dataserie']) ){
-            throw $this->createNotFoundException('The product does not exist');   
-        }        
+    public function graphAction() {   
         $request = $this->get('request');
 
         $dataaccess=new Graph\DataSerieAccess;
