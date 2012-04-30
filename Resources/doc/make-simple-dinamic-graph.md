@@ -47,7 +47,7 @@ Opcion b:
 las graficas. En esta carpeta debera existir el archivo de indice de acceso a las
 datos (yml) y el archivo de acceso a datos (clase php).
 
-Ejemplo:
+Ejemplo: (DataSerieAccess.yml)
 
 clim:
     roles: [ IS_AUTHENTICATED_ANONYMOUSLY ]
@@ -77,9 +77,9 @@ clim:
     classify: Climatology
 
 
+(DataSerieAccess.php)
 
-
-class DataAccess extends BaseDataAccess {
+class DataSerieAccess extends BaseDataAccess {
 
     public function __construct() {
         $this->graphindexpath = __DIR__ . "/graphs.yml";
@@ -136,6 +136,18 @@ class DataAccess extends BaseDataAccess {
     }
 }
 
+Por ultimo una accion que utilice esto. Para ello debes crear un routing a una accion como la siguiente:
+
+    public function graphAction() {
+        if (!isset($params['dataserie']) ){
+            throw $this->createNotFoundException('The product does not exist');   
+        }        
+        $request = $this->get('request');
+
+        $dataaccess=new Graph\DataSerieAccess;
+        
+        return $this->forward('DafuerJpgraphBundle:Graph:query', array('request' => $request, 'dataaccess' => $dataaccess)); //'dataaccess'=>$dataaccess));
+    }
 
 
 
