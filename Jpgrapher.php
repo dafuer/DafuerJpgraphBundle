@@ -569,7 +569,16 @@ class Jpgrapher {
                 }
 
                 if (isset($values['graph_legend_hide'])) {
-                    $graph->legend->Hide($values['graph_legend_hide']);
+                    if(is_string($values['graph_legend_hide'])){
+                        $val=strtolower($values['graph_legend_hide']);
+                        if ($val=="false"){
+                            $graph->legend->Hide(false);
+                        }else{
+                            $graph->legend->Hide(true);
+                        }
+                    }else{
+                        $graph->legend->Hide($values['graph_legend_hide']);
+                    }
                 }                
                 
                 if (isset($values['graph_scale'])) {
