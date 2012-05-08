@@ -65,16 +65,22 @@ class GraphController extends Controller {
 
         //Stroke the graph        
         $x = $jpgrapher->strokeGraph($firststyle, $base_style, $graph);
+        
         if ($x == false) {
-            if ($request->query->get('format') == 'nohtml') {
+            $this->forward('DafuerJpgraphBundle:Graph:imgerrordraw', array('style' => 'error_graph', 'custom' => array()));
+            
+            /* If there is a error it don't show
+             * if ($request->query->get('format') == 'nohtml') {
                 $this->forward('DafuerJpgraphBundle:Graph:imgerrordraw', array('style' => 'error_graph', 'custom' => array()));
 
                 throw new \Exception("Linea 67 de graph controler. Hace referencia a rima??¿?");
                 // RIMA??
                 return $this->render('RimaBundle:Data:graph.html.twig', array());
             } else {
-                return $this->forward('DafuerJpgraphBundle:Graph:imgerror', array('style' => 'error_graph', 'custom' => array()));
-            }
+                //echo "hola";
+                
+                //return $this->forward('DafuerJpgraphBundle:Graph:imgerror', array('style' => 'error_graph', 'custom' => array()));
+            }*/
         }
     }
 
