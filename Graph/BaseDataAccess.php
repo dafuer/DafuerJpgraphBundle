@@ -4,16 +4,10 @@
 namespace Dafuer\JpgraphBundle\Graph;
 
 use Symfony\Component\Yaml\Yaml;
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
-/**
- * Description of GraphIndex
- *
- * @author david
- */
+
+
+
 class BaseDataAccess{
     
     protected $graphindexpath="";
@@ -21,12 +15,13 @@ class BaseDataAccess{
     protected $options;
     
     public function __construct(){
-        if (!isset($this->graphindexpath) || $this->graphindexpath=="")
+        if (!isset($this->graphindexpath) || $this->graphindexpath==""){
             throw new \Exception("JpgraphBundle says: Can't read graph index yml file: " . $this->graphindexpath );
-  
+        }
         
         $this->options = Yaml::parse($this->graphindexpath);        
     }
+    
     
     public function emptyResult(){
         return array('xdata' => array(array()), 'ydata' => array(array()));
@@ -66,9 +61,11 @@ class BaseDataAccess{
         }
     }
     
+    
     public function getStyle($id){
         return $this->options[$id]['style'];
     }
+    
     
     public function getCustom($id){
         if(isset($this->options[$id]['custom_style'])){    
@@ -77,6 +74,7 @@ class BaseDataAccess{
             return array();
         }
     }
+    
     
     public function readGraph($id,$params){
         $data=$this->getData($id, $params);

@@ -427,9 +427,13 @@ class Jpgrapher {
                 $xmin = $graph->xscale->GetMinVal();
                 $xmax = $graph->xscale->GetMaxVal();
 
-                $minmax=$graph->GetXMinMax();
-                $xmin=$minmax[0];
-                $xmax=$minmax[1];
+                try{
+                    $minmax=$graph->GetXMinMax();
+                    $xmin=$minmax[0];
+                    $xmax=$minmax[1];
+                }catch (\Exception $e){
+                    
+                }
             
                 
                 if (isset($values['graph_yscale_min'])) {
