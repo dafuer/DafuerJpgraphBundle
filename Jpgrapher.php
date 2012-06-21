@@ -154,7 +154,12 @@ class Jpgrapher {
             if ($values['graph'] == "piegraph") {
                 require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_pie.php');
                 $graph = new \PieGraph($values['graph_width'], $values['graph_height']);
-            }            
+            }      
+            
+            if ($values['graph'] == "ganttgraph") {
+                require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_gantt.php');
+                $graph = new \GanttGraph($values['graph_width'], $values['graph_height']);
+            }                  
             
 
             if (isset($values['graph_img_margin_left']) && isset($values['graph_img_margin_right']) && isset($values['graph_img_margin_top']) && isset($values['graph_img_margin_bottom'])) {
@@ -287,6 +292,21 @@ class Jpgrapher {
                 }
             }
             
+            if ($values['lineplot'] == "ganttplot") {
+                require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_gantt.php');
+
+                $label="";
+                if(isset($values['lineplot_label'])){
+                    $label=$values['lineplot_label'];
+                }
+                //GantBar (posicion,formato,inicio,fin,etiqueta,grosor)
+                //$lineplot =  new \GanttBar($data[1][0],$data[1][1],$data[1][2],$data[1][3],"[50%]");
+                $lineplot =  new \GanttBar($ydata,$values['lineplot_information'],$xdata[0],$xdata[1],$label);
+                
+                                  
+                $graph->Add($lineplot);
+            }            
+            
             // El eje
             
             if (isset($values['graph_yaxis_number'])) {
@@ -342,13 +362,19 @@ class Jpgrapher {
                 $lineplot->SetColor($values['errorlineplot_color']);
             }
 
-
             if (isset($values['lineplot_legend'])) {
                 $lineplot->SetLegend($values['lineplot_legend']);
             }
-
-            if (isset($values['lineplot_weight'])) {
-                $lineplot->SetWeight($values['lineplot_weight']);
+            
+            if($values['lineplot']!='ganttplot'){
+                if (isset($values['lineplot_weight'])) {
+                    $lineplot->SetWeight($values['lineplot_weight']);
+                }
+            }else{
+                if (isset($values['lineplot_weight'])) {
+                    //echo $values['lineplot_weight'];
+                    $lineplot->SetHeight($values['lineplot_weight']);
+                }                
             }
 
 
@@ -409,7 +435,7 @@ class Jpgrapher {
             // Setting up variable values
             $values = $this->getOptions($style_name, $custom);
 
-            if($values['graph']!='piegraph'){
+            if($values['graph']!='piegraph' && $values['graph']!='ganttgraph'){
 
                 // Setup scales
                 
@@ -481,7 +507,7 @@ class Jpgrapher {
         
 
 
-            if ( count($graph->plots) > 0 || $values['graph']=='piegraph') {
+            if ( count($graph->plots) > 0 || $values['graph']=='piegraph' || $values['graph']=='ganttgraph') {
 
                 if (isset($values['graph_xaxis_labelformatcallback'])) { // If it has labelformatcallback
                     if (is_callable($values['graph_xaxis_labelformatcallback'])) {
@@ -557,7 +583,6 @@ class Jpgrapher {
                 
                 
                 // Set legend
-                
                 if (isset($values['graph_legend_abspos_x']) &&
                         isset($values['graph_legend_abspos_y']) &&
                         isset($values['graph_legend_abspos_halign']) &&
@@ -624,7 +649,7 @@ class Jpgrapher {
 //$graph->xaxis->SetTextTickInterval(1);
 //$graph->xgrid->Show(true);
 
-                if($values['graph']!='piegraph'){
+                if($values['graph']!='piegraph' && $values['graph']!='ganttgraph'){
                     $graph->SetClipping(true);
                     $graph->xaxis->SetPos('min');
                     $graph->graph_theme = null;
