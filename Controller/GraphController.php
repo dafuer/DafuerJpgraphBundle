@@ -223,6 +223,10 @@ class GraphController extends Controller {
 
 
         $x = $jpgrapher->createErrorImg($style, $custom);
+        
+        $response=new \Response('');
+        $response->headers->set('Content-Type', 'image/png');
+        return $response;
     }
 
     public function imgerrorAction($style) {
