@@ -1,5 +1,5 @@
 {
-    "name": "Dafuer/dafuer-jpgraph-bundle",
+    "name": "dafuer/dafuer-jpgraph-bundle",
     "description": "This package provides a easy integration of jpgraph library into Symfony2 project",
     "require": {
 
