@@ -4,5 +4,8 @@
     "require": {
 
     },
+    "autoload": {
+        "psr-0": { "Dafuer\\JpgraphBundle": "" }
+    },
     "target-dir": "Dafuer/JpgraphBundle"
 }
