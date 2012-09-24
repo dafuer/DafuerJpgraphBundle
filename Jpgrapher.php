@@ -15,6 +15,7 @@ class Jpgrapher {
     private $config_file;
     //private $viewer_file;
     private $options;
+    private $path;
 
     //private $viewer;
 
@@ -40,10 +41,11 @@ class Jpgrapher {
         return $callbacks;
     }
 
-    public function __construct($config_file) { //, $viewer_file) {
+    public function __construct($config_file, $kernel_path) { //, $viewer_file) {
         $this->config_file = $config_file;
         //$this->viewer_file = $viewer_file;
         $this->options = Yaml::parse($this->config_file);
+        $this->path=  $kernel_path."/../vendor/asial/jpgraph/src/";
         //$this->viewer = Yaml::parse($this->viewer_file);
     }
 
@@ -133,7 +135,7 @@ class Jpgrapher {
         if (!isset($this->options[$style_name])) {
             throw new \Exception('DafuerJpgraphBundle says: ' . $style_name . ' style does not exists.');
         } else {
-            require_once (__DIR__ . '/../../../jpgraph/src/jpgraph.php');
+            require_once ($this->path.'jpgraph.php');
             
             // Setting up variable values
             $values = $this->getOptions($style_name, $custom);
@@ -152,12 +154,12 @@ class Jpgrapher {
             }
 
             if ($values['graph'] == "piegraph") {
-                require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_pie.php');
+                require_once ($this->path.'jpgraph_pie.php');
                 $graph = new \PieGraph($values['graph_width'], $values['graph_height']);
             }      
             
             if ($values['graph'] == "ganttgraph") {
-                require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_gantt.php');
+                require_once ($this->path.'jpgraph_gantt.php');
                 $graph = new \GanttGraph($values['graph_width'], $values['graph_height']);
             }                  
             
@@ -172,10 +174,10 @@ class Jpgrapher {
                 $yt = substr($values['graph_scale'], -3, 3);
                 $xt = substr($values['graph_scale'], 0, 3);
                 if ($yt == 'dat' || $xt == 'dat') {
-                    require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_date.php');
+                    require_once ($this->path.'jpgraph_date.php');
                 }
                 if ($yt == 'log' || $xt == 'log') {
-                    require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_log.php');
+                    require_once ($this->path.'jpgraph_log.php');
                 }                
                 $graph->SetScale($values['graph_scale']);
             }
@@ -242,7 +244,7 @@ class Jpgrapher {
 
 
             if ($values['lineplot'] == "lineplot") {
-                require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_line.php');
+                 require_once ($this->path.'jpgraph_line.php');
                 if (is_null($xdata)) {
                     $lineplot = new \LinePlot($ydata);
                 } else {
@@ -251,8 +253,8 @@ class Jpgrapher {
             }
 
             if ($values['lineplot'] == "errorlineplot") {
-                require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_line.php');
-                require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_error.php');
+                require_once ($this->path.'jpgraph_line.php');
+                require_once ($this->path.'jpgraph_error.php');
                 if (is_null($xdata) || count($xdata)==0) {
                     $lineplot = new \ErrorLinePlot($ydata);
                 } else {
@@ -261,7 +263,7 @@ class Jpgrapher {
             }
 
             if ($values['lineplot'] == "boxplot") {
-                require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_stock.php');
+                require_once ($this->path.'jpgraph_stock.php');
                 if (!isset($xdata)|| count($xdata)==0) {
                     $lineplot = new \BoxPlot($ydata);
                 } else {
@@ -271,20 +273,20 @@ class Jpgrapher {
             }     
 
             if ($values['lineplot'] == "barplot") {
-                require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_bar.php');
+                require_once ($this->path.'jpgraph_bar.php');
 
                 $lineplot = new \BarPlot($ydata);
             }
            
             if ($values['lineplot'] == "scatterplot") {
-                require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_scatter.php');
+                require_once ($this->path.'jpgraph_scatter.php');
 
                 $lineplot = new \ScatterPlot($ydata, $xdata);
             }
 
             
             if ($values['lineplot'] == "pieplot") {
-                require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_pie.php');
+                require_once ($this->path.'jpgraph_pie.php');
                 $lineplot = new \PiePlot($ydata);                
                 $graph->Add($lineplot);
                 if(isset($values['lineplot_slicecolors'])){
@@ -293,7 +295,7 @@ class Jpgrapher {
             }
             
             if ($values['lineplot'] == "ganttplot") {
-                require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_gantt.php');
+                require_once ($this->path.'jpgraph_gantt.php');
 
                 $label="";
                 if(isset($values['lineplot_label'])){
@@ -662,9 +664,9 @@ class Jpgrapher {
     }
 
     function createErrorImg($style_name, $custom) {
-        require_once (__DIR__ . '/../../../jpgraph/src/jpgraph.php');
-        require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_canvas.php');
-        require_once (__DIR__ . '/../../../jpgraph/src/jpgraph_canvtools.php');
+        require_once ($this->path.'jpgraph.php');
+        require_once ($this->path.'jpgraph_canvas.php');
+        require_once ($this->path.'jpgraph_canvtools.php');
 
         if (!isset($this->options[$style_name])) {
             throw new \Exception('DafuerJpgraphBundle says: ' . $style_name . ' style does not exists.');

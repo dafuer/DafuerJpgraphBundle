@@ -8,17 +8,5 @@
         "psr-0": { "Dafuer\\JpgraphBundle": "" }
     },
     "target-dir": "Dafuer/JpgraphBundle",
-    "repositories": [
-        {
-            "type": "package",
-            "package":{
-                "name": "asial/jpgraph",
-                "version": "3.5.0b1",
-                "dist":{
-                    "url": "http://jpgraph.net/download/download.php?p=5",
-                    "type": "tar"
-                }
-            }
-        }
-    ]
+
 }

@@ -29,12 +29,16 @@ class InstallconstantsCommand extends Command
             if($file=='jpg_config.inc.php') $file='jpg-config.inc.php'; // It's a exception.
             
             $text=file_get_contents($path.$file);
-            echo ($file.':
-                ');
             foreach($constant as $name=>$value){
-                echo $name."   > ".$value."
-                    ";
+                // Make changes
+                $text=  preg_replace("/\/\/.*define\('".$name."'/", "define('".$name."'" , $text);
+                $text=  preg_replace("/define\('".$name."'/", "define('".$name."', '".$value."'); // Before => " , $text);
             }
+            
+            // Save changes in file
+            $fp=fopen($path.$file, "w");
+            fwrite($fp, $text);
+            fclose($fp);            
         }
         
         $output->writeln("");

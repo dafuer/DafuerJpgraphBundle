@@ -7,6 +7,6 @@ parameters:
 services:
     jpgraph:
         class: %jpgraph.class%
-        arguments: [%jpgraph.config_file%] #, %jpgraph.viewer_file%]      
+        arguments: [%jpgraph.config_file%, %kernel.root_dir%] #, %jpgraph.viewer_file%]      
         
 
