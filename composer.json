@@ -2,10 +2,23 @@
     "name": "dafuer/dafuer-jpgraph-bundle",
     "description": "This package provides a easy integration of jpgraph library into Symfony2 project",
     "require": {
-
+        "asial/jpgraph": "3.5.0b1"
     },
     "autoload": {
         "psr-0": { "Dafuer\\JpgraphBundle": "" }
     },
-    "target-dir": "Dafuer/JpgraphBundle"
+    "target-dir": "Dafuer/JpgraphBundle",
+    "repositories": [
+        {
+            "type": "package",
+            "package":{
+                "name": "asial/jpgraph",
+                "version": "3.5.0b1",
+                "dist":{
+                    "url": "http://jpgraph.net/download/download.php?p=5",
+                    "type": "tar"
+                }
+            }
+        }
+    ]
 }

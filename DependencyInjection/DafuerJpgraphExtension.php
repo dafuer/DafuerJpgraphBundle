@@ -24,6 +24,8 @@ class DafuerJpgraphExtension extends Extension
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
+        
+        $container->setParameter('dafuer_jpgraph.constants', $config['constants']);
     }
     
      
