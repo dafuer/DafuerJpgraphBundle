@@ -20,7 +20,7 @@ use Symfony\Component\Process\PhpExecutableFinder;
  */
 class ScriptHandler
 {
-    public static function clearCache($event)
+    public static function setupJpgraph($event)
     {
         $options = self::getOptions($event);
         $appDir = $options['symfony-app-dir'];
