@@ -4,6 +4,7 @@ namespace Dafuer\JpgraphBundle\Form;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 abstract class BaseViewerType extends AbstractType
 {
@@ -36,12 +37,18 @@ abstract class BaseViewerType extends AbstractType
         return $this;
     }
 
-    public function getDefaultOptions(array $options)
+    /*public function getDefaultOptions(array $options)
     {
         return array(
             'csrf_protection' => false,
             );
-    }
+    }*/
+    public function setDefaultOptions(OptionsResolverInterface $resolver)
+    {
+        $resolver->setDefaults(array(
+            'csrf_protection' => false,
+        ));
+    }    
     
     public function getName()
     {
