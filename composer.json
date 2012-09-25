@@ -8,5 +8,13 @@
         "psr-0": { "Dafuer\\JpgraphBundle": "" }
     },
     "target-dir": "Dafuer/JpgraphBundle",
+    "scripts": {
+        "post-install-cmd": [
+            "Dafuer\\JpgraphBundle\\Composer\\ScriptHandler::setupJpgraph"
+        ],
+        "post-update-cmd": [
+            "Dafuer\\JpgraphBundle\\Composer\\ScriptHandler::setupJpgraph"
+        ]
+    },    
 
 }
