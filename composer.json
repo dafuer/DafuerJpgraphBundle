@@ -15,6 +15,6 @@
         "post-update-cmd": [
             "Dafuer\\JpgraphBundle\\Composer\\ScriptHandler::setupJpgraph"
         ]
-    },    
+    }    
 
 }
