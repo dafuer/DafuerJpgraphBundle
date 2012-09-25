@@ -1,6 +1,7 @@
 {
     "name": "dafuer/dafuer-jpgraph-bundle",
     "description": "This package provides a easy integration of jpgraph library into Symfony2 project",
+    "type": "library",
     "require": {
         "asial/jpgraph": "3.5.0b1"
     },
