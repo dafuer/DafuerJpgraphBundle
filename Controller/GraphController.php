@@ -9,7 +9,7 @@ namespace Dafuer\JpgraphBundle\Controller;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use GOA\RimaBundle\Form\GraphviewerType;
+//use GOA\RimaBundle\Form\GraphviewerType;
 
 class GraphController extends Controller {
 

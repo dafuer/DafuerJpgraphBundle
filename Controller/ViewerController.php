@@ -55,7 +55,7 @@ class ViewerController extends Controller {
                 foreach($elements as $linenum=>$element){
                     if(is_array($element)){
                         foreach($element as $formnum=>$value){
-                            $result.="x=document.getElementById('".$formnum."_graphviewer_".$linenum."_".$name."');\n";
+                            $result.="x=document.getElementById('g".$formnum."_graphviewer_".$linenum."_".$name."');\n";
                             $result.="if(x!=null) x.value='".$value."';\n";    
                         }
                     }

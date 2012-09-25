@@ -19,7 +19,7 @@ var singleformsnum=new Array();
  */
 function addGraph(ruta,combined){  
      combined = combined || 1;
-    var url=ruta+'?formname='+num+'_graphviewer'+'&combined='+combined;
+    var url=ruta+'?formname=g'+num+'_graphviewer'+'&combined='+combined;
 
     var r = $.ajax({
         type: 'GET',
@@ -39,7 +39,7 @@ function addGraph(ruta,combined){
 function removeGraph(){
     if(num>1){
         num--;
-        var table=document.getElementById('table_for_'+num+'_graphviewer' );
+        var table=document.getElementById('table_for_g'+num+'_graphviewer' );
         var padre=table.parentNode;
         var removed=padre.removeChild(table);
     }
@@ -61,7 +61,7 @@ function update(formname,graphroute,force){
         actualize=force;
     }
         
-    base=Routing.generate(graphroute); //'AeropaBundle_data_graph'
+    base=Routing.generate(graphroute); 
     
     //alert(base+getURLoptions(formname));
     
@@ -93,7 +93,7 @@ function update_all(graphroute){
     var i=0;
     
     for(i=0;i<num;i++){
-        update(i+"_graphviewer",graphroute,true);
+        update("g"+i+"_graphviewer",graphroute,true);
     }
 }
 
@@ -127,7 +127,7 @@ function addSingleFormTo(formname,ruta,graphroute){//,urlopts){
 
 
 /**
- * Returns a url from make a grah
+ * Returns a url to make a grah
  */
 function getURLoptions(formname){
     var i;
@@ -238,7 +238,7 @@ function refreshURL(viewerurl){
     for(var i=0;i<num;i++){
         tempurl=new String();
         //obtengo el div
-        div=document.getElementById('div_'+i+'_graphviewer'); 
+        div=document.getElementById('div_g'+i+'_graphviewer'); 
         //El primer elemento del div es la imagen, la obtengo y me quedo con su url
         tempurl=new String(div.firstChild.src);
         //Me quedo con la parte de la url que corresponde a los parametros y obvio la par de www.caelis.uva.es
@@ -297,7 +297,7 @@ function copyForms(formfrom,formto){
 function updateFormValues(formname){
     var to=formname.indexOf('_');
     
-    var number=formname.substring(0,to);
+    var number=formname.substring(1,to);
     
     var singleform=singleformsnum[formname] - 1;
     
@@ -305,8 +305,8 @@ function updateFormValues(formname){
         copyForms(formname+"_"+(singleform-1),formname+"_"+singleform);
     }else{
         if(number>0){
-           var max=singleformsnum[(number-1)+"_graphviewer"] - 1;
-           copyForms((number-1)+"_graphviewer_"+max,formname+"_"+singleform); 
+           var max=singleformsnum["g"+(number-1)+"_graphviewer"] - 1;
+           copyForms("g"+(number-1)+"_graphviewer_"+max,formname+"_"+singleform); 
         }
     }
     

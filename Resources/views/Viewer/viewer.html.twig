@@ -45,7 +45,7 @@
             {% if numofgraphs is null or numofgraphs == 1 %}
                 addGraph('{{ path(insertgraphroute) }}', {{ combined }});
             {% else %}
-                {% for i in range(0,numofgraphs-1) %}  
+                {% for i in range(0,numofgraphs-1) %} 
                     addGraph('{{ path(insertgraphroute) }}', {{ combined[i] }});
                 {% endfor %}
             {% endif %}
