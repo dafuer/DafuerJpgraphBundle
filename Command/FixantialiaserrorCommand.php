@@ -31,6 +31,6 @@ class FixantialiaserrorCommand extends Command
         fwrite($fp, $text);
         fclose($fp);     
         
-        $output->writeln("");
+        $output->writeln("Commented line 110 in jpgraph/src/gd_image_inc to resolve antialias error");
     }
 }

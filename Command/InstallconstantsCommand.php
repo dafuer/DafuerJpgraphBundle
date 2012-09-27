@@ -41,6 +41,6 @@ class InstallconstantsCommand extends Command
             fclose($fp);            
         }
         
-        $output->writeln("");
+        $output->writeln("Configured jpgraph library with the constants in config.yml");
     }
 }
