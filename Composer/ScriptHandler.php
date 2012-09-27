@@ -26,7 +26,7 @@ class ScriptHandler {
         static::executeCommand($appDir, 'dafuerjpgraph:installaconstants');
     }
     
-    public static function postUpdate($event) {
+    /*public static function postUpdate($event) {
         $extra = $event->getComposer()->getPackage()->getExtra();
         $appDir = $extra['symfony-app-dir'];
 
@@ -36,7 +36,7 @@ class ScriptHandler {
         }
 
         static::executeCommand($appDir, 'dafuerjpgraph:installaconstants');
-    }    
+    } */   
 
     protected static function executeCommand($appDir, $cmd) {
 
