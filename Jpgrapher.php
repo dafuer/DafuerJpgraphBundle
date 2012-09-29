@@ -294,6 +294,15 @@ class Jpgrapher {
                 }
             }
             
+            if ($values['lineplot'] == "pieplot3d") {
+                require_once ($this->path.'jpgraph_pie3d.php');
+                $lineplot = new \PiePlot3D($ydata);                
+                $graph->Add($lineplot);
+                if(isset($values['lineplot_slicecolors'])){
+                    $lineplot->SetSliceColors($values['lineplot_slicecolors']);
+                }
+            }            
+            
             if ($values['lineplot'] == "ganttplot") {
                 require_once ($this->path.'jpgraph_gantt.php');
 
