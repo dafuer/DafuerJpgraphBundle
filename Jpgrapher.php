@@ -379,11 +379,14 @@ class Jpgrapher {
                 }                
             }
 
-
-
-
             if(isset($values['lineplot_fillcolor'])){
                     $line->SetFillColor($values['lineplot_fillcolor']);
+            }
+            
+            if(isset($values['lineplot_area'])){
+                foreach ($values['lineplot_area'] as $area){
+                    $lineplot->AddArea($area['from'],$area['to'],LP_AREA_FILLED,$area['color']);
+                }
             }
 
 
