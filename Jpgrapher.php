@@ -437,9 +437,9 @@ class Jpgrapher {
               $graph->doAutoScaleYnAxis();
               } */
 
-            if (isset($values['graph_yscale_autoticks']))
+            if (isset($values['graph_yscale_autoticks'])){
                 $graph->yscale->SetAutoTicks($values['graph_yscale_autoticks']);
-
+            }
 
 
             return $lineplot;
@@ -462,7 +462,7 @@ class Jpgrapher {
                     $graph->doAutoScaleYAxis();
                     $graph->doAutoScaleXAxis();
                 }
-
+                //$graph->yaxis->scale->SetAutoMin(0);
                 $yt = substr($values['graph_scale'], -3, 3);
                 $xt = substr($values['graph_scale'], 0, 3);
 
@@ -510,6 +510,9 @@ class Jpgrapher {
                 }       
                 
                 $graph->SetScale($values['graph_scale'], $ymin, $ymax, $xmin, $xmax);
+                            if (isset($values['graph_yscale_autoticks'])){
+                $graph->yscale->SetAutoTicks($values['graph_yscale_autoticks']);
+            }
             }
             
             // Mandatory: The color margin must be defined after set scale
