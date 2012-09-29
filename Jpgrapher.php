@@ -295,6 +295,7 @@ class Jpgrapher {
             }
             
             if ($values['lineplot'] == "pieplot3d") {
+                require_once ($this->path.'jpgraph_pie.php');
                 require_once ($this->path.'jpgraph_pie3d.php');
                 $lineplot = new \PiePlot3D($ydata);                
                 $graph->Add($lineplot);
@@ -374,7 +375,11 @@ class Jpgrapher {
             }
 
             if (isset($values['lineplot_legend'])) {
-                $lineplot->SetLegend($values['lineplot_legend']);
+                if(is_array($values['lineplot_legend'])){
+                    $lineplot->SetLegends($values['lineplot_legend']);
+                }else{
+                    $lineplot->SetLegend($values['lineplot_legend']);
+                }
             }
             
             if($values['lineplot']!='ganttplot'){
