@@ -30,6 +30,9 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end() 
+                ->children()
+                    ->scalarNode('graph_viewer_default_width')->defaultValue(null)->end()
+                ->end()
                 ;
 
         return $treeBuilder;

@@ -13,6 +13,10 @@ var num=0;
  */
 var singleformsnum=new Array();  
 
+/**
+ * Default width for graphs
+ */
+var graph_viewer_default_width=800;
 
 /**
  * Add a new graph
@@ -167,6 +171,7 @@ function getURLoptions(formname){
     form=document.getElementById('form_graphviewer_graph_properties_0');
     for (i=0;i<form.elements.length;i++)
     {
+        // Aqui se debe tener en cuenta el nuevo atributo de las opciones
         if(typeof form.elements[i]  !== "undefined"){
             if( form.elements[i].value!=""){    
                 // Find var name
