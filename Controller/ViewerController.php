@@ -32,7 +32,9 @@ class ViewerController extends Controller {
         
         $js=$this->js_set_form_values($this->get('request')->query->all());
         
-        return $this->render('DafuerJpgraphBundle:Viewer:viewer.html.twig', array('viewerurl'=>$viewerurl, 'numofgraphs' => $numofgraphs, 'combined'=>$combined,  'insertgraphroute'=>$insertgraphroute,'js'=>$js,'viewerformpath'=>$viewerformpath, 'graphroute'=>$graphroute), null);
+        $graph_viewer_default=  json_encode($this->container->getParameter('dafuer_jpgraph.graph_viewer_default'));
+        
+        return $this->render('DafuerJpgraphBundle:Viewer:viewer.html.twig', array('viewerurl'=>$viewerurl, 'numofgraphs' => $numofgraphs, 'combined'=>$combined,  'insertgraphroute'=>$insertgraphroute,'js'=>$js,'viewerformpath'=>$viewerformpath, 'graphroute'=>$graphroute, 'graph_viewer_default'=>$graph_viewer_default), null);
     }
 
     /**

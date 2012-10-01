@@ -42,6 +42,7 @@
         <script src="{{ asset('bundles/dafuerjpgraph/js/viewer.js') }}" type="text/javascript"></script>
 
         <script type="text/javascript">
+            graph_viewer_default_options={{ graph_viewer_default|raw }};
             {% if numofgraphs is null or numofgraphs == 1 %}
                 addGraph('{{ path(insertgraphroute) }}', {{ combined }});
             {% else %}

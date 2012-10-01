@@ -20,6 +20,7 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('dafuer_jpgraph');
 
+        
         $rootNode
                 ->children()
                     ->arrayNode('constants')
@@ -31,7 +32,13 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end() 
                 ->children()
-                    ->scalarNode('graph_viewer_default_width')->defaultValue(null)->end()
+                    ->arrayNode('graph_viewer_default')
+                    ->canBeUnset()
+                        ->children()
+                            ->scalarNode('graph_width')->defaultValue(null)->end()
+                            ->scalarNode('graph_height')->defaultValue(null)->end()
+                        ->end()
+                    ->end()
                 ->end()
                 ;
 

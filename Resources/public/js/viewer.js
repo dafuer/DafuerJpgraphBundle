@@ -16,7 +16,7 @@ var singleformsnum=new Array();
 /**
  * Default width for graphs
  */
-var graph_viewer_default_width=800;
+var graph_viewer_default_options=Array();
 
 /**
  * Add a new graph
@@ -169,9 +169,9 @@ function getURLoptions(formname){
     }
     
     form=document.getElementById('form_graphviewer_graph_properties_0');
+    var options=new Array();
     for (i=0;i<form.elements.length;i++)
     {
-        // Aqui se debe tener en cuenta el nuevo atributo de las opciones
         if(typeof form.elements[i]  !== "undefined"){
             if( form.elements[i].value!=""){    
                 // Find var name
@@ -186,11 +186,22 @@ function getURLoptions(formname){
                 number=form.elements[i].name.substring(from,to-1);
                 // If is number make array
                 if(isFinite(number)) number="["+number+"]";
-                else number="";              
+                else number="";    
+                // Set in obtained option name in array of options set up
+                options.push(elementname);
                 // Add obteined value to result
                 urlopts+="&"+elementname+number+"="+form.elements[i].value;
             }
         }
+        
+        for(var option in graph_viewer_default_options){
+            if(jQuery.inArray(option, options)==-1){
+                if(graph_viewer_default_options[option]!=null){
+                    urlopts+="&"+option+"[0]="+graph_viewer_default_options[option];
+                }
+            }
+        }
+       
     }
 
     return urlopts;
@@ -287,7 +298,6 @@ function copyForms(formfrom,formto){
             if(element!=null){
                 //alert(elements[i].id+"-"+elements[i].value+"-"+element.val);
                 element.val(elements[i].value);
-
             }
 
         }

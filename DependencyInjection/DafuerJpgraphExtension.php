@@ -26,7 +26,11 @@ class DafuerJpgraphExtension extends Extension
         $loader->load('services.yml');
         
         $container->setParameter('dafuer_jpgraph.constants', $config['constants']);
-        $container->setParameter('dafuer_jpgraph.graph_viewer_default_width', $config['graph_viewer_default_width']);
+        if(isset($config['graph_viewer_default'])){
+            $container->setParameter('dafuer_jpgraph.graph_viewer_default', $config['graph_viewer_default']);
+        }else{
+            $container->setParameter('dafuer_jpgraph.graph_viewer_default', array());
+        }
     }
     
      
