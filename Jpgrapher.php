@@ -606,7 +606,16 @@ class Jpgrapher {
                 if (isset($values['graph_yaxis_hideline'])){
                     $graph->yaxis->HideLine($values['graph_yaxis_hideline']);                
                 }
-          
+
+                if (isset($values['graph_yaxis_hidelabels'])){
+                    $graph->yaxis->HideLabels($values['graph_yaxis_hidelabels']);      
+                }
+                
+                if (isset($values['graph_xaxis_hidelabels'])){
+                    $graph->xaxis->HideLabels($values['graph_xaxis_hidelabels']);                
+                }                
+
+                
                 // X-Axis
                 
                 if (isset($values['graph_xaxis_ticklabels'])) {
