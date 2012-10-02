@@ -251,6 +251,32 @@ class Jpgrapher {
                     $lineplot = new \LinePlot($ydata, $xdata);
                 }
             }
+            
+            if ($values['lineplot'] == "zebraplot") {
+                 require_once ($this->path.'jpgraph_line.php');
+                 require_once ($this->path.'jpgraph_plotline.php');
+                 $lineplot=array();
+                 foreach ($ydata as $zebrapoint){
+                     $pline = new \PlotLine(constant($values['lineplot_direction']),$zebrapoint,$values['lineplot_color'],$values['lineplot_weight']);
+                     $lineplot[]=$pline;
+                 }
+                 // Adding a extra line transparent to optimize scales
+                 $min=min($ydata);
+                 $max=max($ydata);
+                 $transparent_x_data=array();
+                 $transparent_x_data=array();
+                 if($values['lineplot_direction']=='VERTICAL'){
+                     $transparent_x_data=array($min,$max);
+                     $transparent_y_data=array(0,0);
+                 }else{
+                     $transparent_x_data=array(0,0);
+                     $transparent_y_data=array($min,$max);                
+                 }
+  
+                 $line_for_scale = new \LinePlot($transparent_y_data, $transparent_x_data);
+                 $line_for_scale->setColor('black@0.1');
+                 $graph->add($line_for_scale);
+            }            
 
             if ($values['lineplot'] == "errorlineplot") {
                 require_once ($this->path.'jpgraph_line.php');
@@ -378,19 +404,25 @@ class Jpgrapher {
                 if(is_array($values['lineplot_legend'])){
                     $lineplot->SetLegends($values['lineplot_legend']);
                 }else{
-                    $lineplot->SetLegend($values['lineplot_legend']);
+                    if($values['lineplot'] == "zebraplot"){
+                        $lineplot[0]->SetLegend($values['lineplot_legend']);
+                    }else{
+                        $lineplot->SetLegend($values['lineplot_legend']);
+                    }
                 }
             }
             
-            if($values['lineplot']!='ganttplot'){
-                if (isset($values['lineplot_weight'])) {
-                    $lineplot->SetWeight($values['lineplot_weight']);
+            if($values['lineplot']!='zebraplot'){ // If zebraplot weight is asigned in construct
+                if($values['lineplot']!='ganttplot'){
+                    if (isset($values['lineplot_weight'])) {
+                        $lineplot->SetWeight($values['lineplot_weight']);
+                    }
+                }else{
+                    if (isset($values['lineplot_weight'])) {
+                        //echo $values['lineplot_weight'];
+                        $lineplot->SetHeight($values['lineplot_weight']);
+                    }                
                 }
-            }else{
-                if (isset($values['lineplot_weight'])) {
-                    //echo $values['lineplot_weight'];
-                    $lineplot->SetHeight($values['lineplot_weight']);
-                }                
             }
 
             if(isset($values['lineplot_fillcolor'])){
@@ -513,7 +545,9 @@ class Jpgrapher {
                 
                 if (isset($values['graph_yscale_autoticks'])){
                     $graph->yscale->SetAutoTicks($values['graph_yscale_autoticks']);
-                }                
+                }    
+
+             
             }
             
             // Mandatory: The color margin must be defined after set scale
@@ -572,7 +606,7 @@ class Jpgrapher {
                 if (isset($values['graph_yaxis_hideline'])){
                     $graph->yaxis->HideLine($values['graph_yaxis_hideline']);                
                 }
-                
+          
                 // X-Axis
                 
                 if (isset($values['graph_xaxis_ticklabels'])) {
@@ -676,7 +710,7 @@ class Jpgrapher {
                     $graph->xaxis->SetPos('min');
                     $graph->graph_theme = null;
                 }
-                
+                 
                 return $graph->Stroke();
             } else {
                 return false;
