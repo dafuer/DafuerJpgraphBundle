@@ -27,7 +27,7 @@ class Jpgrapher {
                 };
 
         $callbacks['TimeCallbackTime'] = function ($aVal) {
-                    return Date('H:i:s', $aVal); //return Date ('Y-m-d',$aVal);
+                    return Date('H:i', $aVal); //return Date ('Y-m-d',$aVal);
                 };
 
         $callbacks['CallbackMonthNumber'] = function ($aVal) {
