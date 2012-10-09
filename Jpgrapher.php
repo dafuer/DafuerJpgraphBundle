@@ -254,6 +254,7 @@ class Jpgrapher {
             
             if ($values['lineplot'] == "zebraplot") {
                  require_once ($this->path.'jpgraph_line.php');
+                 require_once ($this->path.'jpgraph_scatter.php');
                  require_once ($this->path.'jpgraph_plotline.php');
                  $lineplot=array();
                  foreach ($ydata as $zebrapoint){
@@ -267,15 +268,16 @@ class Jpgrapher {
                  $transparent_x_data=array();
                  if($values['lineplot_direction']=='VERTICAL'){
                      $transparent_x_data=array($min,$max);
-                     $transparent_y_data=array(0,0);
+                     $transparent_y_data=array(5.6,5.6);
                  }else{
-                     $transparent_x_data=array(0,0);
+                     $transparent_x_data=array(5.6,5.6);
                      $transparent_y_data=array($min,$max);                
                  }
   
-                 $line_for_scale = new \LinePlot($transparent_y_data, $transparent_x_data);
-                 $line_for_scale->setColor('black@0.1');
-                 $graph->add($line_for_scale);
+                 $scatter_for_scale = new \ScatterPlot($transparent_y_data, $transparent_x_data);
+                 $scatter_for_scale->mark->SetWidth(0);
+                 $scatter_for_scale->setColor('black');
+                 $graph->add($scatter_for_scale);
             }            
 
             if ($values['lineplot'] == "errorlineplot") {
