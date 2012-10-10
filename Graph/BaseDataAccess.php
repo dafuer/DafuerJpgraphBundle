@@ -33,11 +33,11 @@ class BaseDataAccess{
     }
     
     
-    public function getGraphList($securitycontext){
+    public function getGraphList(){
         $result=array();
        
         foreach($this->options as $key=>$graph){
-            if( $securitycontext->isGranted($graph['role']) ){ //count(array_intersect($rolenames, $graph['roles']))>0 ){  
+            if( $this->securityContext->isGranted($graph['role']) ){ //count(array_intersect($rolenames, $graph['roles']))>0 ){  
                 //$result=array_merge_recursive($result, $graph['classify']);
                 $x=array($key=>$graph['description']);
                 if(isset($graph['classify']) && $graph['classify']!=''){
