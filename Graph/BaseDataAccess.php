@@ -3,6 +3,8 @@
 
 namespace Dafuer\JpgraphBundle\Graph;
 
+use Symfony\Component\Security\Core\SecurityContextInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Yaml\Yaml;
 
 
@@ -14,11 +16,14 @@ class BaseDataAccess{
     
     protected $options;
     
-    public function __construct(){
+    protected $securityContext;
+    
+       
+    public function __construct(SecurityContextInterface $securityContext){
         if (!isset($this->graphindexpath) || $this->graphindexpath==""){
             throw new \Exception("JpgraphBundle says: Can't read graph index yml file: " . $this->graphindexpath );
         }
-        
+        $this->securityContext = $securityContext;
         $this->options = Yaml::parse($this->graphindexpath);        
     }
     
@@ -32,7 +37,7 @@ class BaseDataAccess{
         $result=array();
        
         foreach($this->options as $key=>$graph){
-            if( $securitycontext->isGranted($graph['role']) ){//count(array_intersect($rolenames, $graph['roles']))>0 ){  
+            if( $securitycontext->isGranted($graph['role']) ){ //count(array_intersect($rolenames, $graph['roles']))>0 ){  
                 //$result=array_merge_recursive($result, $graph['classify']);
                 $x=array($key=>$graph['description']);
                 if(isset($graph['classify']) && $graph['classify']!=''){
@@ -54,7 +59,12 @@ class BaseDataAccess{
 
     public function getData($id,$params){
         if(isset($this->options[$id])){
-            $function=$this->options[$id]['function'];
+            if( !$this->securityContext->isGranted($this->options[$id]['role']) ){
+                throw new AccessDeniedException();  
+            }
+             
+             $function=$this->options[$id]['function'];
+             
             return $this->$function($params);
         }else{
             return null;
@@ -63,11 +73,17 @@ class BaseDataAccess{
     
     
     public function getStyle($id){
+        if( !$this->securityContext->isGranted($this->options[$id]['role']) ){
+            throw new AccessDeniedException();  
+        }        
         return $this->options[$id]['style'];
     }
     
     
     public function getCustom($id){
+        if( !$this->securityContext->isGranted($this->options[$id]['role']) ){
+            throw new AccessDeniedException();  
+        }        
         if(isset($this->options[$id]['custom_style'])){    
             return $this->options[$id]['custom_style'];
         }else{
@@ -77,6 +93,10 @@ class BaseDataAccess{
     
     
     public function readGraph($id,$params){
+        //print_r($this->options[$id]);
+        if( !$this->securityContext->isGranted($this->options[$id]['role']) ){
+            throw new AccessDeniedException();  
+        }         
         $data=$this->getData($id, $params);
                 
         if(is_null($data)) throw new \Exception("Can't read graph. Perhaps there is no parameter dataserie.");
