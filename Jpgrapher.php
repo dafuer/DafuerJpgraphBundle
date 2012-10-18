@@ -320,6 +320,7 @@ class Jpgrapher {
                 if(isset($values['lineplot_slicecolors'])){
                     $lineplot->SetSliceColors($values['lineplot_slicecolors']);
                 }
+                
             }
             
             if ($values['lineplot'] == "pieplot3d") {
@@ -330,6 +331,7 @@ class Jpgrapher {
                 if(isset($values['lineplot_slicecolors'])){
                     $lineplot->SetSliceColors($values['lineplot_slicecolors']);
                 }
+                
             }            
             
             if ($values['lineplot'] == "ganttplot") {
@@ -398,6 +400,10 @@ class Jpgrapher {
                 $line->SetColor($values['lineplot_color']);
             }
 
+            if (isset($values['lineplot_value_color'])) {
+                $lineplot->value->SetColor($values['lineplot_value_color']);
+            }
+            
             if ($values['lineplot'] == "errorlineplot" && isset($values['errorlineplot_color'])) {
                 $lineplot->SetColor($values['errorlineplot_color']);
             }

@@ -38,6 +38,7 @@ How to define graph styles
 #    lineplot_marks: integer #If #points < max_ptos_to_mark, marks are used_ If -1 never used_ if 0 never use mark_ if -1 always use mark_
 #    lineplot_mark_color: color
 #    lineplot_mark_width: integer
+#    lineplot_value_color: 'white'
 
 # graph_xaxis_scale_dateformat: 'Y'
 
