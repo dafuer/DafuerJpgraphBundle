@@ -546,12 +546,12 @@ class Jpgrapher {
                 if($this->zebra_x_min != null){  
                      // if exist y autoscale 
                     if($ymin!=null){
-                         $scatter_for_scale = new \ScatterPlot(array(($ymin+$ymax/2),($ymin+$ymax/2)), array($this->zebra_x_min,$this->zebra_x_min));
+                         $scatter_for_scale = new \ScatterPlot(array(($ymin+$ymax/2),($ymin+$ymax/2)), array($this->zebra_x_min,$this->zebra_x_max));
                          $scatter_for_scale->mark->SetWidth(0);
                          $scatter_for_scale->setColor('black');
                          $graph->add($scatter_for_scale);                         
                      }else{
-                         $scatter_for_scale = new \ScatterPlot(array(0,0), array($this->zebra_x_min,$this->zebra_x_min));
+                         $scatter_for_scale = new \ScatterPlot(array(0,0), array($this->zebra_x_min,$this->zebra_x_max));
                          $scatter_for_scale->mark->SetWidth(0);
                          $scatter_for_scale->setColor('black');
                          $graph->add($scatter_for_scale);     
@@ -562,19 +562,29 @@ class Jpgrapher {
                 if($this->zebra_y_min != null){  
                      // if exist y autoscale 
                     if($xmin!=null){
-                         $scatter_for_scale = new \ScatterPlot(array($this->zebra_y_min,$this->zebra_y_min), array(($xmin+$xmax/2),($xmin+$xmax/2)));
+                         $scatter_for_scale = new \ScatterPlot(array($this->zebra_y_min,$this->zebra_y_max), array(($xmin+$xmax/2),($xmin+$xmax/2)));
                          $scatter_for_scale->mark->SetWidth(0);
                          $scatter_for_scale->setColor('black');
                          $graph->add($scatter_for_scale);                         
                      }else{
-                         $scatter_for_scale = new \ScatterPlot(array($this->zebra_x_min,$this->zebra_x_min),array(0,0));
+                         $scatter_for_scale = new \ScatterPlot(array($this->zebra_y_min,$this->zebra_y_max),array(0,0));
                          $scatter_for_scale->mark->SetWidth(0);
                          $scatter_for_scale->setColor('black');
                          $graph->add($scatter_for_scale);     
                      }
-                }                 
-
-
+                }          
+                
+                
+                // try to get autoscale again
+              /*  if (count($graph->plots) > 0) {
+                    $graph->doAutoScaleYAxis();
+                    $ymin = $graph->yscale->GetMinVal();
+                    $ymax = $graph->yscale->GetMaxVal();    
+                 
+                    $graph->doAutoScaleXAxis();
+                    $xmin = $graph->xscale->GetMinVal();
+                    $xmax = $graph->xscale->GetMaxVal();  
+                } */
                 /*
                 $ymin = 0;
                 $ymax = 1;
@@ -621,6 +631,15 @@ class Jpgrapher {
                         $xmax=log($xmax,10);
                     }                    
                 }       
+                
+                // If min or max are zebras, add grace space.
+                $ygrace=($ymax-$ymin)*0.01;
+                if($ymin==$this->zebra_y_min) $ymin=$ymin-$ygrace;
+                if($ymax==$this->zebra_y_max) $ymax=$ymin+$ygrace; 
+                
+                $xgrace=($xmax-$xmin)*0.01;
+                if($xmin==$this->zebra_x_min) $xmin=$xmin-$xgrace;
+                if($xmax==$this->zebra_x_max) $xmax=$xmax+$xgrace;                 
                 
                 $graph->SetScale($values['graph_scale'], $ymin, $ymax, $xmin, $xmax);
                 
