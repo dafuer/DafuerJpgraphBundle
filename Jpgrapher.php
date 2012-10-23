@@ -16,6 +16,11 @@ class Jpgrapher {
     //private $viewer_file;
     private $options;
     private $path;
+    
+    private $zebra_x_min=null;
+    private $zebra_x_max=null;
+    private $zebra_y_min=null;
+    private $zebra_y_max=null;
 
     //private $viewer;
 
@@ -90,7 +95,6 @@ class Jpgrapher {
 
         if ($has_styles)
             unset($custom['style']);
-
       
         // I set the custom value
         foreach ($custom as $asociated_name => $asociated_value) {
@@ -100,7 +104,6 @@ class Jpgrapher {
                 unset($values[$asociated_name]);
             }
         }
-        
         
         // Last, I replace value of the linked attributes
         // performance penalty
@@ -169,7 +172,6 @@ class Jpgrapher {
             }
 
 
-
             if (isset($values['graph_scale'])) {
                 $yt = substr($values['graph_scale'], -3, 3);
                 $xt = substr($values['graph_scale'], 0, 3);
@@ -219,8 +221,6 @@ class Jpgrapher {
                 $graph->SetClipping($values['graph_clipping']);
 
 
-         
-
             return $graph;
         }
     }
@@ -261,8 +261,27 @@ class Jpgrapher {
                      $pline = new \PlotLine(constant($values['lineplot_direction']),$zebrapoint,$values['lineplot_color'],$values['lineplot_weight']);
                      $lineplot[]=$pline;
                  }
-                 // Adding a extra line transparent to optimize scales
+                 
                  $min=min($ydata);
+                 $max=max($ydata);  
+                 
+                 if($values['lineplot_direction']=='VERTICAL'){
+                     if($this->zebra_x_min==null || $min<$this->zebra_x_min){
+                         $this->zebra_x_min=$min;
+                     }
+                     if($this->zebra_x_max==null || $max>$this->zebra_x_max){
+                         $this->zebra_x_max=$max;
+                     }                     
+                 }else{
+                     if($this->zebra_y_min==null || $min<$this->zebra_y_min){
+                         $this->zebra_y_min=$min;
+                     }
+                     if($this->zebra_y_max==null || $max>$this->zebra_y_max){
+                         $this->zebra_y_max=$max;
+                     }                        
+                 }
+                 // Adding a extra line transparent to optimize scales
+                 /*$min=min($ydata);
                  $max=max($ydata);
                  $transparent_x_data=array();
                  $transparent_x_data=array();
@@ -277,7 +296,7 @@ class Jpgrapher {
                  $scatter_for_scale = new \ScatterPlot($transparent_y_data, $transparent_x_data);
                  $scatter_for_scale->mark->SetWidth(0);
                  $scatter_for_scale->setColor('black');
-                 $graph->add($scatter_for_scale);
+                 $graph->add($scatter_for_scale);*/
             }            
 
             if ($values['lineplot'] == "errorlineplot") {
@@ -497,20 +516,74 @@ class Jpgrapher {
             if($values['graph']!='piegraph' && $values['graph']!='ganttgraph'){
 
                 // Setup scales
-                
+               
+                $ymin = null;
+                $ymax = null;
+                $xmin = null;
+                $xmax = null;
+               
                 if (count($graph->plots) > 0) {
-                    $graph->doAutoScaleYAxis();
-                    $graph->doAutoScaleXAxis();
+                    try{
+                        $graph->doAutoScaleYAxis();
+                        $ymin = $graph->yscale->GetMinVal();
+                        $ymax = $graph->yscale->GetMaxVal();                        
+                    }  catch (\Exception $e) {
+                        
+                    }
+                    
+                    try{
+                        $graph->doAutoScaleXAxis();
+                        $xmin = $graph->xscale->GetMinVal();
+                        $xmax = $graph->xscale->GetMaxVal();                         
+                    }  catch (\Exception $e) {
+                        
+                    }
                 }
+                
+                // Add a scatter points to adjust scale
+                
+                // If there are vertical zebras
+                if($this->zebra_x_min != null){  
+                     // if exist y autoscale 
+                    if($ymin!=null){
+                         $scatter_for_scale = new \ScatterPlot(array(($ymin+$ymax/2),($ymin+$ymax/2)), array($this->zebra_x_min,$this->zebra_x_min));
+                         $scatter_for_scale->mark->SetWidth(0);
+                         $scatter_for_scale->setColor('black');
+                         $graph->add($scatter_for_scale);                         
+                     }else{
+                         $scatter_for_scale = new \ScatterPlot(array(0,0), array($this->zebra_x_min,$this->zebra_x_min));
+                         $scatter_for_scale->mark->SetWidth(0);
+                         $scatter_for_scale->setColor('black');
+                         $graph->add($scatter_for_scale);     
+                     }
+                }                
 
+                // If there are horizontal zebras
+                if($this->zebra_y_min != null){  
+                     // if exist y autoscale 
+                    if($xmin!=null){
+                         $scatter_for_scale = new \ScatterPlot(array($this->zebra_y_min,$this->zebra_y_min), array(($xmin+$xmax/2),($xmin+$xmax/2)));
+                         $scatter_for_scale->mark->SetWidth(0);
+                         $scatter_for_scale->setColor('black');
+                         $graph->add($scatter_for_scale);                         
+                     }else{
+                         $scatter_for_scale = new \ScatterPlot(array($this->zebra_x_min,$this->zebra_x_min),array(0,0));
+                         $scatter_for_scale->mark->SetWidth(0);
+                         $scatter_for_scale->setColor('black');
+                         $graph->add($scatter_for_scale);     
+                     }
+                }                 
+
+
+                /*
+                $ymin = 0;
+                $ymax = 1;
+                $xmin = 0;
+                $xmax = 1;
+                 */
+                
                 $yt = substr($values['graph_scale'], -3, 3);
                 $xt = substr($values['graph_scale'], 0, 3);
-
-                
-                $ymin = $graph->yscale->GetMinVal();
-                $ymax = $graph->yscale->GetMaxVal();
-                $xmin = $graph->xscale->GetMinVal();
-                $xmax = $graph->xscale->GetMaxVal();
 
               
                 if(count($graph->plots)>0){
@@ -554,8 +627,7 @@ class Jpgrapher {
                 if (isset($values['graph_yscale_autoticks'])){
                     $graph->yscale->SetAutoTicks($values['graph_yscale_autoticks']);
                 }    
-
-             
+            
             }
             
             // Mandatory: The color margin must be defined after set scale
@@ -569,7 +641,6 @@ class Jpgrapher {
                 //$graph->SetBackgroundGradient('darkred:0.7', 'black', 2, BGRAD_MARGIN);
             }
         
-
 
             if ( count($graph->plots) > 0 || $values['graph']=='piegraph' || $values['graph']=='ganttgraph') {
 
@@ -647,12 +718,11 @@ class Jpgrapher {
                 }
                  
                 
-//$graph->xaxis->SetTickPositions(array(0,  2.5),array(1,  2));
-                // ¿?
+                //$graph->xaxis->SetTickPositions(array(0,  2.5),array(1,  2));
+                
                 if (isset($values['lineplot_xaxis_pos'])) {
                     $graph->xaxis->SetPos($values["graph_xaxis_pos"]);
                 }                
-                
                 
                 
                 // Set legend
@@ -719,8 +789,8 @@ class Jpgrapher {
                 }                
               
                 
-//$graph->xaxis->SetTextTickInterval(1);
-//$graph->xgrid->Show(true);
+                //$graph->xaxis->SetTextTickInterval(1);
+                //$graph->xgrid->Show(true);
 
                 if($values['graph']!='piegraph' && $values['graph']!='ganttgraph'){
                     $graph->SetClipping(true);
@@ -747,10 +817,13 @@ class Jpgrapher {
             $values = $this->getOptions($style_name, $custom);
 
             // Now create graph and define style values before obtained.
-            if (!isset($values['canvasgraph_width']))
+            if (!isset($values['canvasgraph_width'])){
                 throw new \Exception('DafuerJpgraphBundle says: Variable canvasgraph_width must be defined.');
-            if (!isset($values['canvasgraph_height']))
+            }
+            
+            if (!isset($values['canvasgraph_height'])){
                 throw new \Exception('DafuerJpgraphBundle says: Variable canvasgraph_height must be defined.');
+            }
 
             $graph = new \CanvasGraph($values['canvasgraph_width'], $values['canvasgraph_height'], 'auto');
             $graph->InitFrame();
