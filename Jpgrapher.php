@@ -719,7 +719,13 @@ class Jpgrapher {
                 if (isset($values['graph_xaxis_ticklabels'])) {
                     $graph->xaxis->SetTickLabels($values["graph_xaxis_ticklabels"]);
                 }
-
+                
+                if (isset($values['graph_yaxis_ticklabels'])) {
+                    $graph->yaxis->SetTickLabels($values["graph_yaxis_ticklabels"]);
+                }
+                
+ 
+                
                 if (isset($values['graph_xaxis_title'])) {
                     if(isset($values['graph_xaxis_title_position'])){
                         $graph->xaxis->SetTitle($values["graph_xaxis_title"],$values['graph_xaxis_title_position']);
