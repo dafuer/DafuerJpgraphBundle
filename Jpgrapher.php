@@ -749,6 +749,15 @@ class Jpgrapher {
                     $graph->xaxis->SetPos($values["graph_xaxis_pos"]);
                 }                
                 
+                if (isset($values['graph_xaxis_tickposition'])) {
+                    $graph->xaxis->SetTickPositions($values['graph_xaxis_tickposition'][0],$values['graph_xaxis_tickposition'][1],$values['graph_xaxis_tickposition'][2]);
+                }          
+                
+                if (isset($values['graph_yaxis_tickposition'])) {
+                    $graph->yaxis->SetTickPositions($values['graph_yaxis_tickposition'][0],$values['graph_yaxis_tickposition'][1],$values['graph_yaxis_tickposition'][2]);
+                }          
+                
+                //example: $graph->yaxis->setTickPositions(array(0,1,2,3,4,5,6,7),null,array('a','b','c','d','e','f','g','h'));                
                 
                 // Set legend
                 if (isset($values['graph_legend_abspos_x']) &&
@@ -814,7 +823,8 @@ class Jpgrapher {
                 }                
               
                 
-                //$graph->xaxis->SetTextTickInterval(1);
+                //$graph->yaxis->SetTextTickInterval(2);
+                
                 //$graph->xgrid->Show(true);
 
                 if($values['graph']!='piegraph' && $values['graph']!='ganttgraph'){

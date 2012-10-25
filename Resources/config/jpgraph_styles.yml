@@ -38,7 +38,7 @@
 
 #graph_yscale_min
 #...
-
+#         graph_yaxis_tickposition: [ [0, 1, 2, 3, 4, 5, 6 ] , ~, ['', 'sta h', 'sta b', 'sta s', 'alms', 'pps', ''] ]
 # You can put here your styles_ If you want that the examples run properly, you can't remove example styles
 
 graph_example:
