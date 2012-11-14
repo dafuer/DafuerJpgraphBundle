@@ -634,12 +634,12 @@ class Jpgrapher {
                 
                 // If min or max are zebras, add grace space.
                 $ygrace=($ymax-$ymin)*0.01;
-                if($ymin==$this->zebra_y_min) $ymin=$ymin-$ygrace;
-                if($ymax==$this->zebra_y_max) $ymax=$ymin+$ygrace; 
+                if($ymin===$this->zebra_y_min) $ymin=$ymin-$ygrace;
+                if($ymax===$this->zebra_y_max) $ymax=$ymin+$ygrace; 
                 
                 $xgrace=($xmax-$xmin)*0.01;
-                if($xmin==$this->zebra_x_min) $xmin=$xmin-$xgrace;
-                if($xmax==$this->zebra_x_max) $xmax=$xmax+$xgrace;                 
+                if($xmin===$this->zebra_x_min) $xmin=$xmin-$xgrace;
+                if($xmax===$this->zebra_x_max) $xmax=$xmax+$xgrace;                 
                 
                 $graph->SetScale($values['graph_scale'], $ymin, $ymax, $xmin, $xmax);
                 
