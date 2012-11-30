@@ -744,10 +744,7 @@ class Jpgrapher {
                  
                 
                 //$graph->xaxis->SetTickPositions(array(0,  2.5),array(1,  2));
-                
-                if (isset($values['lineplot_xaxis_pos'])) {
-                    $graph->xaxis->SetPos($values["graph_xaxis_pos"]);
-                }                
+                              
                 
                 if (isset($values['graph_xaxis_tickposition'])) {
                     $graph->xaxis->SetTickPositions($values['graph_xaxis_tickposition'][0],$values['graph_xaxis_tickposition'][1],$values['graph_xaxis_tickposition'][2]);
@@ -829,7 +826,9 @@ class Jpgrapher {
 
                 if($values['graph']!='piegraph' && $values['graph']!='ganttgraph'){
                     $graph->SetClipping(true);
-                    $graph->xaxis->SetPos('min');
+                    if (isset($values['graph_xaxis_pos'])) {
+                        $graph->xaxis->SetPos($values["graph_xaxis_pos"]);
+                    } 
                     $graph->graph_theme = null;
                 }
                  
