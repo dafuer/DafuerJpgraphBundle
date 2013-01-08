@@ -821,6 +821,13 @@ class Jpgrapher {
               
                 
                 //$graph->yaxis->SetTextTickInterval(2);
+                if(isset($values['graph_xaxis_tick_interval'])){
+                    $graph->xaxis->scale->ticks->Set($values['graph_xaxis_tick_interval']);
+                }
+                
+                if(isset($values['graph_yaxis_tick_interval'])){
+                    $graph->xaxis->scale->ticks->Set($values['graph_xaxis_tick_interval']);
+                }
                 
                 //$graph->xgrid->Show(true);
 

@@ -26,7 +26,9 @@
 #    graph_legend_frameweight: integer
 #    graph_margincolor: color
 #    graph_frame: [boolean,color, integer] #[draw it?, color, width]
-#    
+#    graph_xaxis_tick_interval
+#    graph_yaxis_tick_interval
+
 #generic_lineplot:
 #    lineplot_color: color
 #    lineplot_weight: integer
