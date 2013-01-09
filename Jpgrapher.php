@@ -754,7 +754,69 @@ class Jpgrapher {
                     $graph->yaxis->SetTickPositions($values['graph_yaxis_tickposition'][0],$values['graph_yaxis_tickposition'][1],$values['graph_yaxis_tickposition'][2]);
                 }          
                 
-                //example: $graph->yaxis->setTickPositions(array(0,1,2,3,4,5,6,7),null,array('a','b','c','d','e','f','g','h'));                
+                if (isset($values['graph_xaxis_tickside'])) {
+                    $graph->xaxis->SetTickSide(constant($values['graph_xaxis_tickside']));
+                } 
+                
+                if (isset($values['graph_yaxis_tickside'])) {
+                    $graph->yaxis->SetTickSide(constant($values['graph_yaxis_tickside']));
+                }                 
+                
+                if (isset($values['graph_xaxis_tick_hide_minor']) || isset($values['graph_xaxis_tick_hide_major'])) {
+                    if(!isset($values['graph_xaxis_tick_hide_minor'])){
+                        $values['graph_xaxis_tick_hide_minor']=true;
+                        $values['graph_yaxis_tick_hide_major']=true;
+                    } 
+                    if(!isset($values['graph_xaxis_tick_hide_major'])){
+                        $values['graph_xaxis_tick_hide_major']=true;
+                    }
+                    
+                    $graph->xaxis->HideTicks($values['graph_xaxis_tick_hide_minor'], $values['graph_xaxis_tick_hide_major']);
+                }                 
+                
+                if (isset($values['graph_yaxis_tick_hide_minor']) || isset($values['graph_yaxis_tick_hide_major'])) {
+                    if(!isset($values['graph_yaxis_tick_hide_minor'])){
+                        $values['graph_yaxis_tick_hide_minor']=true;
+                        $values['graph_yaxis_tick_hide_major']=true;
+                    } 
+                    if(!isset($values['graph_yaxis_tick_hide_major'])){
+                        $values['graph_yaxis_tick_hide_major']=true;
+                    }
+                    
+                    $graph->yaxis->HideTicks($values['graph_yaxis_tick_hide_minor'], $values['graph_yaxis_tick_hide_major']);
+                }                 
+
+                if (isset($values['graph_xaxis_tick_size_minor']) || isset($values['graph_xaxis_tick_size_major'])) {
+                    if(!isset($values['graph_xaxis_tick_size_minor'])){
+                        $values['graph_xaxis_tick_size_minor']=3;
+                    } 
+                    if(!isset($values['graph_xaxis_tick_size_major'])){
+                        $values['graph_xaxis_tick_size_major']=3;
+                    }
+                    
+                    $graph->xaxis->scale->ticks->SetSize($values['graph_xaxis_tick_size_major'], $values['graph_xaxis_tick_size_minor']);
+                }                   
+                
+                if (isset($values['graph_yaxis_tick_size_minor']) || isset($values['graph_yaxis_tick_size_major'])) {
+                    if(!isset($values['graph_yaxis_tick_size_minor'])){
+                        $values['graph_yaxis_tick_size_minor']=3;
+                    } 
+                    if(!isset($values['graph_yaxis_tick_size_major'])){
+                        $values['graph_yaxis_tick_size_major']=3;
+                    }
+                    
+                    $graph->yaxis->scale->ticks->SetSize($values['graph_yaxis_tick_size_major'], $values['graph_yaxis_tick_size_minor']);
+                }               
+                
+                if (isset($values['graph_xaxis_tick_color'])){
+                    $graph->xaxis->scale->ticks->SetColor($values['graph_xaxis_tick_color']);
+                }
+                
+                if (isset($values['graph_yaxis_tick_color'])){
+                    $graph->yaxis->scale->ticks->SetColor($values['graph_yaxis_tick_color']);
+                }                
+                
+                         
                 
                 // Set legend
                 if (isset($values['graph_legend_abspos_x']) &&
