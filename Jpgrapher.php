@@ -379,14 +379,6 @@ class Jpgrapher {
                     if (isset($values['graph_yaxis_hideline']))
                         $graph->yaxis->HideLine($values['graph_yaxis_hideline']);
 
-                    // This code here has not effect
-                    if (isset($values['graph_ygrid_fill'])) {
-                        $graph->ygrid->SetFill($values['graph_ygrid_fill'][0], $values['graph_ygrid_fill'][1], $values['graph_ygrid_fill'][2]);
-                        //DEPTH_BACK, Under plots
-                        //DEPTH_FRONT, On top of plots      
-                        $graph->ygrid->Show();
-                        $graph->SetGridDepth(DEPTH_BACK);
-                    }
 
                     $graph->Add($lineplot);
                 } else {
@@ -498,7 +490,6 @@ class Jpgrapher {
 
             if (isset($values['graph_yscale_autoticks']))
                 $graph->yscale->SetAutoTicks($values['graph_yscale_autoticks']);
-
 
 
             return $lineplot;
@@ -640,7 +631,7 @@ class Jpgrapher {
                 $xgrace=($xmax-$xmin)*0.01;
                 if($xmin===$this->zebra_x_min) $xmin=$xmin-$xgrace;
                 if($xmax===$this->zebra_x_max) $xmax=$xmax+$xgrace;                 
-                
+//throw new \Exception($xmin);
                 $graph->SetScale($values['graph_scale'], $ymin, $ymax, $xmin, $xmax);
                 
                 if (isset($values['graph_yscale_autoticks'])){
@@ -824,7 +815,14 @@ class Jpgrapher {
                     $graph->yaxis->scale->ticks->SetLabelLogType(constant($values['graph_yaxis_tick_labellogtype']));
                 }
                 
-                         
+                // This code here has not effect
+                if (isset($values['graph_ygrid_fill'])) {
+                    $graph->ygrid->SetFill($values['graph_ygrid_fill'][0], $values['graph_ygrid_fill'][1], $values['graph_ygrid_fill'][2]);
+                    //DEPTH_BACK, Under plots
+                    //DEPTH_FRONT, On top of plots      
+                    $graph->ygrid->Show();
+                    $graph->SetGridDepth(DEPTH_BACK);
+                }                         
                 
                 // Set legend
                 if (isset($values['graph_legend_abspos_x']) &&
@@ -911,7 +909,7 @@ class Jpgrapher {
                     }                     
                     $graph->graph_theme = null;
                 }
-                 
+            
                 return $graph->Stroke();
             } else {
                 return false;
