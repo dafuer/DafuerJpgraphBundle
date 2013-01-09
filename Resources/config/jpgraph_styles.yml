@@ -28,6 +28,8 @@
 #    graph_frame: [boolean,color, integer] #[draw it?, color, width]
 #    graph_xaxis_tick_interval
 #    graph_yaxis_tick_interval
+#    graph_xaxis_pos: min
+#    graph_yaxis_pos: min
 
 #generic_lineplot:
 #    lineplot_color: color

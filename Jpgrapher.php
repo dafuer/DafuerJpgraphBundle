@@ -836,6 +836,9 @@ class Jpgrapher {
                     if (isset($values['graph_xaxis_pos'])) {
                         $graph->xaxis->SetPos($values["graph_xaxis_pos"]);
                     } 
+                    if (isset($values['graph_yaxis_pos'])) {
+                        $graph->yaxis->SetPos($values["graph_yaxis_pos"]);
+                    }                     
                     $graph->graph_theme = null;
                 }
                  
