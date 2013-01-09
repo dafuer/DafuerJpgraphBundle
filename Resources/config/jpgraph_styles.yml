@@ -43,7 +43,10 @@
 #    graph_yaxis_tick_size_minor: 10  
 #    graph_xaxis_tick_color:
 #    graph_yaxis_tick_color:
-        
+#    graph_xaxis_tick_labellogtype: LOGLABELS_PLAIN # or LOGLABELS_MAGNITUDE (default)
+#    graph_yaxis_tick_labellogtype
+
+
 #generic_lineplot:
 #    lineplot_color: color
 #    lineplot_weight: integer

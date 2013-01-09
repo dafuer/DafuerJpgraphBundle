@@ -815,6 +815,14 @@ class Jpgrapher {
                 if (isset($values['graph_yaxis_tick_color'])){
                     $graph->yaxis->scale->ticks->SetColor($values['graph_yaxis_tick_color']);
                 }                
+
+                if(isset($values['graph_xaxis_tick_labellogtype']) && get_class($graph->xaxis->scale->ticks)=='LogTicks'){
+                    $graph->xaxis->scale->ticks->SetLabelLogType(constant($values['graph_xaxis_tick_labellogtype']));
+                }
+                
+                if(isset($values['graph_yaxis_tick_labellogtype']) && get_class($graph->yaxis->scale->ticks)=='LogTicks'){
+                    $graph->yaxis->scale->ticks->SetLabelLogType(constant($values['graph_yaxis_tick_labellogtype']));
+                }
                 
                          
                 
