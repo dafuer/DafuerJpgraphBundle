@@ -815,14 +815,24 @@ class Jpgrapher {
                     $graph->yaxis->scale->ticks->SetLabelLogType(constant($values['graph_yaxis_tick_labellogtype']));
                 }
                 
-                // This code here has not effect
+
                 if (isset($values['graph_ygrid_fill'])) {
-                    $graph->ygrid->SetFill($values['graph_ygrid_fill'][0], $values['graph_ygrid_fill'][1], $values['graph_ygrid_fill'][2]);
-                    //DEPTH_BACK, Under plots
-                    //DEPTH_FRONT, On top of plots      
+                    $graph->ygrid->SetFill($values['graph_ygrid_fill'][0], $values['graph_ygrid_fill'][1], $values['graph_ygrid_fill'][2]);   
                     $graph->ygrid->Show();
-                    $graph->SetGridDepth(DEPTH_BACK);
-                }                         
+                    $graph->SetGridDepth(DEPTH_BACK);  //DEPTH_BACK, Under plots //DEPTH_FRONT, On top of plots   
+                }          
+                
+                if (isset($values['graph_color'])) {
+                    $graph->SetColor($values['graph_color']); 
+                }
+                
+                if (isset($values['graph_xgrid_show'])) {
+                    $graph->xgrid->Show($values['graph_xgrid_show']); 
+                }
+                                
+                if (isset($values['graph_ygrid_show'])) {
+                    $graph->ygrid->Show($values['graph_ygrid_show']); 
+                }
                 
                 // Set legend
                 if (isset($values['graph_legend_abspos_x']) &&
@@ -909,7 +919,7 @@ class Jpgrapher {
                     }                     
                     $graph->graph_theme = null;
                 }
-            
+
                 return $graph->Stroke();
             } else {
                 return false;

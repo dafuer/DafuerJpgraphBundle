@@ -45,7 +45,9 @@
 #    graph_yaxis_tick_color:
 #    graph_xaxis_tick_labellogtype: LOGLABELS_PLAIN # or LOGLABELS_MAGNITUDE (default)
 #    graph_yaxis_tick_labellogtype
-
+#    graph_color
+#    graph_xgrid_show
+#    graph_ygrid_show
 
 #generic_lineplot:
 #    lineplot_color: color
