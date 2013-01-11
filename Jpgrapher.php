@@ -588,11 +588,10 @@ class Jpgrapher {
 
               
                 if(count($graph->plots)>0){
-                    $minmax=$graph->GetXMinMax();
-                    $xmin=$minmax[0];
-                    $xmax=$minmax[1];
+                    $xmin=$graph->xscale->GetMinVal();
+                    $xmax=$graph->xscale->GetMaxVal();
                 }
-            
+            //throw new \Exception($xmax);
                 
                 if (isset($values['graph_yscale_min'])) {
                     $ymin = $values['graph_yscale_min'];
