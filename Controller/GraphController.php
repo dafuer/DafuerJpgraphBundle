@@ -37,7 +37,9 @@ class GraphController extends Controller {
         
         // First, extract manual data from url
         $dataname = $request->query->get('dataname',array(0=>'data'));
+        $c=0;
         foreach ($dataname as $index=>$name) {
+            if($c==0) $minindex=$index;
             $xdata[$index] = $request->query->get('x' . $name, array());
             $request->query->remove('x' . $name);
             $ydata[$index] = $request->query->get('y' . $name, array());
@@ -45,8 +47,10 @@ class GraphController extends Controller {
             $styledata[$index] = $request->query->get('style' . $name, 'lineplot_timeserie');
             $request->query->remove('style' . $name);
             $customdata[$index] = $request->query->get('custom' . $name, array());
-            $request->query->remove('custom' . $name);            
+            $request->query->remove('custom' . $name);      
+            $c++;
         }
+        $index=$minindex;
         $this->get('request')->query->remove('dataname');
        
                 
@@ -56,7 +60,7 @@ class GraphController extends Controller {
 
         
         // Combined parameter is mandatory except for single 
-        $combined = $request->query->get('combined', (int)(count($ydata[0])==0));
+        $combined = $request->query->get('combined', (int)(count($ydata[$index])==0));
 
         if($combined>0){
             $datas = array();
@@ -94,10 +98,10 @@ class GraphController extends Controller {
         }else{
             // Create graph with idividual style
            
-            $firststyle = $styledata[0];
-            $firstcustom = $customdata[0];
-            $base_style = array_merge($firstcustom, $customdata[0]);
-            $graph = $jpgrapher->createGraph($styledata[0],$customdata[0]);
+            $firststyle = $styledata[$index];
+            $firstcustom = $customdata[$index];
+            $base_style = array_merge($firstcustom, $customdata[$index]);
+            $graph = $jpgrapher->createGraph($styledata[$index],$customdata[$index]);
         }
 
         // Add url plots  
