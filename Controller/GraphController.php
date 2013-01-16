@@ -37,18 +37,15 @@ class GraphController extends Controller {
         
         // First, extract manual data from url
         $dataname = $request->query->get('dataname',array(0=>'data'));
-        $c = 0;
-        foreach ($dataname as $name) {
-            $xdata[$c] = $request->query->get('x' . $name, array());
+        foreach ($dataname as $index=>$name) {
+            $xdata[$index] = $request->query->get('x' . $name, array());
             $request->query->remove('x' . $name);
-            $ydata[$c] = $request->query->get('y' . $name, array());
+            $ydata[$index] = $request->query->get('y' . $name, array());
             $request->query->remove('y' . $name);
-            $styledata[$c] = $request->query->get('style' . $name, 'lineplot_timeserie');
+            $styledata[$index] = $request->query->get('style' . $name, 'lineplot_timeserie');
             $request->query->remove('style' . $name);
-            $customdata[$c] = $request->query->get('custom' . $name, array());
+            $customdata[$index] = $request->query->get('custom' . $name, array());
             $request->query->remove('custom' . $name);            
-            
-            $c++;
         }
         $this->get('request')->query->remove('dataname');
        
@@ -102,7 +99,7 @@ class GraphController extends Controller {
             $base_style = array_merge($firstcustom, $customdata[0]);
             $graph = $jpgrapher->createGraph($styledata[0],$customdata[0]);
         }
-        
+
         // Add url plots  
         foreach ($dataname as $i => $linename) {
             if (count($ydata[$i]) > 0) {
