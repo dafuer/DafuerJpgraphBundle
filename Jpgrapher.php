@@ -379,7 +379,7 @@ class Jpgrapher {
                     if (isset($values['graph_yaxis_hideline']))
                         $graph->yaxis->HideLine($values['graph_yaxis_hideline']);
 
-
+                    if(!isset($lineplot)) throw new \Exception('DafuerDafuerJpgraphBundle says: Lineplot dont exist');
                     $graph->Add($lineplot);
                 } else {
                     // First, I find maxium index allowed to prevent a exception
@@ -983,7 +983,7 @@ class Jpgrapher {
 
         return $result;
     }
-
+/*
     function graphDaySeries($graph_style, $line_style, $ydata, $xdata, $custom_graph = array(), $custom_lineplot = array(), $graph = null) {
         if (count($xdata) > 0) {
 
@@ -1016,12 +1016,14 @@ class Jpgrapher {
         } else {
 
             if (is_null($graph)) {  // Si no me pasan una grafica a la que añadir la linea creo una nueva para devolver el error
-                $graph = $this->createErrorGraph($graph_style, $custom_graph);
+                $graph = $this->createErrorImg($graph_style, $custom_graph);
             }
 
             return $graph;
         }
     }
+ 
+ */
 
 }
 

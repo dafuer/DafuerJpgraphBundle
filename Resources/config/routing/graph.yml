@@ -17,3 +17,13 @@ JpgraphBundle_graph_imgerrordraw:
 JpgraphBundle_graph_imgerror:
     pattern:  /graph/imgerror/{style}
     defaults: { _controller: DafuerJpgraphBundle:Graph:imgerror } 
+    
+#JpgraphBundle_graph_drawtimeseries:
+#    pattern:  /drawtimeseries
+#    defaults: { _controller: DafuerJpgraphBundle:Graph:drawtimeseries }
+#    options:
+#        expose: true
+#        
+#JpgraphBundle_graph_viewdrawtimeseries:
+#    pattern:  /viewdrawtimeseries
+#    defaults: { _controller: DafuerJpgraphBundle:Graph:viewdrawtimeseries }

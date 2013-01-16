@@ -4,11 +4,11 @@
 
 
     
-JpgraphBundle_graph_drawtimeseries:
-    pattern:  /graph/drawtimeseries
-    defaults: { _controller: DafuerJpgraphBundle:Default:drawtimeseries }
-    options:
-        expose: true
+#JpgraphBundle_graph_drawtimeseries:
+#    pattern:  /graph/drawtimeseries
+#    defaults: { _controller: DafuerJpgraphBundle:Default:drawtimeseries }
+#    options:
+#        expose: true
         
 
         
