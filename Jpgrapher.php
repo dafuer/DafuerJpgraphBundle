@@ -448,6 +448,17 @@ class Jpgrapher {
                     $line->SetFillColor($values['lineplot_fillcolor']);
             }
             
+            if(isset($values['lineplot_style'])){
+                if(!is_array($lineplot)){
+                    $lineplot->SetStyle($values['lineplot_style']);
+                }else{
+                    foreach($lineplot as $singleline){
+                        $singleline->SetLineStyle($values['lineplot_style']);
+                    }
+                }
+            }            
+            
+            
             if(isset($values['lineplot_area'])){
                 foreach ($values['lineplot_area'] as $area){
                     $lineplot->AddArea($area['from'],$area['to'],LP_AREA_FILLED,$area['color']);
