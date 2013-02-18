@@ -564,8 +564,8 @@ class Jpgrapher {
                          $graph->add($scatter_for_scale);     
                      }
                 }          
-                
-                if($this->zebra_y_min != null && $this->zebra_y_min<$ymin){
+
+                if($this->zebra_y_min != null && $this->zebra_y_min<$ymin){                  
                     $ymin=$this->zebra_y_min;
                 }
                 if($this->zebra_y_max != null && $this->zebra_y_max>$ymax){
@@ -578,34 +578,28 @@ class Jpgrapher {
                 if($this->zebra_x_max != null && $this->zebra_x_max>$xmax){
                     $xmax=$this->zebra_x_max;
                 }                            
-                
-                // try to get autoscale again
-              /*  if (count($graph->plots) > 0) {
-                    $graph->doAutoScaleYAxis();
-                    $ymin = $graph->yscale->GetMinVal();
-                    $ymax = $graph->yscale->GetMaxVal();    
-                 
-                    $graph->doAutoScaleXAxis();
-                    $xmin = $graph->xscale->GetMinVal();
-                    $xmax = $graph->xscale->GetMaxVal();  
-                } */
-                /*
-                $ymin = 0;
-                $ymax = 1;
-                $xmin = 0;
-                $xmax = 1;
-                 */
+                                   
                 
                 $yt = substr($values['graph_scale'], -3, 3);
                 $xt = substr($values['graph_scale'], 0, 3);
 
+              if($xmin==null){
+                  $xmin=$this->zebra_x_min;
+              }
               
-                if(count($graph->plots)>0){
-                    $xmin=$graph->xscale->GetMinVal();
-                    $xmax=$graph->xscale->GetMaxVal();
-                }
-            //throw new \Exception($xmax);
-                
+              if($xmax==null){
+                  $xmax=$this->zebra_x_max;
+              }     
+              
+              if($ymin==null){
+                  $ymin=$this->zebra_y_min;
+              }
+              
+              if($ymax==null){
+                  $ymax=$this->zebra_y_max;
+              }                   
+
+
                 if (isset($values['graph_yscale_min'])) {
                     $ymin = $values['graph_yscale_min'];
                 }else{
@@ -633,17 +627,17 @@ class Jpgrapher {
                     if ($xt == 'log') {
                         $xmax=log($xmax,10);
                     }                    
-                }       
-                
+                }        
+                           
                 // If min or max are zebras, add grace space.
                 $ygrace=($ymax-$ymin)*0.01;
-                if($ymin===$this->zebra_y_min) $ymin=$ymin-$ygrace;
-                if($ymax===$this->zebra_y_max) $ymax=$ymin+$ygrace; 
-                
+                if($ymin==$this->zebra_y_min) $ymin=$ymin-$ygrace;
+                if($ymax==$this->zebra_y_max)  $ymax=$ymax+$ygrace; 
+    
                 $xgrace=($xmax-$xmin)*0.01;
-                if($xmin===$this->zebra_x_min) $xmin=$xmin-$xgrace;
-                if($xmax===$this->zebra_x_max) $xmax=$xmax+$xgrace;                 
-//throw new \Exception($xmin);
+                if($xmin==$this->zebra_x_min) $xmin=$xmin-$xgrace;
+                if($xmax==$this->zebra_x_max) $xmax=$xmax+$xgrace;                        
+
                 $graph->SetScale($values['graph_scale'], $ymin, $ymax, $xmin, $xmax);
                 
                 if (isset($values['graph_yscale_autoticks'])){
