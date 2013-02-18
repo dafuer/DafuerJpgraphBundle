@@ -565,6 +565,19 @@ class Jpgrapher {
                      }
                 }          
                 
+                if($this->zebra_y_min != null && $this->zebra_y_min<$ymin){
+                    $ymin=$this->zebra_y_min;
+                }
+                if($this->zebra_y_max != null && $this->zebra_y_max>$ymax){
+                    $ymax=$this->zebra_y_max;
+                } 
+                
+                if($this->zebra_x_min != null && $this->zebra_x_min<$xmin){
+                    $xmin=$this->zebra_x_min;
+                }
+                if($this->zebra_x_max != null && $this->zebra_x_max>$xmax){
+                    $xmax=$this->zebra_x_max;
+                }                            
                 
                 // try to get autoscale again
               /*  if (count($graph->plots) > 0) {
