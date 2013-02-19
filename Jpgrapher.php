@@ -186,7 +186,7 @@ class Jpgrapher {
 
 
             if (isset($values['graph_title'])) {
-                $graph->title->Set($values['graph_title']);
+                $graph->title->Set($this->transformString($values['graph_title']));
             }
             
             // Set up title font
@@ -358,7 +358,7 @@ class Jpgrapher {
 
                 $label="";
                 if(isset($values['lineplot_label'])){
-                    $label=$values['lineplot_label'];
+                    $label=$this->transformString($values['lineplot_label']);
                 }
                 //GantBar (posicion,formato,inicio,fin,etiqueta,grosor)
                 //$lineplot =  new \GanttBar($data[1][0],$data[1][1],$data[1][2],$data[1][3],"[50%]");
@@ -373,7 +373,7 @@ class Jpgrapher {
             if (isset($values['graph_yaxis_number'])) {
                 if ($values['graph_yaxis_number'] == 0) {
                     if (isset($values['graph_yaxis_title']))
-                        $graph->yaxis->title->Set($values["graph_yaxis_title"]);
+                        $graph->yaxis->title->Set($this->transformString($values["graph_yaxis_title"]));
                     if (isset($values['graph_yaxis_titlemargin']))
                         $graph->yaxis->SetTitleMargin($values["graph_yaxis_titlemargin"]);
                     if (isset($values['graph_yaxis_hideline']))
@@ -704,7 +704,7 @@ class Jpgrapher {
                 }
 
                 if (isset($values['graph_yaxis_title'])){
-                    $graph->yaxis->title->Set($values["graph_yaxis_title"]);
+                    $graph->yaxis->title->Set($this->transformString($values["graph_yaxis_title"]));
                 }
                 if (isset($values['graph_yaxis_titlemargin'])){
                     $graph->yaxis->SetTitleMargin($values["graph_yaxis_titlemargin"]);
@@ -736,9 +736,9 @@ class Jpgrapher {
                 
                 if (isset($values['graph_xaxis_title'])) {
                     if(isset($values['graph_xaxis_title_position'])){
-                        $graph->xaxis->SetTitle($values["graph_xaxis_title"],$values['graph_xaxis_title_position']);
+                        $graph->xaxis->SetTitle($this->transformString($values["graph_xaxis_title"]),$values['graph_xaxis_title_position']);
                     }else{
-                        $graph->xaxis->SetTitle($values["graph_xaxis_title"]);
+                        $graph->xaxis->SetTitle($this->transformString($values["graph_xaxis_title"]));
                     }
                 } 
                 
@@ -1001,47 +1001,167 @@ class Jpgrapher {
 
         return $result;
     }
-/*
-    function graphDaySeries($graph_style, $line_style, $ydata, $xdata, $custom_graph = array(), $custom_lineplot = array(), $graph = null) {
-        if (count($xdata) > 0) {
 
-            if (is_null($graph)) {  // Si no me pasan una grafica a la que añadir la linea creo una nueva
-                $graph = $this->createGraph($graph_style, $custom_graph);
-            } else {// Esto sifnifica que la grafica viene para que añada la linea
-                // Compruebo que la grafica tenga algo pintado (que no sea un cuadro blanco)
-                if ($graph->img->width < 15)
-                    $graph = $this->createGraph($graph_style, $custom_graph);
-            }
+     function transformString($string){
+        if(strpos($string, "___")===false){
+            return $string;
+        }else{ // If there are special chars, find it
+            $special_chars=array(
+                \SymChar::Get('alpha',true),
+                \SymChar::Get('alpha',false),
+                \SymChar::Get('beta',true),
+                \SymChar::Get('beta',false),
+                \SymChar::Get('gamma',true),
+                \SymChar::Get('gamma',false),
+                \SymChar::Get('delta',true),
+                \SymChar::Get('delta',false),
+                \SymChar::Get('epsilon',true),
+                \SymChar::Get('epsilon',false),
+                \SymChar::Get('zeta',true),
+                \SymChar::Get('zeta',false),
+                \SymChar::Get('ny',true),
+                \SymChar::Get('ny',false),
+                \SymChar::Get('eta',true),
+                \SymChar::Get('eta',false),
+                \SymChar::Get('theta',true),
+                \SymChar::Get('theta',false),
+                \SymChar::Get('iota',true),
+                \SymChar::Get('iota',false),
+                \SymChar::Get('kappa',true),
+                \SymChar::Get('kappa',false),
+                \SymChar::Get('lambda',true),
+                \SymChar::Get('lambda',false),
+                \SymChar::Get('mu',true),
+                \SymChar::Get('mu',false),
+                \SymChar::Get('nu',true),
+                \SymChar::Get('nu',false),
+                \SymChar::Get('xi',true),
+                \SymChar::Get('xi',false),
+                \SymChar::Get('omicron',true),
+                \SymChar::Get('omicron',false),
+                \SymChar::Get('pi',true),
+                \SymChar::Get('pi',false),
+                \SymChar::Get('rho',true),
+                \SymChar::Get('rho',false),
+                \SymChar::Get('sigma',true),
+                \SymChar::Get('sigma',false),
+                \SymChar::Get('tau',true),
+                \SymChar::Get('tau',false),
+                \SymChar::Get('upsilon',true),
+                \SymChar::Get('upsilon',false),
+                \SymChar::Get('phi',true),
+                \SymChar::Get('phi',false),
+                \SymChar::Get('chi',true),
+                \SymChar::Get('chi',false),
+                \SymChar::Get('psi',true),
+                \SymChar::Get('psi',false),
+                \SymChar::Get('omega',true),
+                \SymChar::Get('omega',false),
+                \SymChar::Get('euro',true),
+                \SymChar::Get('euro',false),
+                \SymChar::Get('yen',true),
+                \SymChar::Get('yen',false),
+                \SymChar::Get('pound',true),
+                \SymChar::Get('pound',false),
+                \SymChar::Get('approx',true),
+                \SymChar::Get('approx',false),
+                \SymChar::Get('neq',true),
+                \SymChar::Get('neq',false),
+                \SymChar::Get('not',true),
+                \SymChar::Get('not',false),
+                \SymChar::Get('inf',true),
+                \SymChar::Get('inf',false),
+                \SymChar::Get('sqrt',true),
+                \SymChar::Get('sqrt',false),
+                \SymChar::Get('int',true),
+                \SymChar::Get('int',false),
+                \SymChar::Get('copy',true),
+                \SymChar::Get('copy',false),
+                \SymChar::Get('para',true),
+                \SymChar::Get('para',false),
+                );
 
+            $special_tags=array(
+                "___ALPHA",
+                "___alpha",
+                "___BETA",
+                "___beta",
+                "___GAMMA",
+                "___gamma",
+                "___DELTA",
+                "___delta",
+                "___EPSILON",
+                "___epsilon",
+                "___ZETA",
+                "___zeta",
+                "___NY",
+                "___ny",
+                "___ETA",
+                "___eta",
+                "___THETA",
+                "___theta",
+                "___IOTA",
+                "___iota",
+                "___KAPPA",
+                "___kappa",
+                "___LAMBDA",
+                "___lambda",
+                "___MU",
+                "___mu",
+                "___NU",
+                "___nu",
+                "___XI",
+                "___xi",
+                "___OMICRON",
+                "___omicron",
+                "___PI",
+                "___pi",
+                "___RHO",
+                "___rho",
+                "___SIGMA",
+                "___sigma",
+                "___TAU",
+                "___tau",
+                "___UPSILON",
+                "___upsilon",
+                "___PHI",
+                "___phi",
+                "___CHI",
+                "___chi",
+                "___PSI",
+                "___psi",
+                "___OMEGA",
+                "___omega",
+                "___EURO",
+                "___euro",
+                "___YEN",
+                "___yen",
+                "___POUND",
+                "___pound",
+                "___APPROX",
+                "___approx",
+                "___NEQ",
+                "___neq",
+                "___NOT",
+                "___not",
+                "___DEF",
+                "___def",
+                "___INF",
+                "___inf",
+                "___SQRT",
+                "___sqrt",
+                "___INT",
+                "___int",
+                "___COPY",
+                "___copy",
+                "___PARA",
+                "___para",
+                );
 
-            $indice = 0;
-            // Obtengo un indice valido
-            foreach ($xdata as $i => $value) {
-                $indice = $i;
-                break;
-            }
-
-            if (is_array($xdata[$indice])) {
-                foreach ($xdata as $i => $value) {
-                    // Si hay establecidos maximos y minimos en las escalas adapto los datos
-                    $lineplot = $this->createGraphPlot($line_style, $graph, $ydata[$i], $xdata[$i], $custom_lineplot);
-                }
-            } else {
-                $lineplot = $this->createGraphPlot($line_style, $graph, $ydata[$i], $xdata[$i], $custom_lineplot);
-            }
-
-            return $graph;
-        } else {
-
-            if (is_null($graph)) {  // Si no me pasan una grafica a la que añadir la linea creo una nueva para devolver el error
-                $graph = $this->createErrorImg($graph_style, $custom_graph);
-            }
-
-            return $graph;
+            return str_replace($special_tags, $special_chars, $string);
         }
     }
- 
- */
+   
 
 }
 
