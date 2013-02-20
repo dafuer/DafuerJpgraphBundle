@@ -594,19 +594,19 @@ class Jpgrapher {
                 $yt = substr($values['graph_scale'], -3, 3);
                 $xt = substr($values['graph_scale'], 0, 3);
 
-              if($xmin==null){
+              if($xmin===null){
                   $xmin=$this->zebra_x_min;
               }
               
-              if($xmax==null){
+              if($xmax===null){
                   $xmax=$this->zebra_x_max;
               }     
-              
-              if($ymin==null){
+             
+              if($ymin===null){
                   $ymin=$this->zebra_y_min;
               }
               
-              if($ymax==null){
+              if($ymax===null){
                   $ymax=$this->zebra_y_max;
               }                   
 
