@@ -51,6 +51,8 @@
 #    lineplot_style: solid # dotted, dashed, longdashed
 #    graph_yaxis_color
 #    graph_xaxis_color
+#    graph_xaxis_label_color
+#    graph_yaxis_label_color
 
 #generic_lineplot:
 #    lineplot_color: color

@@ -813,15 +813,27 @@ class Jpgrapher {
                 
                 if (isset($values['graph_yaxis_color'])){
                     foreach($graph->ynaxis as $axis){
-                        $axis->SetColor($values['graph_yaxis_color']);
-                    }                      
-                    $graph->yaxis->SetColor($values['graph_yaxis_color']);
+                        if (isset($values['graph_yaxis_label_color'])){
+                            $axis->SetColor($values['graph_yaxis_color'],$values['graph_yaxis_label_color']);
+                        }else{
+                            $axis->SetColor($values['graph_yaxis_color']);
+                        }
+                    }    
+                    if (isset($values['graph_yaxis_label_color'])){
+                       $graph->yaxis->SetColor($values['graph_yaxis_color'],$values['graph_yaxis_label_color']);
+                    }else{
+                       $graph->yaxis->SetColor($values['graph_yaxis_color']);
+                    }            
                 }   
                 
                 if (isset($values['graph_xaxis_color'])){
-                    $graph->xaxis->SetColor($values['graph_xaxis_color']);
+                    if (isset($values['graph_xaxis_label_color'])){
+                        $graph->xaxis->SetColor($values['graph_xaxis_color'], $values['graph_xaxis_label_color']);
+                    }else{
+                        $graph->xaxis->SetColor($values['graph_xaxis_color']);
+                    }
                 }                     
-                
+                //$graph->ynaxis[0]->SetColor('#E3E3E3','blue');
 
                 if(isset($values['graph_xaxis_tick_labellogtype']) && get_class($graph->xaxis->scale->ticks)=='LogTicks'){
                     $graph->xaxis->scale->ticks->SetLabelLogType(constant($values['graph_xaxis_tick_labellogtype']));
