@@ -421,12 +421,12 @@ class Jpgrapher {
 
             if (isset($values['lineplot_legend'])) {
                 if(is_array($values['lineplot_legend'])){
-                    $lineplot->SetLegends($values['lineplot_legend']);
+                    $lineplot->SetLegends($this->transformString($values['lineplot_legend']));
                 }else{
                     if($values['lineplot'] == "zebraplot"){
-                        $lineplot[0]->SetLegend($values['lineplot_legend']);
+                        $lineplot[0]->SetLegend($this->transformString($values['lineplot_legend']));
                     }else{
-                        $lineplot->SetLegend($values['lineplot_legend']);
+                        $lineplot->SetLegend($this->transformString($values['lineplot_legend']));
                     }
                 }
             }
@@ -856,7 +856,7 @@ class Jpgrapher {
                         isset($values['graph_legend_abspos_y']) &&
                         isset($values['graph_legend_abspos_halign']) &&
                         isset($values['graph_legend_abspos_valign'])) {
-                    $graph->legend->SetAbsPos($values['graph_legend_abspos_x'], $values['graph_legend_abspos_x'], $values['graph_legend_abspos_halign'], $values['graph_legend_abspos_valign']);
+                    $graph->legend->SetAbsPos($values['graph_legend_abspos_x'], $values['graph_legend_abspos_y'], $values['graph_legend_abspos_halign'], $values['graph_legend_abspos_valign']);
                 }
 
                 if (isset($values['graph_legend_layout'])) {
