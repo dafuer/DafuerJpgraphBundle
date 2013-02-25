@@ -280,23 +280,7 @@ class Jpgrapher {
                          $this->zebra_y_max=$max;
                      }                        
                  }
-                 // Adding a extra line transparent to optimize scales
-                 /*$min=min($ydata);
-                 $max=max($ydata);
-                 $transparent_x_data=array();
-                 $transparent_x_data=array();
-                 if($values['lineplot_direction']=='VERTICAL'){
-                     $transparent_x_data=array($min,$max);
-                     $transparent_y_data=array(5.6,5.6);
-                 }else{
-                     $transparent_x_data=array(5.6,5.6);
-                     $transparent_y_data=array($min,$max);                
-                 }
-  
-                 $scatter_for_scale = new \ScatterPlot($transparent_y_data, $transparent_x_data);
-                 $scatter_for_scale->mark->SetWidth(0);
-                 $scatter_for_scale->setColor('black');
-                 $graph->add($scatter_for_scale);*/
+                 
             }            
 
             if ($values['lineplot'] == "errorlineplot") {
@@ -392,8 +376,7 @@ class Jpgrapher {
                         $index = $i - 1;
 
                     $graph->SetYScale($index, 'lin');
-                    $graph->AddY($index, $lineplot);
-                    //$graph->ynaxis[0]->SetColor('teal');                    
+                    $graph->AddY($index, $lineplot);                
                 }
             }
 
@@ -821,8 +804,24 @@ class Jpgrapher {
                 }
                 
                 if (isset($values['graph_yaxis_tick_color'])){
+                    foreach($graph->ynaxis as $axis){
+                        $axis->scale->ticks->SetColor($values['graph_yaxis_tick_color']);
+                    }                      
                     $graph->yaxis->scale->ticks->SetColor($values['graph_yaxis_tick_color']);
-                }                
+                }        
+                
+                
+                if (isset($values['graph_yaxis_color'])){
+                    foreach($graph->ynaxis as $axis){
+                        $axis->SetColor($values['graph_yaxis_color']);
+                    }                      
+                    $graph->yaxis->SetColor($values['graph_yaxis_color']);
+                }   
+                
+                if (isset($values['graph_xaxis_color'])){
+                    $graph->xaxis->SetColor($values['graph_xaxis_color']);
+                }                     
+                
 
                 if(isset($values['graph_xaxis_tick_labellogtype']) && get_class($graph->xaxis->scale->ticks)=='LogTicks'){
                     $graph->xaxis->scale->ticks->SetLabelLogType(constant($values['graph_xaxis_tick_labellogtype']));

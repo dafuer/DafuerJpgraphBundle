@@ -49,7 +49,8 @@
 #    graph_xgrid_show
 #    graph_ygrid_show
 #    lineplot_style: solid # dotted, dashed, longdashed
-
+#    graph_yaxis_color
+#    graph_xaxis_color
 
 #generic_lineplot:
 #    lineplot_color: color
