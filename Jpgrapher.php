@@ -352,17 +352,9 @@ class Jpgrapher {
                 $graph->Add($lineplot);
             }            
             
-            // El eje
-            
+            // Add lineplot
             if (isset($values['graph_yaxis_number'])) {
                 if ($values['graph_yaxis_number'] == 0) {
-                    if (isset($values['graph_yaxis_title']))
-                        $graph->yaxis->title->Set($this->transformString($values["graph_yaxis_title"]));
-                    if (isset($values['graph_yaxis_titlemargin']))
-                        $graph->yaxis->SetTitleMargin($values["graph_yaxis_titlemargin"]);
-                    if (isset($values['graph_yaxis_hideline']))
-                        $graph->yaxis->HideLine($values['graph_yaxis_hideline']);
-
                     if(!isset($lineplot)) throw new \Exception('DafuerDafuerJpgraphBundle says: Lineplot dont exist');
                     $graph->Add($lineplot);
                 } else {
@@ -689,6 +681,8 @@ class Jpgrapher {
                 if (isset($values['graph_yaxis_title'])){
                     $graph->yaxis->title->Set($this->transformString($values["graph_yaxis_title"]));
                 }
+                
+                
                 if (isset($values['graph_yaxis_titlemargin'])){
                     $graph->yaxis->SetTitleMargin($values["graph_yaxis_titlemargin"]);
                 }
