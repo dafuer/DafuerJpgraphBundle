@@ -53,6 +53,7 @@
 #    graph_xaxis_color
 #    graph_xaxis_label_color
 #    graph_yaxis_label_color
+#    graph_legend_only: Only print a legend
 
 #generic_lineplot:
 #    lineplot_color: color

@@ -489,7 +489,18 @@ class Jpgrapher {
 
             // Setting up variable values
             $values = $this->getOptions($style_name, $custom);
-
+              
+            if(isset($values['graph_legend_only'])){
+                 if($values['graph_legend_only']===true || strtolower($values['graph_legend_only'])==='true'){
+                   $this->prepareLegend($graph, $values);
+                   $graph->legend->SetAbsPos(0, 0, 'left');
+                   $graph->legend->Hide(false);
+                   $graph->doPrestrokeAdjustments();
+                   $graph->legend->Stroke($graph->img);
+                   return $graph->cache->PutAndStream($graph->img,$graph->cache_name,$graph->inline,null);
+                 }
+            }
+            
             if($values['graph']!='piegraph' && $values['graph']!='ganttgraph'){
 
                 // Setup scales
@@ -631,6 +642,8 @@ class Jpgrapher {
                 }    
             
             }
+            
+            $this->prepareLegend($graph, $values);
             
             // Mandatory: The color margin must be defined after set scale
             if (isset($values['graph_margincolor'])) {
@@ -856,52 +869,8 @@ class Jpgrapher {
                     $graph->ygrid->Show($values['graph_ygrid_show']); 
                 }
                 
-                // Set legend
-                if (isset($values['graph_legend_abspos_x']) &&
-                        isset($values['graph_legend_abspos_y']) &&
-                        isset($values['graph_legend_abspos_halign']) &&
-                        isset($values['graph_legend_abspos_valign'])) {
-                    $graph->legend->SetAbsPos($values['graph_legend_abspos_x'], $values['graph_legend_abspos_y'], $values['graph_legend_abspos_halign'], $values['graph_legend_abspos_valign']);
-                }
 
-                if (isset($values['graph_legend_layout'])) {
-                    $graph->legend->SetLayout($values['graph_legend_layout']);
-                }
-
-                if (isset($values['graph_legend_shadow'])) {
-                    $graph->legend->SetShadow($values['graph_legend_shadow']);
-                }
-
-                if (isset($values['graph_legend_fillcolor'])) {
-                    $graph->legend->SetFillColor($values['graph_legend_fillcolor']);
-                }
-
-                if (isset($values['graph_legend_hide'])) {
-                    if(is_string($values['graph_legend_hide'])){
-                        $val=strtolower($values['graph_legend_hide']);
-                        if ($val=="false"){
-                            $graph->legend->Hide(false);
-                        }else{
-                            $graph->legend->Hide(true);
-                        }
-                    }else{
-                        $graph->legend->Hide($values['graph_legend_hide']);
-                    }
-                }                
-                
-                if (isset($values['graph_scale'])) {
-                    $xt = substr($values['graph_scale'], 0, 3);
-                    if($xt=='dat'){ // I can call xscale type date methods
-                        // SetDateAlign not implemented yet
-                        // $graph->xaxis->scale->SetDateAlign(YEARADJ_1,YEARADJ_1);
-
-                        if(isset($values['graph_xaxis_scale_dateformat'])){
-                            $graph->xaxis->scale->SetDateFormat($values['graph_xaxis_scale_dateformat']);
-                        }                        
-                              
-                    }
-                }                
-           
+                   
                 if (isset($values['graph_yaxis_scale_ticks_supressfirst'])) {
                     $graph->yaxis->scale->ticks->SupressFirst($values['graph_yaxis_scale_ticks_supressfirst']);
                 }
@@ -947,6 +916,54 @@ class Jpgrapher {
                 return false;
             }
         }
+    }
+    
+    private function prepareLegend($graph, $values){
+        // Set legend
+        if (isset($values['graph_legend_abspos_x']) &&
+                isset($values['graph_legend_abspos_y']) &&
+                isset($values['graph_legend_abspos_halign']) &&
+                isset($values['graph_legend_abspos_valign'])) {
+            $graph->legend->SetAbsPos($values['graph_legend_abspos_x'], $values['graph_legend_abspos_y'], $values['graph_legend_abspos_halign'], $values['graph_legend_abspos_valign']);
+        }
+
+        if (isset($values['graph_legend_layout'])) {
+            $graph->legend->SetLayout($values['graph_legend_layout']);
+        }
+
+        if (isset($values['graph_legend_shadow'])) {
+            $graph->legend->SetShadow($values['graph_legend_shadow']);
+        }
+
+        if (isset($values['graph_legend_fillcolor'])) {
+            $graph->legend->SetFillColor($values['graph_legend_fillcolor']);
+        }
+
+        if (isset($values['graph_legend_hide'])) {
+            if(is_string($values['graph_legend_hide'])){
+                $val=strtolower($values['graph_legend_hide']);
+                if ($val=="false"){
+                    $graph->legend->Hide(false);
+                }else{
+                    $graph->legend->Hide(true);
+                }
+            }else{
+                $graph->legend->Hide($values['graph_legend_hide']);
+            }
+        }                
+
+        if (isset($values['graph_scale'])) {
+            $xt = substr($values['graph_scale'], 0, 3);
+            if($xt=='dat'){ // I can call xscale type date methods
+                // SetDateAlign not implemented yet
+                // $graph->xaxis->scale->SetDateAlign(YEARADJ_1,YEARADJ_1);
+
+                if(isset($values['graph_xaxis_scale_dateformat'])){
+                    $graph->xaxis->scale->SetDateFormat($values['graph_xaxis_scale_dateformat']);
+                }                        
+
+            }
+        }          
     }
 
     function createErrorImg($style_name, $custom) {
