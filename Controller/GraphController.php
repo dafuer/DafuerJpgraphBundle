@@ -59,18 +59,18 @@ class GraphController extends Controller {
         $params = $jpgrapher->parseQueryParameters($request->query);
 
         
-        // Combined parameter is mandatory except for single 
+        // Combined parameter is mandatory except for single graph
         $combined = $request->query->get('combined', (int)(count($ydata[$index])==0));
 
-        if($combined>0){
-            $datas = array();
+        $datas = array();
+        if($combined>0){ // Extract database data and create graph.
+            
             for ($i = 0; $i < $combined; $i++) {
                 if (!isset($params[$i]['dataserie']) ){
                     throw $this->createNotFoundException('The product does not exist');   
                 }                 
                 $datas[] = $dataaccess->readGraph($params[$i]['dataserie'], $params[$i]);
             }
-
 
             reset($datas[0]['ydata']);
             $keylines = array_keys($datas[0]['ydata']);
@@ -80,30 +80,36 @@ class GraphController extends Controller {
             $firstcustom = $datas[0]['custom'][$firstkey];
 
             $base_style = array_merge($firstcustom, $params[0]);
-
+            
             // Create graph
             $graph = $jpgrapher->createGraph($firststyle, $base_style);
 
-            // Add plots stored in database
-            foreach ($datas as $i => $data) {
-                foreach ($data['ydata'] as $j => $line) {
-                    if (count($data['ydata'][$j]) > 0) {
-                        $style_line = array_merge($data['custom'][$j], $params[$i]);
-                        if(isset($data['xdata'][$j])) $xdata=$data['xdata'][$j];
-                        else $xdata=null;
-                        $lineplot = $jpgrapher->createGraphPlot($data['style'][$j], $graph, $data['ydata'][$j], $xdata, $style_line);
-                    }
-                }
-            }
-        }else{
+
+        }else{ // If there are not database data only create graph
+            
             // Create graph with idividual style
-           
             $firststyle = $styledata[$index];
             $firstcustom = $customdata[$index];
-            $base_style = array_merge($firstcustom, $customdata[$index]);
+            $base_style = array_merge($firstcustom, $customdata[$index]);      
             $graph = $jpgrapher->createGraph($styledata[$index],$customdata[$index]);
         }
 
+        
+        // Add plots stored in database
+        foreach ($datas as $i => $data) {
+            foreach ($data['ydata'] as $j => $line) {
+                if (count($data['ydata'][$j]) > 0) {
+                    $style_line = array_merge($data['custom'][$j], $params[$i]);
+                    if(isset($data['xdata'][$j])){
+                        $xdata=$data['xdata'][$j];
+                    }else{
+                        $xdata=null;
+                    }
+                    $lineplot = $jpgrapher->createGraphPlot($data['style'][$j], $graph, $data['ydata'][$j], $xdata, $style_line);
+                }
+            }
+        }        
+        
         // Add url plots  
         foreach ($dataname as $i => $linename) {
             if (count($ydata[$i]) > 0) {
