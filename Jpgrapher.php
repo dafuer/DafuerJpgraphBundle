@@ -470,10 +470,6 @@ class Jpgrapher {
             }
 
 
-            /* if (isset($values['lineplot_reescale'])) {
-              $graph->doAutoScaleYnAxis();
-              } */
-
             if (isset($values['graph_yscale_autoticks']))
                 $graph->yscale->SetAutoTicks($values['graph_yscale_autoticks']);
 
@@ -521,197 +517,8 @@ class Jpgrapher {
 
             if ( count($graph->plots) > 0 || $values['graph']=='piegraph' || $values['graph']=='ganttgraph') {
 
-                if (isset($values['graph_xaxis_labelformatcallback'])) { // If it has labelformatcallback
-                    if (is_callable($values['graph_xaxis_labelformatcallback'])) {
-                        $graph->xaxis->SetLabelFormatCallback($values['graph_xaxis_labelformatcallback']);
-                    } else {
-                        $callbacks = $this->getCallFunctions();
-                        if ($values['graph_xaxis_labelformatcallback'] == 'AutoTimeCallback') { // If it
-                            $xminmax = $graph->GetXMinMax();
-                            if ($xminmax[0] != null) {
-                                $tpo = $xminmax[1] - $xminmax[0];
+                $this->prepareAxis($graph, $values);
 
-                                $callbacks = $this->getCallFunctions();
-                                if ($tpo > 172800) {
-                                    $graph->xaxis->SetLabelFormatCallback($callbacks['TimeCallbackDay']);
-                                } else {
-                                    $graph->xaxis->SetLabelFormatCallback($callbacks['TimeCallbackTime']);
-                                }
-                            }
-                        } else {
-                            $graph->xaxis->SetLabelFormatCallback($callbacks[$values['graph_xaxis_labelformatcallback']]);
-                        }
-                    }
-                }
-
-                
-                // Setup axis
-                
-                // Y- Axis
-                
-                if (isset($values['graph_xaxis_labelangle'])) {
-                    $graph->xaxis->SetLabelAngle($values["graph_xaxis_labelangle"]);
-                }
-
-                if (isset($values['graph_yaxis_title'])){
-                    $graph->yaxis->title->Set($this->transformString($values["graph_yaxis_title"]));
-                }
-                
-                
-                if (isset($values['graph_yaxis_titlemargin'])){
-                    $graph->yaxis->SetTitleMargin($values["graph_yaxis_titlemargin"]);
-                }
-                if (isset($values['graph_yaxis_hideline'])){
-                    $graph->yaxis->HideLine($values['graph_yaxis_hideline']);                
-                }
-
-                if (isset($values['graph_yaxis_hidelabels'])){
-                    $graph->yaxis->HideLabels($values['graph_yaxis_hidelabels']);      
-                }
-                
-                if (isset($values['graph_xaxis_hidelabels'])){
-                    $graph->xaxis->HideLabels($values['graph_xaxis_hidelabels']);                
-                }                
-
-                
-                // X-Axis
-                
-                if (isset($values['graph_xaxis_ticklabels'])) {
-                    $graph->xaxis->SetTickLabels($values["graph_xaxis_ticklabels"]);
-                }
-                
-                if (isset($values['graph_yaxis_ticklabels'])) {
-                    $graph->yaxis->SetTickLabels($values["graph_yaxis_ticklabels"]);
-                }
-                
- 
-                
-                if (isset($values['graph_xaxis_title'])) {
-                    if(isset($values['graph_xaxis_title_position'])){
-                        $graph->xaxis->SetTitle($this->transformString($values["graph_xaxis_title"]),$values['graph_xaxis_title_position']);
-                    }else{
-                        $graph->xaxis->SetTitle($this->transformString($values["graph_xaxis_title"]));
-                    }
-                } 
-                
-                if (isset($values['graph_xaxis_titlemargin'])){
-                    $graph->xaxis->SetTitleMargin($values["graph_xaxis_titlemargin"]);
-                }
-                
-                if (isset($values['graph_axis_tickposition'])) {
-                    $graph->xaxis->SetTickPositions($values['graph_axis_tickposition']);
-                }
-                 
-                
-                //$graph->xaxis->SetTickPositions(array(0,  2.5),array(1,  2));
-                              
-                
-                if (isset($values['graph_xaxis_tickposition'])) {
-                    $graph->xaxis->SetTickPositions($values['graph_xaxis_tickposition'][0],$values['graph_xaxis_tickposition'][1],$values['graph_xaxis_tickposition'][2]);
-                }          
-                
-                if (isset($values['graph_yaxis_tickposition'])) {
-                    $graph->yaxis->SetTickPositions($values['graph_yaxis_tickposition'][0],$values['graph_yaxis_tickposition'][1],$values['graph_yaxis_tickposition'][2]);
-                }          
-                
-                if (isset($values['graph_xaxis_tickside'])) {
-                    $graph->xaxis->SetTickSide(constant($values['graph_xaxis_tickside']));
-                } 
-                
-                if (isset($values['graph_yaxis_tickside'])) {
-                    $graph->yaxis->SetTickSide(constant($values['graph_yaxis_tickside']));
-                }                 
-                
-                if (isset($values['graph_xaxis_tick_hide_minor']) || isset($values['graph_xaxis_tick_hide_major'])) {
-                    if(!isset($values['graph_xaxis_tick_hide_minor'])){
-                        $values['graph_xaxis_tick_hide_minor']=true;
-                        $values['graph_yaxis_tick_hide_major']=true;
-                    } 
-                    if(!isset($values['graph_xaxis_tick_hide_major'])){
-                        $values['graph_xaxis_tick_hide_major']=true;
-                    }
-                    
-                    $graph->xaxis->HideTicks($values['graph_xaxis_tick_hide_minor'], $values['graph_xaxis_tick_hide_major']);
-                }                 
-                
-                if (isset($values['graph_yaxis_tick_hide_minor']) || isset($values['graph_yaxis_tick_hide_major'])) {
-                    if(!isset($values['graph_yaxis_tick_hide_minor'])){
-                        $values['graph_yaxis_tick_hide_minor']=true;
-                        $values['graph_yaxis_tick_hide_major']=true;
-                    } 
-                    if(!isset($values['graph_yaxis_tick_hide_major'])){
-                        $values['graph_yaxis_tick_hide_major']=true;
-                    }
-                    
-                    $graph->yaxis->HideTicks($values['graph_yaxis_tick_hide_minor'], $values['graph_yaxis_tick_hide_major']);
-                }                 
-
-                if (isset($values['graph_xaxis_tick_size_minor']) || isset($values['graph_xaxis_tick_size_major'])) {
-                    if(!isset($values['graph_xaxis_tick_size_minor'])){
-                        $values['graph_xaxis_tick_size_minor']=3;
-                    } 
-                    if(!isset($values['graph_xaxis_tick_size_major'])){
-                        $values['graph_xaxis_tick_size_major']=3;
-                    }
-                    
-                    $graph->xaxis->scale->ticks->SetSize($values['graph_xaxis_tick_size_major'], $values['graph_xaxis_tick_size_minor']);
-                }                   
-                
-                if (isset($values['graph_yaxis_tick_size_minor']) || isset($values['graph_yaxis_tick_size_major'])) {
-                    if(!isset($values['graph_yaxis_tick_size_minor'])){
-                        $values['graph_yaxis_tick_size_minor']=3;
-                    } 
-                    if(!isset($values['graph_yaxis_tick_size_major'])){
-                        $values['graph_yaxis_tick_size_major']=3;
-                    }
-                    
-                    $graph->yaxis->scale->ticks->SetSize($values['graph_yaxis_tick_size_major'], $values['graph_yaxis_tick_size_minor']);
-                }               
-                
-                if (isset($values['graph_xaxis_tick_color'])){
-                    $graph->xaxis->scale->ticks->SetColor($values['graph_xaxis_tick_color']);
-                }
-                
-                if (isset($values['graph_yaxis_tick_color'])){
-                    foreach($graph->ynaxis as $axis){
-                        $axis->scale->ticks->SetColor($values['graph_yaxis_tick_color']);
-                    }                      
-                    $graph->yaxis->scale->ticks->SetColor($values['graph_yaxis_tick_color']);
-                }        
-                
-                
-                if (isset($values['graph_yaxis_color'])){
-                    foreach($graph->ynaxis as $axis){
-                        if (isset($values['graph_yaxis_label_color'])){
-                            $axis->SetColor($values['graph_yaxis_color'],$values['graph_yaxis_label_color']);
-                        }else{
-                            $axis->SetColor($values['graph_yaxis_color']);
-                        }
-                    }    
-                    if (isset($values['graph_yaxis_label_color'])){
-                       $graph->yaxis->SetColor($values['graph_yaxis_color'],$values['graph_yaxis_label_color']);
-                    }else{
-                       $graph->yaxis->SetColor($values['graph_yaxis_color']);
-                    }            
-                }   
-                
-                if (isset($values['graph_xaxis_color'])){
-                    if (isset($values['graph_xaxis_label_color'])){
-                        $graph->xaxis->SetColor($values['graph_xaxis_color'], $values['graph_xaxis_label_color']);
-                    }else{
-                        $graph->xaxis->SetColor($values['graph_xaxis_color']);
-                    }
-                }                     
-                //$graph->ynaxis[0]->SetColor('#E3E3E3','blue');
-
-                if(isset($values['graph_xaxis_tick_labellogtype']) && get_class($graph->xaxis->scale->ticks)=='LogTicks'){
-                    $graph->xaxis->scale->ticks->SetLabelLogType(constant($values['graph_xaxis_tick_labellogtype']));
-                }
-                
-                if(isset($values['graph_yaxis_tick_labellogtype']) && get_class($graph->yaxis->scale->ticks)=='LogTicks'){
-                    $graph->yaxis->scale->ticks->SetLabelLogType(constant($values['graph_yaxis_tick_labellogtype']));
-                }
-                
 
                 if (isset($values['graph_ygrid_fill'])) {
                     $graph->ygrid->SetFill($values['graph_ygrid_fill'][0], $values['graph_ygrid_fill'][1], $values['graph_ygrid_fill'][2]);   
@@ -729,55 +536,243 @@ class Jpgrapher {
                                 
                 if (isset($values['graph_ygrid_show'])) {
                     $graph->ygrid->Show($values['graph_ygrid_show']); 
-                }
-                
-
-                   
-                if (isset($values['graph_yaxis_scale_ticks_supressfirst'])) {
-                    $graph->yaxis->scale->ticks->SupressFirst($values['graph_yaxis_scale_ticks_supressfirst']);
-                }
-                
-           
-                if (isset($values['graph_xaxis_scale_ticks_supressfirst'])) {
-                    $graph->xaxis->scale->ticks->SupressFirst($values['graph_xaxis_scale_ticks_supressfirst']);
-                }
-                
-                if(isset($values['graph_xaxis_scale_ticks'])){
-                    $graph->xaxis->scale->ticks->Set($values['graph_xaxis_scale_ticks']);
-                }       
-                
-                if(isset($values['graph_yaxis_scale_ticks'])){
-                    $graph->yaxis->scale->ticks->Set($values['graph_yaxis_scale_ticks']);
                 }                
-              
-                
-                //$graph->yaxis->SetTextTickInterval(2);
-                if(isset($values['graph_xaxis_tick_interval'])){
-                    $graph->xaxis->scale->ticks->Set($values['graph_xaxis_tick_interval']);
-                }
-                
-                if(isset($values['graph_yaxis_tick_interval'])){
-                    $graph->xaxis->scale->ticks->Set($values['graph_xaxis_tick_interval']);
-                }
-                
-                //$graph->xgrid->Show(true);
-
-                if($values['graph']!='piegraph' && $values['graph']!='ganttgraph'){
-                    $graph->SetClipping(true);
-                    if (isset($values['graph_xaxis_pos'])) {
-                        $graph->xaxis->SetPos($values["graph_xaxis_pos"]);
-                    } 
-                    if (isset($values['graph_yaxis_pos'])) {
-                        $graph->yaxis->SetPos($values["graph_yaxis_pos"]);
-                    }                     
-                    $graph->graph_theme = null;
-                }
 
                 return $graph->Stroke();
             } else {
                 return false;
             }
         }
+    }
+    
+    private function prepareAxis($graph, $values){
+        if (isset($values['graph_xaxis_labelformatcallback'])) { // If it has labelformatcallback
+            if (is_callable($values['graph_xaxis_labelformatcallback'])) {
+                $graph->xaxis->SetLabelFormatCallback($values['graph_xaxis_labelformatcallback']);
+            } else {
+                $callbacks = $this->getCallFunctions();
+                if ($values['graph_xaxis_labelformatcallback'] == 'AutoTimeCallback') { // If it
+                    $xminmax = $graph->GetXMinMax();
+                    if ($xminmax[0] != null) {
+                        $tpo = $xminmax[1] - $xminmax[0];
+
+                        $callbacks = $this->getCallFunctions();
+                        if ($tpo > 172800) {
+                            $graph->xaxis->SetLabelFormatCallback($callbacks['TimeCallbackDay']);
+                        } else {
+                            $graph->xaxis->SetLabelFormatCallback($callbacks['TimeCallbackTime']);
+                        }
+                    }
+                } else {
+                    $graph->xaxis->SetLabelFormatCallback($callbacks[$values['graph_xaxis_labelformatcallback']]);
+                }
+            }
+        }
+
+
+        // Setup axis
+
+        // Y- Axis
+
+        if (isset($values['graph_xaxis_labelangle'])) {
+            $graph->xaxis->SetLabelAngle($values["graph_xaxis_labelangle"]);
+        }
+
+        if (isset($values['graph_yaxis_title'])){
+            $graph->yaxis->title->Set($this->transformString($values["graph_yaxis_title"]));
+        }
+
+
+        if (isset($values['graph_yaxis_titlemargin'])){
+            $graph->yaxis->SetTitleMargin($values["graph_yaxis_titlemargin"]);
+        }
+        if (isset($values['graph_yaxis_hideline'])){
+            $graph->yaxis->HideLine($values['graph_yaxis_hideline']);                
+        }
+
+        if (isset($values['graph_yaxis_hidelabels'])){
+            $graph->yaxis->HideLabels($values['graph_yaxis_hidelabels']);      
+        }
+
+        if (isset($values['graph_xaxis_hidelabels'])){
+            $graph->xaxis->HideLabels($values['graph_xaxis_hidelabels']);                
+        }                
+
+
+        // X-Axis
+
+        if (isset($values['graph_xaxis_ticklabels'])) {
+            $graph->xaxis->SetTickLabels($values["graph_xaxis_ticklabels"]);
+        }
+
+        if (isset($values['graph_yaxis_ticklabels'])) {
+            $graph->yaxis->SetTickLabels($values["graph_yaxis_ticklabels"]);
+        }
+
+
+
+        if (isset($values['graph_xaxis_title'])) {
+            if(isset($values['graph_xaxis_title_position'])){
+                $graph->xaxis->SetTitle($this->transformString($values["graph_xaxis_title"]),$values['graph_xaxis_title_position']);
+            }else{
+                $graph->xaxis->SetTitle($this->transformString($values["graph_xaxis_title"]));
+            }
+        } 
+
+        if (isset($values['graph_xaxis_titlemargin'])){
+            $graph->xaxis->SetTitleMargin($values["graph_xaxis_titlemargin"]);
+        }
+
+        if (isset($values['graph_axis_tickposition'])) {
+            $graph->xaxis->SetTickPositions($values['graph_axis_tickposition']);
+        }
+
+
+        if (isset($values['graph_xaxis_tickposition'])) {
+            $graph->xaxis->SetTickPositions($values['graph_xaxis_tickposition'][0],$values['graph_xaxis_tickposition'][1],$values['graph_xaxis_tickposition'][2]);
+        }          
+
+        if (isset($values['graph_yaxis_tickposition'])) {
+            $graph->yaxis->SetTickPositions($values['graph_yaxis_tickposition'][0],$values['graph_yaxis_tickposition'][1],$values['graph_yaxis_tickposition'][2]);
+        }          
+
+        if (isset($values['graph_xaxis_tickside'])) {
+            $graph->xaxis->SetTickSide(constant($values['graph_xaxis_tickside']));
+        } 
+
+        if (isset($values['graph_yaxis_tickside'])) {
+            $graph->yaxis->SetTickSide(constant($values['graph_yaxis_tickside']));
+        }                 
+
+        if (isset($values['graph_xaxis_tick_hide_minor']) || isset($values['graph_xaxis_tick_hide_major'])) {
+            if(!isset($values['graph_xaxis_tick_hide_minor'])){
+                $values['graph_xaxis_tick_hide_minor']=true;
+                $values['graph_yaxis_tick_hide_major']=true;
+            } 
+            if(!isset($values['graph_xaxis_tick_hide_major'])){
+                $values['graph_xaxis_tick_hide_major']=true;
+            }
+
+            $graph->xaxis->HideTicks($values['graph_xaxis_tick_hide_minor'], $values['graph_xaxis_tick_hide_major']);
+        }                 
+
+        if (isset($values['graph_yaxis_tick_hide_minor']) || isset($values['graph_yaxis_tick_hide_major'])) {
+            if(!isset($values['graph_yaxis_tick_hide_minor'])){
+                $values['graph_yaxis_tick_hide_minor']=true;
+                $values['graph_yaxis_tick_hide_major']=true;
+            } 
+            if(!isset($values['graph_yaxis_tick_hide_major'])){
+                $values['graph_yaxis_tick_hide_major']=true;
+            }
+
+            $graph->yaxis->HideTicks($values['graph_yaxis_tick_hide_minor'], $values['graph_yaxis_tick_hide_major']);
+        }                 
+
+        if (isset($values['graph_xaxis_tick_size_minor']) || isset($values['graph_xaxis_tick_size_major'])) {
+            if(!isset($values['graph_xaxis_tick_size_minor'])){
+                $values['graph_xaxis_tick_size_minor']=3;
+            } 
+            if(!isset($values['graph_xaxis_tick_size_major'])){
+                $values['graph_xaxis_tick_size_major']=3;
+            }
+
+            $graph->xaxis->scale->ticks->SetSize($values['graph_xaxis_tick_size_major'], $values['graph_xaxis_tick_size_minor']);
+        }                   
+
+        if (isset($values['graph_yaxis_tick_size_minor']) || isset($values['graph_yaxis_tick_size_major'])) {
+            if(!isset($values['graph_yaxis_tick_size_minor'])){
+                $values['graph_yaxis_tick_size_minor']=3;
+            } 
+            if(!isset($values['graph_yaxis_tick_size_major'])){
+                $values['graph_yaxis_tick_size_major']=3;
+            }
+
+            $graph->yaxis->scale->ticks->SetSize($values['graph_yaxis_tick_size_major'], $values['graph_yaxis_tick_size_minor']);
+        }               
+
+        if (isset($values['graph_xaxis_tick_color'])){
+            $graph->xaxis->scale->ticks->SetColor($values['graph_xaxis_tick_color']);
+        }
+
+        if (isset($values['graph_yaxis_tick_color'])){
+            foreach($graph->ynaxis as $axis){
+                $axis->scale->ticks->SetColor($values['graph_yaxis_tick_color']);
+            }                      
+            $graph->yaxis->scale->ticks->SetColor($values['graph_yaxis_tick_color']);
+        }        
+
+
+        if (isset($values['graph_yaxis_color'])){
+            foreach($graph->ynaxis as $axis){
+                if (isset($values['graph_yaxis_label_color'])){
+                    $axis->SetColor($values['graph_yaxis_color'],$values['graph_yaxis_label_color']);
+                }else{
+                    $axis->SetColor($values['graph_yaxis_color']);
+                }
+            }    
+            if (isset($values['graph_yaxis_label_color'])){
+               $graph->yaxis->SetColor($values['graph_yaxis_color'],$values['graph_yaxis_label_color']);
+            }else{
+               $graph->yaxis->SetColor($values['graph_yaxis_color']);
+            }            
+        }   
+
+        if (isset($values['graph_xaxis_color'])){
+            if (isset($values['graph_xaxis_label_color'])){
+                $graph->xaxis->SetColor($values['graph_xaxis_color'], $values['graph_xaxis_label_color']);
+            }else{
+                $graph->xaxis->SetColor($values['graph_xaxis_color']);
+            }
+        }                     
+        //$graph->ynaxis[0]->SetColor('#E3E3E3','blue');
+
+        if(isset($values['graph_xaxis_tick_labellogtype']) && get_class($graph->xaxis->scale->ticks)=='LogTicks'){
+            $graph->xaxis->scale->ticks->SetLabelLogType(constant($values['graph_xaxis_tick_labellogtype']));
+        }
+
+        if(isset($values['graph_yaxis_tick_labellogtype']) && get_class($graph->yaxis->scale->ticks)=='LogTicks'){
+            $graph->yaxis->scale->ticks->SetLabelLogType(constant($values['graph_yaxis_tick_labellogtype']));
+        }
+
+
+        if (isset($values['graph_yaxis_scale_ticks_supressfirst'])) {
+            $graph->yaxis->scale->ticks->SupressFirst($values['graph_yaxis_scale_ticks_supressfirst']);
+        }
+
+
+        if (isset($values['graph_xaxis_scale_ticks_supressfirst'])) {
+            $graph->xaxis->scale->ticks->SupressFirst($values['graph_xaxis_scale_ticks_supressfirst']);
+        }
+
+        if(isset($values['graph_xaxis_scale_ticks'])){
+            $graph->xaxis->scale->ticks->Set($values['graph_xaxis_scale_ticks']);
+        }       
+
+        if(isset($values['graph_yaxis_scale_ticks'])){
+            $graph->yaxis->scale->ticks->Set($values['graph_yaxis_scale_ticks']);
+        }                
+
+
+        //$graph->yaxis->SetTextTickInterval(2);
+        if(isset($values['graph_xaxis_tick_interval'])){
+            $graph->xaxis->scale->ticks->Set($values['graph_xaxis_tick_interval']);
+        }
+
+        if(isset($values['graph_yaxis_tick_interval'])){
+            $graph->xaxis->scale->ticks->Set($values['graph_xaxis_tick_interval']);
+        }
+        
+        if($values['graph']!='piegraph' && $values['graph']!='ganttgraph'){
+            $graph->SetClipping(true);
+            if (isset($values['graph_xaxis_pos'])) {
+                $graph->xaxis->SetPos($values["graph_xaxis_pos"]);
+            } 
+            if (isset($values['graph_yaxis_pos'])) {
+                $graph->yaxis->SetPos($values["graph_yaxis_pos"]);
+            }                     
+            $graph->graph_theme = null;
+        }        
+
     }
     
     private function prepareScale($graph, $values){
