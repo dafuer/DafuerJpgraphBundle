@@ -519,30 +519,34 @@ class Jpgrapher {
 
                 $this->prepareAxis($graph, $values);
 
-
-                if (isset($values['graph_ygrid_fill'])) {
-                    $graph->ygrid->SetFill($values['graph_ygrid_fill'][0], $values['graph_ygrid_fill'][1], $values['graph_ygrid_fill'][2]);   
-                    $graph->ygrid->Show();
-                    $graph->SetGridDepth(DEPTH_BACK);  //DEPTH_BACK, Under plots //DEPTH_FRONT, On top of plots   
-                }          
-                
                 if (isset($values['graph_color'])) {
                     $graph->SetColor($values['graph_color']); 
                 }
                 
-                if (isset($values['graph_xgrid_show'])) {
-                    $graph->xgrid->Show($values['graph_xgrid_show']); 
-                }
-                                
-                if (isset($values['graph_ygrid_show'])) {
-                    $graph->ygrid->Show($values['graph_ygrid_show']); 
-                }                
+                $this->prepareGrid($graph, $values);
+      
 
                 return $graph->Stroke();
             } else {
                 return false;
             }
         }
+    }
+
+    private function prepareGrid($graph, $values){    
+        if (isset($values['graph_ygrid_fill'])) {
+            $graph->ygrid->SetFill($values['graph_ygrid_fill'][0], $values['graph_ygrid_fill'][1], $values['graph_ygrid_fill'][2]);   
+            $graph->ygrid->Show();
+            $graph->SetGridDepth(DEPTH_BACK);  //DEPTH_BACK, Under plots //DEPTH_FRONT, On top of plots   
+        }    
+
+        if (isset($values['graph_xgrid_show'])) {
+            $graph->xgrid->Show($values['graph_xgrid_show']); 
+        }
+
+        if (isset($values['graph_ygrid_show'])) {
+            $graph->ygrid->Show($values['graph_ygrid_show']); 
+        }                  
     }
     
     private function prepareAxis($graph, $values){
