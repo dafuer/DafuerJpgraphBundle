@@ -501,147 +501,9 @@ class Jpgrapher {
                  }
             }
             
-            if($values['graph']!='piegraph' && $values['graph']!='ganttgraph'){
-
-                // Setup scales
-               
-                $ymin = null;
-                $ymax = null;
-                $xmin = null;
-                $xmax = null;
-               
-                if (count($graph->plots) > 0) {
-                    try{
-                        $graph->doAutoScaleYAxis();
-                        $ymin = $graph->yscale->GetMinVal();
-                        $ymax = $graph->yscale->GetMaxVal();                        
-                    }  catch (\Exception $e) {
-                        
-                    }
-                    
-                    try{
-                        $graph->doAutoScaleXAxis();
-                        $xmin = $graph->xscale->GetMinVal();
-                        $xmax = $graph->xscale->GetMaxVal();                         
-                    }  catch (\Exception $e) {
-                        
-                    }
-                }
-                
-                // Add a scatter points to adjust scale
-                
-                // If there are vertical zebras
-                if($this->zebra_x_min != null){  
-                     // if exist y autoscale 
-                    if($ymin!=null){
-                         $scatter_for_scale = new \ScatterPlot(array(($ymin+$ymax/2),($ymin+$ymax/2)), array($this->zebra_x_min,$this->zebra_x_max));
-                         $scatter_for_scale->mark->SetWidth(0);
-                         $scatter_for_scale->setColor('black');
-                         $graph->add($scatter_for_scale);                         
-                     }else{
-                         $scatter_for_scale = new \ScatterPlot(array(0,0), array($this->zebra_x_min,$this->zebra_x_max));
-                         $scatter_for_scale->mark->SetWidth(0);
-                         $scatter_for_scale->setColor('black');
-                         $graph->add($scatter_for_scale);     
-                     }
-                }                
-
-                // If there are horizontal zebras
-                if($this->zebra_y_min != null){  
-                     // if exist y autoscale 
-                    if($xmin!=null){
-                         $scatter_for_scale = new \ScatterPlot(array($this->zebra_y_min,$this->zebra_y_max), array(($xmin+$xmax/2),($xmin+$xmax/2)));
-                         $scatter_for_scale->mark->SetWidth(0);
-                         $scatter_for_scale->setColor('black');
-                         $graph->add($scatter_for_scale);                         
-                     }else{
-                         $scatter_for_scale = new \ScatterPlot(array($this->zebra_y_min,$this->zebra_y_max),array(0,0));
-                         $scatter_for_scale->mark->SetWidth(0);
-                         $scatter_for_scale->setColor('black');
-                         $graph->add($scatter_for_scale);     
-                     }
-                }          
-
-                if($this->zebra_y_min != null && $this->zebra_y_min<$ymin){                  
-                    $ymin=$this->zebra_y_min;
-                }
-                if($this->zebra_y_max != null && $this->zebra_y_max>$ymax){
-                    $ymax=$this->zebra_y_max;
-                } 
-                
-                if($this->zebra_x_min != null && $this->zebra_x_min<$xmin){
-                    $xmin=$this->zebra_x_min;
-                }
-                if($this->zebra_x_max != null && $this->zebra_x_max>$xmax){
-                    $xmax=$this->zebra_x_max;
-                }                            
-                                   
-                
-                $yt = substr($values['graph_scale'], -3, 3);
-                $xt = substr($values['graph_scale'], 0, 3);
-
-              if($xmin===null){
-                  $xmin=$this->zebra_x_min;
-              }
-              
-              if($xmax===null){
-                  $xmax=$this->zebra_x_max;
-              }     
-             
-              if($ymin===null){
-                  $ymin=$this->zebra_y_min;
-              }
-              
-              if($ymax===null){
-                  $ymax=$this->zebra_y_max;
-              }                   
-
-
-                if (isset($values['graph_yscale_min'])) {
-                    $ymin = $values['graph_yscale_min'];
-                }else{
-                    if ($yt == 'log') {
-                        $ymin=log($ymin,10);
-                    }                    
-                }
-                if (isset($values['graph_yscale_max'])) {
-                    $ymax = $values['graph_yscale_max'];
-                }else{
-                    if ($yt == 'log') {
-                        $ymax=log($ymax,10);
-                    }                    
-                }
-                if (isset($values['graph_xscale_min'])) {
-                    $xmin = $values['graph_xscale_min'];
-                }else{
-                    if ($xt == 'log') {
-                        $xmin=log($xmin,10);
-                    }                    
-                }
-                if (isset($values['graph_xscale_max'])) {
-                    $xmax = $values['graph_xscale_max'];
-                }else{
-                    if ($xt == 'log') {
-                        $xmax=log($xmax,10);
-                    }                    
-                }        
-                           
-                // If min or max are zebras, add grace space.
-                $ygrace=($ymax-$ymin)*0.01;
-                if($ymin==$this->zebra_y_min) $ymin=$ymin-$ygrace;
-                if($ymax==$this->zebra_y_max)  $ymax=$ymax+$ygrace; 
-    
-                $xgrace=($xmax-$xmin)*0.01;
-                if($xmin==$this->zebra_x_min) $xmin=$xmin-$xgrace;
-                if($xmax==$this->zebra_x_max) $xmax=$xmax+$xgrace;                        
-
-                $graph->SetScale($values['graph_scale'], $ymin, $ymax, $xmin, $xmax);
-                
-                if (isset($values['graph_yscale_autoticks'])){
-                    $graph->yscale->SetAutoTicks($values['graph_yscale_autoticks']);
-                }    
             
-            }
+            
+            $this->prepareScale($graph, $values);
             
             $this->prepareLegend($graph, $values);
             
@@ -916,6 +778,150 @@ class Jpgrapher {
                 return false;
             }
         }
+    }
+    
+    private function prepareScale($graph, $values){
+        if($values['graph']!='piegraph' && $values['graph']!='ganttgraph'){
+
+            // Setup scales
+
+            $ymin = null;
+            $ymax = null;
+            $xmin = null;
+            $xmax = null;
+
+            if (count($graph->plots) > 0) {
+                try{
+                    $graph->doAutoScaleYAxis();
+                    $ymin = $graph->yscale->GetMinVal();
+                    $ymax = $graph->yscale->GetMaxVal();                        
+                }  catch (\Exception $e) {
+
+                }
+
+                try{
+                    $graph->doAutoScaleXAxis();
+                    $xmin = $graph->xscale->GetMinVal();
+                    $xmax = $graph->xscale->GetMaxVal();                         
+                }  catch (\Exception $e) {
+
+                }
+            }
+
+            // Add a scatter points to adjust scale
+
+            // If there are vertical zebras
+            if($this->zebra_x_min != null){  
+                 // if exist y autoscale 
+                if($ymin!=null){
+                     $scatter_for_scale = new \ScatterPlot(array(($ymin+$ymax/2),($ymin+$ymax/2)), array($this->zebra_x_min,$this->zebra_x_max));
+                     $scatter_for_scale->mark->SetWidth(0);
+                     $scatter_for_scale->setColor('black');
+                     $graph->add($scatter_for_scale);                         
+                 }else{
+                     $scatter_for_scale = new \ScatterPlot(array(0,0), array($this->zebra_x_min,$this->zebra_x_max));
+                     $scatter_for_scale->mark->SetWidth(0);
+                     $scatter_for_scale->setColor('black');
+                     $graph->add($scatter_for_scale);     
+                 }
+            }                
+
+            // If there are horizontal zebras
+            if($this->zebra_y_min != null){  
+                 // if exist y autoscale 
+                if($xmin!=null){
+                     $scatter_for_scale = new \ScatterPlot(array($this->zebra_y_min,$this->zebra_y_max), array(($xmin+$xmax/2),($xmin+$xmax/2)));
+                     $scatter_for_scale->mark->SetWidth(0);
+                     $scatter_for_scale->setColor('black');
+                     $graph->add($scatter_for_scale);                         
+                 }else{
+                     $scatter_for_scale = new \ScatterPlot(array($this->zebra_y_min,$this->zebra_y_max),array(0,0));
+                     $scatter_for_scale->mark->SetWidth(0);
+                     $scatter_for_scale->setColor('black');
+                     $graph->add($scatter_for_scale);     
+                 }
+            }          
+
+            if($this->zebra_y_min != null && $this->zebra_y_min<$ymin){                  
+                $ymin=$this->zebra_y_min;
+            }
+            if($this->zebra_y_max != null && $this->zebra_y_max>$ymax){
+                $ymax=$this->zebra_y_max;
+            } 
+
+            if($this->zebra_x_min != null && $this->zebra_x_min<$xmin){
+                $xmin=$this->zebra_x_min;
+            }
+            if($this->zebra_x_max != null && $this->zebra_x_max>$xmax){
+                $xmax=$this->zebra_x_max;
+            }                            
+
+
+            $yt = substr($values['graph_scale'], -3, 3);
+            $xt = substr($values['graph_scale'], 0, 3);
+
+          if($xmin===null){
+              $xmin=$this->zebra_x_min;
+          }
+
+          if($xmax===null){
+              $xmax=$this->zebra_x_max;
+          }     
+
+          if($ymin===null){
+              $ymin=$this->zebra_y_min;
+          }
+
+          if($ymax===null){
+              $ymax=$this->zebra_y_max;
+          }                   
+
+
+            if (isset($values['graph_yscale_min'])) {
+                $ymin = $values['graph_yscale_min'];
+            }else{
+                if ($yt == 'log') {
+                    $ymin=log($ymin,10);
+                }                    
+            }
+            if (isset($values['graph_yscale_max'])) {
+                $ymax = $values['graph_yscale_max'];
+            }else{
+                if ($yt == 'log') {
+                    $ymax=log($ymax,10);
+                }                    
+            }
+            if (isset($values['graph_xscale_min'])) {
+                $xmin = $values['graph_xscale_min'];
+            }else{
+                if ($xt == 'log') {
+                    $xmin=log($xmin,10);
+                }                    
+            }
+            if (isset($values['graph_xscale_max'])) {
+                $xmax = $values['graph_xscale_max'];
+            }else{
+                if ($xt == 'log') {
+                    $xmax=log($xmax,10);
+                }                    
+            }        
+
+            // If min or max are zebras, add grace space.
+            $ygrace=($ymax-$ymin)*0.01;
+            if($ymin==$this->zebra_y_min) $ymin=$ymin-$ygrace;
+            if($ymax==$this->zebra_y_max)  $ymax=$ymax+$ygrace; 
+
+            $xgrace=($xmax-$xmin)*0.01;
+            if($xmin==$this->zebra_x_min) $xmin=$xmin-$xgrace;
+            if($xmax==$this->zebra_x_max) $xmax=$xmax+$xgrace;                        
+
+            $graph->SetScale($values['graph_scale'], $ymin, $ymax, $xmin, $xmax);
+
+            if (isset($values['graph_yscale_autoticks'])){
+                $graph->yscale->SetAutoTicks($values['graph_yscale_autoticks']);
+            }    
+
+        }        
     }
     
     private function prepareLegend($graph, $values){
