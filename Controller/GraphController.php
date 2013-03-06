@@ -105,7 +105,7 @@ class GraphController extends Controller {
                     }else{
                         $xdata=null;
                     }
-                    $lineplot = $jpgrapher->createGraphPlot($data['style'][$j], $graph, $data['ydata'][$j], $xdata, $style_line);
+                    $lineplot = $jpgrapher->createGraphPlot($data['style'][$j], $data['ydata'][$j], $xdata, $style_line);
                 }
             }
         }        
@@ -113,7 +113,7 @@ class GraphController extends Controller {
         // Add url plots  
         foreach ($dataname as $i => $linename) {
             if (count($ydata[$i]) > 0) {
-                $lineplot = $jpgrapher->createGraphPlot($styledata[$i], $graph, $ydata[$i], $xdata[$i], $customdata[$i]);
+                $lineplot = $jpgrapher->createGraphPlot($styledata[$i], $ydata[$i], $xdata[$i], $customdata[$i]);
             }
         }
         

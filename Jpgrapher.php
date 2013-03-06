@@ -12,6 +12,7 @@ use Symfony\Component\Yaml\Yaml;
  */
 class Jpgrapher {
 
+    private $graph=null;
     private $config_file;
     //private $viewer_file;
     private $options;
@@ -153,22 +154,22 @@ class Jpgrapher {
 
 
             if ($values['graph'] == "graph") {
-                $graph = new \Graph($values['graph_width'], $values['graph_height']);
+                $this->graph = new \Graph($values['graph_width'], $values['graph_height']);
             }
 
             if ($values['graph'] == "piegraph") {
                 require_once ($this->path.'jpgraph_pie.php');
-                $graph = new \PieGraph($values['graph_width'], $values['graph_height']);
+                $this->graph = new \PieGraph($values['graph_width'], $values['graph_height']);
             }      
             
             if ($values['graph'] == "ganttgraph") {
                 require_once ($this->path.'jpgraph_gantt.php');
-                $graph = new \GanttGraph($values['graph_width'], $values['graph_height']);
+                $this->graph = new \GanttGraph($values['graph_width'], $values['graph_height']);
             }                  
             
 
             if (isset($values['graph_img_margin_left']) && isset($values['graph_img_margin_right']) && isset($values['graph_img_margin_top']) && isset($values['graph_img_margin_bottom'])) {
-                $graph->SetMargin($values['graph_img_margin_left'], $values['graph_img_margin_right'], $values['graph_img_margin_top'], $values['graph_img_margin_bottom']);
+                $this->graph->SetMargin($values['graph_img_margin_left'], $values['graph_img_margin_right'], $values['graph_img_margin_top'], $values['graph_img_margin_bottom']);
             }
 
 
@@ -181,54 +182,54 @@ class Jpgrapher {
                 if ($yt == 'log' || $xt == 'log') {
                     require_once ($this->path.'jpgraph_log.php');
                 }                
-                $graph->SetScale($values['graph_scale']);
+                $this->graph->SetScale($values['graph_scale']);
             }
 
 
             if (isset($values['graph_title'])) {
-                $graph->title->Set($this->transformString($values['graph_title']));
+                $this->graph->title->Set($this->transformString($values['graph_title']));
             }
             
             // Set up title font
             if(isset($values['graph_title_font_family'])){
                 if(isset($values['graph_title_font_style'])){
                     if(isset($values['graph_title_font_size'])){
-                        $graph->title->SetFont(constant($values['graph_title_font_family']),constant($values['graph_title_font_style']),$values['graph_title_font_size']);
+                        $this->graph->title->SetFont(constant($values['graph_title_font_family']),constant($values['graph_title_font_style']),$values['graph_title_font_size']);
                     }else{
-                        $graph->title->SetFont(constant($values['graph_title_font_family']),constant($values['graph_title_font_style']));
+                        $this->graph->title->SetFont(constant($values['graph_title_font_family']),constant($values['graph_title_font_style']));
                     }
                 }else{
-                    $graph->title->SetFont(constant($values['graph_title_font_family']));
+                    $this->graph->title->SetFont(constant($values['graph_title_font_family']));
                 }
             }
             
             if (isset($values['graph_box'])) {
-                $graph->SetBox($values['graph_box']);
+                $this->graph->SetBox($values['graph_box']);
             }
             if (isset($values['graph_xgrid_show']))
-                $graph->xgrid->Show($values['graph_xgrid_show']);
+                $this->graph->xgrid->Show($values['graph_xgrid_show']);
             if (isset($values['graph_xgrid_color']))
-                $graph->xgrid->SetColor($values['graph_xgrid_color']);
+                $this->graph->xgrid->SetColor($values['graph_xgrid_color']);
             if (isset($values['graph_xgrid_linestyle']))
-                $graph->xgrid->SetLineStyle($values["graph_xgrid_linestyle"]);
+                $this->graph->xgrid->SetLineStyle($values["graph_xgrid_linestyle"]);
             //if (isset($values['graph_img_antialiasing']))
-            //    $graph->img->SetAntiAliasing($values['graph_img_antialiasing']);
+            //    $this->graph->img->SetAntiAliasing($values['graph_img_antialiasing']);
             if (isset($values['graph_legend_frameweight']))
-                $graph->legend->SetFrameWeight($values['graph_legend_frameweight']);
+                $this->graph->legend->SetFrameWeight($values['graph_legend_frameweight']);
             if (isset($values['graph_frame'][0]) && isset($values['graph_frame'][1]))
-                $graph->SetFrame($values['graph_frame'][0], $values['graph_frame'][1], $values['graph_frame'][2]);
+                $this->graph->SetFrame($values['graph_frame'][0], $values['graph_frame'][1], $values['graph_frame'][2]);
             if (isset($values['graph_clipping']))
-                $graph->SetClipping($values['graph_clipping']);
+                $this->graph->SetClipping($values['graph_clipping']);
 
 
-            return $graph;
+            return $this->graph;
         }
     }
     
     
     
 
-    public function createGraphPlot($style_name, $graph, $ydata, $xdata = null, $custom = array()) {
+    public function createGraphPlot($style_name, $ydata, $xdata = null, $custom = array()) {
 
         if (!isset($this->options[$style_name])) {
             throw new \Exception('DafuerJpgraphBundle says: ' . $style_name . ' style does not exists.');
@@ -237,7 +238,7 @@ class Jpgrapher {
             // Setting up variable values
             $values = $this->getOptions($style_name, $custom);
 
-            //if($graph==null) $graph=$this->createGraph ($style_name, $custom);
+            //if($this->graph==null) $this->graph=$this->createGraph ($style_name, $custom);
             // Check mandatory vars
             if (!isset($values['lineplot']))
                 throw new \Exception('DafuerDafuerJpgraphBundle says: Variable lineplot must be defined.');
@@ -319,7 +320,7 @@ class Jpgrapher {
             if ($values['lineplot'] == "pieplot") {
                 require_once ($this->path.'jpgraph_pie.php');
                 $lineplot = new \PiePlot($ydata);                
-                $graph->Add($lineplot);
+                $this->graph->Add($lineplot);
                 if(isset($values['lineplot_slicecolors'])){
                     $lineplot->SetSliceColors($values['lineplot_slicecolors']);
                 }
@@ -330,7 +331,7 @@ class Jpgrapher {
                 require_once ($this->path.'jpgraph_pie.php');
                 require_once ($this->path.'jpgraph_pie3d.php');
                 $lineplot = new \PiePlot3D($ydata);                
-                $graph->Add($lineplot);
+                $this->graph->Add($lineplot);
                 if(isset($values['lineplot_slicecolors'])){
                     $lineplot->SetSliceColors($values['lineplot_slicecolors']);
                 }
@@ -349,26 +350,26 @@ class Jpgrapher {
                 $lineplot =  new \GanttBar($ydata,$values['lineplot_information'],$xdata[0],$xdata[1],$label);
                 
                                   
-                $graph->Add($lineplot);
+                $this->graph->Add($lineplot);
             }            
             
             // Add lineplot
             if (isset($values['graph_yaxis_number'])) {
                 if ($values['graph_yaxis_number'] == 0) {
                     if(!isset($lineplot)) throw new \Exception('DafuerDafuerJpgraphBundle says: Lineplot dont exist');
-                    $graph->Add($lineplot);
+                    $this->graph->Add($lineplot);
                 } else {
                     // First, I find maxium index allowed to prevent a exception
                     $index = 0;
                     for ($i = 0; $i < $values['graph_yaxis_number'] - 1; $i++) {
-                        if (!isset($graph->ynaxis))
+                        if (!isset($this->graph->ynaxis))
                             break;
                     }
                     if ($i > 0)
                         $index = $i - 1;
 
-                    $graph->SetYScale($index, 'lin');
-                    $graph->AddY($index, $lineplot);                
+                    $this->graph->SetYScale($index, 'lin');
+                    $this->graph->AddY($index, $lineplot);                
                 }
             }
 
@@ -471,14 +472,14 @@ class Jpgrapher {
 
 
             if (isset($values['graph_yscale_autoticks']))
-                $graph->yscale->SetAutoTicks($values['graph_yscale_autoticks']);
+                $this->graph->yscale->SetAutoTicks($values['graph_yscale_autoticks']);
 
 
             return $lineplot;
         }
     }
 
-    function strokeGraph($style_name, $custom, $graph) {
+    function strokeGraph($style_name, $custom) {
         if (!isset($this->options[$style_name])) {
             throw new \Exception('DafuerDafuerJpgraphBundle says: ' . $style_name . ' style does not exists.');
         } else {
@@ -489,85 +490,85 @@ class Jpgrapher {
             // If I only want the legend, I make a bypass
             if(isset($values['graph_legend_only'])){
                  if($values['graph_legend_only']===true || strtolower($values['graph_legend_only'])==='true'){
-                   $this->prepareLegend($graph, $values);
-                   $graph->legend->SetAbsPos(0, 0, 'left');
-                   $graph->legend->Hide(false);
-                   $graph->doPrestrokeAdjustments();
-                   $graph->legend->Stroke($graph->img);
-                   return $graph->cache->PutAndStream($graph->img,$graph->cache_name,$graph->inline,null);
+                   $this->prepareLegend($values);
+                   $this->graph->legend->SetAbsPos(0, 0, 'left');
+                   $this->graph->legend->Hide(false);
+                   $this->graph->doPrestrokeAdjustments();
+                   $this->graph->legend->Stroke($this->graph->img);
+                   return $this->graph->cache->PutAndStream($this->graph->img,$this->graph->cache_name,$this->graph->inline,null);
                  }
             }
             
             // In other case, I continue preparing            
-            $this->prepareScale($graph, $values);            
-            $this->prepareLegend($graph, $values);
+            $this->prepareScale($values);            
+            $this->prepareLegend($values);
             
             // Mandatory: The color margin must be defined after set scale
-            $this->prepareGraph($graph, $values);
-            if ( count($graph->plots) > 0 || $values['graph']=='piegraph' || $values['graph']=='ganttgraph') {
-                $this->prepareAxis($graph, $values);
-                $this->prepareGrid($graph, $values);
+            $this->prepareGraph($values);
+            if ( count($this->graph->plots) > 0 || $values['graph']=='piegraph' || $values['graph']=='ganttgraph') {
+                $this->prepareAxis($values);
+                $this->prepareGrid($values);
                 
-                return $graph->Stroke();
+                return $this->graph->Stroke();
             } else {
                 return false;
             }
         }
     }
 
-    private function prepareGraph($graph, $values){
+    private function prepareGraph($values){
         // Mandatory: The color margin must be defined after set scale
         if (isset($values['graph_margincolor'])) {
             //frame with not implemented yet 
-            $graph->SetFrame(true, $values['graph_margincolor'], 0);
-            $graph->SetColor($values['graph_margincolor']);
-            $graph->SetMarginColor($values['graph_margincolor']);
+            $this->graph->SetFrame(true, $values['graph_margincolor'], 0);
+            $this->graph->SetColor($values['graph_margincolor']);
+            $this->graph->SetMarginColor($values['graph_margincolor']);
 
             // not implemented yet 
-            //$graph->SetBackgroundGradient('darkred:0.7', 'black', 2, BGRAD_MARGIN);
+            //$this->graph->SetBackgroundGradient('darkred:0.7', 'black', 2, BGRAD_MARGIN);
         }
 
         if (isset($values['graph_color'])) {
-            $graph->SetColor($values['graph_color']); 
+            $this->graph->SetColor($values['graph_color']); 
         }          
     }    
     
-    private function prepareGrid($graph, $values){    
+    private function prepareGrid($values){    
         if (isset($values['graph_ygrid_fill'])) {
-            $graph->ygrid->SetFill($values['graph_ygrid_fill'][0], $values['graph_ygrid_fill'][1], $values['graph_ygrid_fill'][2]);   
-            $graph->ygrid->Show();
-            $graph->SetGridDepth(DEPTH_BACK);  //DEPTH_BACK, Under plots //DEPTH_FRONT, On top of plots   
+            $this->graph->ygrid->SetFill($values['graph_ygrid_fill'][0], $values['graph_ygrid_fill'][1], $values['graph_ygrid_fill'][2]);   
+            $this->graph->ygrid->Show();
+            $this->graph->SetGridDepth(DEPTH_BACK);  //DEPTH_BACK, Under plots //DEPTH_FRONT, On top of plots   
         }    
 
         if (isset($values['graph_xgrid_show'])) {
-            $graph->xgrid->Show($values['graph_xgrid_show']); 
+            $this->graph->xgrid->Show($values['graph_xgrid_show']); 
         }
 
         if (isset($values['graph_ygrid_show'])) {
-            $graph->ygrid->Show($values['graph_ygrid_show']); 
+            $this->graph->ygrid->Show($values['graph_ygrid_show']); 
         }                  
     }
     
-    private function prepareAxis($graph, $values){
+    private function prepareAxis($values){
         if (isset($values['graph_xaxis_labelformatcallback'])) { // If it has labelformatcallback
             if (is_callable($values['graph_xaxis_labelformatcallback'])) {
-                $graph->xaxis->SetLabelFormatCallback($values['graph_xaxis_labelformatcallback']);
+                $this->graph->xaxis->SetLabelFormatCallback($values['graph_xaxis_labelformatcallback']);
             } else {
                 $callbacks = $this->getCallFunctions();
                 if ($values['graph_xaxis_labelformatcallback'] == 'AutoTimeCallback') { // If it
-                    $xminmax = $graph->GetXMinMax();
+                    $xminmax = $this->graph->GetXMinMax();
                     if ($xminmax[0] != null) {
                         $tpo = $xminmax[1] - $xminmax[0];
 
                         $callbacks = $this->getCallFunctions();
                         if ($tpo > 172800) {
-                            $graph->xaxis->SetLabelFormatCallback($callbacks['TimeCallbackDay']);
+                            $this->graph->xaxis->SetLabelFormatCallback($callbacks['TimeCallbackDay']);
                         } else {
-                            $graph->xaxis->SetLabelFormatCallback($callbacks['TimeCallbackTime']);
+                            $this->graph->xaxis->SetLabelFormatCallback($callbacks['TimeCallbackTime']);
                         }
                     }
                 } else {
-                    $graph->xaxis->SetLabelFormatCallback($callbacks[$values['graph_xaxis_labelformatcallback']]);
+                    $this->graph->xaxis->SetLabelFormatCallback($callbacks[$values['graph_xaxis_labelformatcallback']]);
                 }
             }
         }
@@ -578,73 +579,73 @@ class Jpgrapher {
         // Y- Axis
 
         if (isset($values['graph_xaxis_labelangle'])) {
-            $graph->xaxis->SetLabelAngle($values["graph_xaxis_labelangle"]);
+            $this->graph->xaxis->SetLabelAngle($values["graph_xaxis_labelangle"]);
         }
 
         if (isset($values['graph_yaxis_title'])){
-            $graph->yaxis->title->Set($this->transformString($values["graph_yaxis_title"]));
+            $this->graph->yaxis->title->Set($this->transformString($values["graph_yaxis_title"]));
         }
 
 
         if (isset($values['graph_yaxis_titlemargin'])){
-            $graph->yaxis->SetTitleMargin($values["graph_yaxis_titlemargin"]);
+            $this->graph->yaxis->SetTitleMargin($values["graph_yaxis_titlemargin"]);
         }
         if (isset($values['graph_yaxis_hideline'])){
-            $graph->yaxis->HideLine($values['graph_yaxis_hideline']);                
+            $this->graph->yaxis->HideLine($values['graph_yaxis_hideline']);                
         }
 
         if (isset($values['graph_yaxis_hidelabels'])){
-            $graph->yaxis->HideLabels($values['graph_yaxis_hidelabels']);      
+            $this->graph->yaxis->HideLabels($values['graph_yaxis_hidelabels']);      
         }
 
         if (isset($values['graph_xaxis_hidelabels'])){
-            $graph->xaxis->HideLabels($values['graph_xaxis_hidelabels']);                
+            $this->graph->xaxis->HideLabels($values['graph_xaxis_hidelabels']);                
         }                
 
 
         // X-Axis
 
         if (isset($values['graph_xaxis_ticklabels'])) {
-            $graph->xaxis->SetTickLabels($values["graph_xaxis_ticklabels"]);
+            $this->graph->xaxis->SetTickLabels($values["graph_xaxis_ticklabels"]);
         }
 
         if (isset($values['graph_yaxis_ticklabels'])) {
-            $graph->yaxis->SetTickLabels($values["graph_yaxis_ticklabels"]);
+            $this->graph->yaxis->SetTickLabels($values["graph_yaxis_ticklabels"]);
         }
 
 
 
         if (isset($values['graph_xaxis_title'])) {
             if(isset($values['graph_xaxis_title_position'])){
-                $graph->xaxis->SetTitle($this->transformString($values["graph_xaxis_title"]),$values['graph_xaxis_title_position']);
+                $this->graph->xaxis->SetTitle($this->transformString($values["graph_xaxis_title"]),$values['graph_xaxis_title_position']);
             }else{
-                $graph->xaxis->SetTitle($this->transformString($values["graph_xaxis_title"]));
+                $this->graph->xaxis->SetTitle($this->transformString($values["graph_xaxis_title"]));
             }
         } 
 
         if (isset($values['graph_xaxis_titlemargin'])){
-            $graph->xaxis->SetTitleMargin($values["graph_xaxis_titlemargin"]);
+            $this->graph->xaxis->SetTitleMargin($values["graph_xaxis_titlemargin"]);
         }
 
         if (isset($values['graph_axis_tickposition'])) {
-            $graph->xaxis->SetTickPositions($values['graph_axis_tickposition']);
+            $this->graph->xaxis->SetTickPositions($values['graph_axis_tickposition']);
         }
 
 
         if (isset($values['graph_xaxis_tickposition'])) {
-            $graph->xaxis->SetTickPositions($values['graph_xaxis_tickposition'][0],$values['graph_xaxis_tickposition'][1],$values['graph_xaxis_tickposition'][2]);
+            $this->graph->xaxis->SetTickPositions($values['graph_xaxis_tickposition'][0],$values['graph_xaxis_tickposition'][1],$values['graph_xaxis_tickposition'][2]);
         }          
 
         if (isset($values['graph_yaxis_tickposition'])) {
-            $graph->yaxis->SetTickPositions($values['graph_yaxis_tickposition'][0],$values['graph_yaxis_tickposition'][1],$values['graph_yaxis_tickposition'][2]);
+            $this->graph->yaxis->SetTickPositions($values['graph_yaxis_tickposition'][0],$values['graph_yaxis_tickposition'][1],$values['graph_yaxis_tickposition'][2]);
         }          
 
         if (isset($values['graph_xaxis_tickside'])) {
-            $graph->xaxis->SetTickSide(constant($values['graph_xaxis_tickside']));
+            $this->graph->xaxis->SetTickSide(constant($values['graph_xaxis_tickside']));
         } 
 
         if (isset($values['graph_yaxis_tickside'])) {
-            $graph->yaxis->SetTickSide(constant($values['graph_yaxis_tickside']));
+            $this->graph->yaxis->SetTickSide(constant($values['graph_yaxis_tickside']));
         }                 
 
         if (isset($values['graph_xaxis_tick_hide_minor']) || isset($values['graph_xaxis_tick_hide_major'])) {
@@ -656,7 +657,7 @@ class Jpgrapher {
                 $values['graph_xaxis_tick_hide_major']=true;
             }
 
-            $graph->xaxis->HideTicks($values['graph_xaxis_tick_hide_minor'], $values['graph_xaxis_tick_hide_major']);
+            $this->graph->xaxis->HideTicks($values['graph_xaxis_tick_hide_minor'], $values['graph_xaxis_tick_hide_major']);
         }                 
 
         if (isset($values['graph_yaxis_tick_hide_minor']) || isset($values['graph_yaxis_tick_hide_major'])) {
@@ -668,7 +669,7 @@ class Jpgrapher {
                 $values['graph_yaxis_tick_hide_major']=true;
             }
 
-            $graph->yaxis->HideTicks($values['graph_yaxis_tick_hide_minor'], $values['graph_yaxis_tick_hide_major']);
+            $this->graph->yaxis->HideTicks($values['graph_yaxis_tick_hide_minor'], $values['graph_yaxis_tick_hide_major']);
         }                 
 
         if (isset($values['graph_xaxis_tick_size_minor']) || isset($values['graph_xaxis_tick_size_major'])) {
@@ -679,7 +680,7 @@ class Jpgrapher {
                 $values['graph_xaxis_tick_size_major']=3;
             }
 
-            $graph->xaxis->scale->ticks->SetSize($values['graph_xaxis_tick_size_major'], $values['graph_xaxis_tick_size_minor']);
+            $this->graph->xaxis->scale->ticks->SetSize($values['graph_xaxis_tick_size_major'], $values['graph_xaxis_tick_size_minor']);
         }                   
 
         if (isset($values['graph_yaxis_tick_size_minor']) || isset($values['graph_yaxis_tick_size_major'])) {
@@ -690,23 +691,23 @@ class Jpgrapher {
                 $values['graph_yaxis_tick_size_major']=3;
             }
 
-            $graph->yaxis->scale->ticks->SetSize($values['graph_yaxis_tick_size_major'], $values['graph_yaxis_tick_size_minor']);
+            $this->graph->yaxis->scale->ticks->SetSize($values['graph_yaxis_tick_size_major'], $values['graph_yaxis_tick_size_minor']);
         }               
 
         if (isset($values['graph_xaxis_tick_color'])){
-            $graph->xaxis->scale->ticks->SetColor($values['graph_xaxis_tick_color']);
+            $this->graph->xaxis->scale->ticks->SetColor($values['graph_xaxis_tick_color']);
         }
 
         if (isset($values['graph_yaxis_tick_color'])){
-            foreach($graph->ynaxis as $axis){
+            foreach($this->graph->ynaxis as $axis){
                 $axis->scale->ticks->SetColor($values['graph_yaxis_tick_color']);
             }                      
-            $graph->yaxis->scale->ticks->SetColor($values['graph_yaxis_tick_color']);
+            $this->graph->yaxis->scale->ticks->SetColor($values['graph_yaxis_tick_color']);
         }        
 
 
         if (isset($values['graph_yaxis_color'])){
-            foreach($graph->ynaxis as $axis){
+            foreach($this->graph->ynaxis as $axis){
                 if (isset($values['graph_yaxis_label_color'])){
                     $axis->SetColor($values['graph_yaxis_color'],$values['graph_yaxis_label_color']);
                 }else{
@@ -714,71 +715,71 @@ class Jpgrapher {
                 }
             }    
             if (isset($values['graph_yaxis_label_color'])){
-               $graph->yaxis->SetColor($values['graph_yaxis_color'],$values['graph_yaxis_label_color']);
+               $this->graph->yaxis->SetColor($values['graph_yaxis_color'],$values['graph_yaxis_label_color']);
             }else{
-               $graph->yaxis->SetColor($values['graph_yaxis_color']);
+               $this->graph->yaxis->SetColor($values['graph_yaxis_color']);
             }            
         }   
 
         if (isset($values['graph_xaxis_color'])){
             if (isset($values['graph_xaxis_label_color'])){
-                $graph->xaxis->SetColor($values['graph_xaxis_color'], $values['graph_xaxis_label_color']);
+                $this->graph->xaxis->SetColor($values['graph_xaxis_color'], $values['graph_xaxis_label_color']);
             }else{
-                $graph->xaxis->SetColor($values['graph_xaxis_color']);
+                $this->graph->xaxis->SetColor($values['graph_xaxis_color']);
             }
         }                     
-        //$graph->ynaxis[0]->SetColor('#E3E3E3','blue');
+        //$this->graph->ynaxis[0]->SetColor('#E3E3E3','blue');
 
-        if(isset($values['graph_xaxis_tick_labellogtype']) && get_class($graph->xaxis->scale->ticks)=='LogTicks'){
-            $graph->xaxis->scale->ticks->SetLabelLogType(constant($values['graph_xaxis_tick_labellogtype']));
+        if(isset($values['graph_xaxis_tick_labellogtype']) && get_class($this->graph->xaxis->scale->ticks)=='LogTicks'){
+            $this->graph->xaxis->scale->ticks->SetLabelLogType(constant($values['graph_xaxis_tick_labellogtype']));
         }
 
-        if(isset($values['graph_yaxis_tick_labellogtype']) && get_class($graph->yaxis->scale->ticks)=='LogTicks'){
-            $graph->yaxis->scale->ticks->SetLabelLogType(constant($values['graph_yaxis_tick_labellogtype']));
+        if(isset($values['graph_yaxis_tick_labellogtype']) && get_class($this->graph->yaxis->scale->ticks)=='LogTicks'){
+            $this->graph->yaxis->scale->ticks->SetLabelLogType(constant($values['graph_yaxis_tick_labellogtype']));
         }
 
 
         if (isset($values['graph_yaxis_scale_ticks_supressfirst'])) {
-            $graph->yaxis->scale->ticks->SupressFirst($values['graph_yaxis_scale_ticks_supressfirst']);
+            $this->graph->yaxis->scale->ticks->SupressFirst($values['graph_yaxis_scale_ticks_supressfirst']);
         }
 
 
         if (isset($values['graph_xaxis_scale_ticks_supressfirst'])) {
-            $graph->xaxis->scale->ticks->SupressFirst($values['graph_xaxis_scale_ticks_supressfirst']);
+            $this->graph->xaxis->scale->ticks->SupressFirst($values['graph_xaxis_scale_ticks_supressfirst']);
         }
 
         if(isset($values['graph_xaxis_scale_ticks'])){
-            $graph->xaxis->scale->ticks->Set($values['graph_xaxis_scale_ticks']);
+            $this->graph->xaxis->scale->ticks->Set($values['graph_xaxis_scale_ticks']);
         }       
 
         if(isset($values['graph_yaxis_scale_ticks'])){
-            $graph->yaxis->scale->ticks->Set($values['graph_yaxis_scale_ticks']);
+            $this->graph->yaxis->scale->ticks->Set($values['graph_yaxis_scale_ticks']);
         }                
 
 
-        //$graph->yaxis->SetTextTickInterval(2);
+        //$this->graph->yaxis->SetTextTickInterval(2);
         if(isset($values['graph_xaxis_tick_interval'])){
-            $graph->xaxis->scale->ticks->Set($values['graph_xaxis_tick_interval']);
+            $this->graph->xaxis->scale->ticks->Set($values['graph_xaxis_tick_interval']);
         }
 
         if(isset($values['graph_yaxis_tick_interval'])){
-            $graph->xaxis->scale->ticks->Set($values['graph_xaxis_tick_interval']);
+            $this->graph->xaxis->scale->ticks->Set($values['graph_xaxis_tick_interval']);
         }
         
         if($values['graph']!='piegraph' && $values['graph']!='ganttgraph'){
-            $graph->SetClipping(true);
+            $this->graph->SetClipping(true);
             if (isset($values['graph_xaxis_pos'])) {
-                $graph->xaxis->SetPos($values["graph_xaxis_pos"]);
+                $this->graph->xaxis->SetPos($values["graph_xaxis_pos"]);
             } 
             if (isset($values['graph_yaxis_pos'])) {
-                $graph->yaxis->SetPos($values["graph_yaxis_pos"]);
+                $this->graph->yaxis->SetPos($values["graph_yaxis_pos"]);
             }                     
-            $graph->graph_theme = null;
+            $this->graph->graph_theme = null;
         }        
 
     }
     
-    private function prepareScale($graph, $values){
+    private function prepareScale($values){
         if($values['graph']!='piegraph' && $values['graph']!='ganttgraph'){
 
             // Setup scales
@@ -788,19 +789,19 @@ class Jpgrapher {
             $xmin = null;
             $xmax = null;
 
-            if (count($graph->plots) > 0) {
+            if (count($this->graph->plots) > 0) {
                 try{
-                    $graph->doAutoScaleYAxis();
-                    $ymin = $graph->yscale->GetMinVal();
-                    $ymax = $graph->yscale->GetMaxVal();                        
+                    $this->graph->doAutoScaleYAxis();
+                    $ymin = $this->graph->yscale->GetMinVal();
+                    $ymax = $this->graph->yscale->GetMaxVal();                        
                 }  catch (\Exception $e) {
 
                 }
 
                 try{
-                    $graph->doAutoScaleXAxis();
-                    $xmin = $graph->xscale->GetMinVal();
-                    $xmax = $graph->xscale->GetMaxVal();                         
+                    $this->graph->doAutoScaleXAxis();
+                    $xmin = $this->graph->xscale->GetMinVal();
+                    $xmax = $this->graph->xscale->GetMaxVal();                         
                 }  catch (\Exception $e) {
 
                 }
@@ -815,12 +816,12 @@ class Jpgrapher {
                      $scatter_for_scale = new \ScatterPlot(array(($ymin+$ymax/2),($ymin+$ymax/2)), array($this->zebra_x_min,$this->zebra_x_max));
                      $scatter_for_scale->mark->SetWidth(0);
                      $scatter_for_scale->setColor('black');
-                     $graph->add($scatter_for_scale);                         
+                     $this->graph->add($scatter_for_scale);                         
                  }else{
                      $scatter_for_scale = new \ScatterPlot(array(0,0), array($this->zebra_x_min,$this->zebra_x_max));
                      $scatter_for_scale->mark->SetWidth(0);
                      $scatter_for_scale->setColor('black');
-                     $graph->add($scatter_for_scale);     
+                     $this->graph->add($scatter_for_scale);     
                  }
             }                
 
@@ -831,12 +832,12 @@ class Jpgrapher {
                      $scatter_for_scale = new \ScatterPlot(array($this->zebra_y_min,$this->zebra_y_max), array(($xmin+$xmax/2),($xmin+$xmax/2)));
                      $scatter_for_scale->mark->SetWidth(0);
                      $scatter_for_scale->setColor('black');
-                     $graph->add($scatter_for_scale);                         
+                     $this->graph->add($scatter_for_scale);                         
                  }else{
                      $scatter_for_scale = new \ScatterPlot(array($this->zebra_y_min,$this->zebra_y_max),array(0,0));
                      $scatter_for_scale->mark->SetWidth(0);
                      $scatter_for_scale->setColor('black');
-                     $graph->add($scatter_for_scale);     
+                     $this->graph->add($scatter_for_scale);     
                  }
             }          
 
@@ -913,46 +914,46 @@ class Jpgrapher {
             if($xmin==$this->zebra_x_min) $xmin=$xmin-$xgrace;
             if($xmax==$this->zebra_x_max) $xmax=$xmax+$xgrace;                        
 
-            $graph->SetScale($values['graph_scale'], $ymin, $ymax, $xmin, $xmax);
+            $this->graph->SetScale($values['graph_scale'], $ymin, $ymax, $xmin, $xmax);
 
             if (isset($values['graph_yscale_autoticks'])){
-                $graph->yscale->SetAutoTicks($values['graph_yscale_autoticks']);
+                $this->graph->yscale->SetAutoTicks($values['graph_yscale_autoticks']);
             }    
 
         }        
     }
     
-    private function prepareLegend($graph, $values){
+    private function prepareLegend($values){
         // Set legend
         if (isset($values['graph_legend_abspos_x']) &&
                 isset($values['graph_legend_abspos_y']) &&
                 isset($values['graph_legend_abspos_halign']) &&
                 isset($values['graph_legend_abspos_valign'])) {
-            $graph->legend->SetAbsPos($values['graph_legend_abspos_x'], $values['graph_legend_abspos_y'], $values['graph_legend_abspos_halign'], $values['graph_legend_abspos_valign']);
+            $this->graph->legend->SetAbsPos($values['graph_legend_abspos_x'], $values['graph_legend_abspos_y'], $values['graph_legend_abspos_halign'], $values['graph_legend_abspos_valign']);
         }
 
         if (isset($values['graph_legend_layout'])) {
-            $graph->legend->SetLayout($values['graph_legend_layout']);
+            $this->graph->legend->SetLayout($values['graph_legend_layout']);
         }
 
         if (isset($values['graph_legend_shadow'])) {
-            $graph->legend->SetShadow($values['graph_legend_shadow']);
+            $this->graph->legend->SetShadow($values['graph_legend_shadow']);
         }
 
         if (isset($values['graph_legend_fillcolor'])) {
-            $graph->legend->SetFillColor($values['graph_legend_fillcolor']);
+            $this->graph->legend->SetFillColor($values['graph_legend_fillcolor']);
         }
 
         if (isset($values['graph_legend_hide'])) {
             if(is_string($values['graph_legend_hide'])){
                 $val=strtolower($values['graph_legend_hide']);
                 if ($val=="false"){
-                    $graph->legend->Hide(false);
+                    $this->graph->legend->Hide(false);
                 }else{
-                    $graph->legend->Hide(true);
+                    $this->graph->legend->Hide(true);
                 }
             }else{
-                $graph->legend->Hide($values['graph_legend_hide']);
+                $this->graph->legend->Hide($values['graph_legend_hide']);
             }
         }                
 
@@ -960,10 +961,10 @@ class Jpgrapher {
             $xt = substr($values['graph_scale'], 0, 3);
             if($xt=='dat'){ // I can call xscale type date methods
                 // SetDateAlign not implemented yet
-                // $graph->xaxis->scale->SetDateAlign(YEARADJ_1,YEARADJ_1);
+                // $this->graph->xaxis->scale->SetDateAlign(YEARADJ_1,YEARADJ_1);
 
                 if(isset($values['graph_xaxis_scale_dateformat'])){
-                    $graph->xaxis->scale->SetDateFormat($values['graph_xaxis_scale_dateformat']);
+                    $this->graph->xaxis->scale->SetDateFormat($values['graph_xaxis_scale_dateformat']);
                 }                        
 
             }
@@ -990,14 +991,14 @@ class Jpgrapher {
                 throw new \Exception('DafuerJpgraphBundle says: Variable canvasgraph_height must be defined.');
             }
 
-            $graph = new \CanvasGraph($values['canvasgraph_width'], $values['canvasgraph_height'], 'auto');
-            $graph->InitFrame();
+            $this->graph = new \CanvasGraph($values['canvasgraph_width'], $values['canvasgraph_height'], 'auto');
+            $this->graph->InitFrame();
             if (isset($values['canvasgraph_color'])) {
-                $graph->img->SetColor($values['canvasgraph_color']);
-                $graph->img->FilledRectangle(0, 0, $values['canvasgraph_width'], $values['canvasgraph_height']);
+                $this->graph->img->SetColor($values['canvasgraph_color']);
+                $this->graph->img->FilledRectangle(0, 0, $values['canvasgraph_width'], $values['canvasgraph_height']);
             }
 
-            $graph->Stroke();
+            $this->graph->Stroke();
         }
     }
 
