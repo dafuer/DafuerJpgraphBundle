@@ -13,6 +13,8 @@ use Symfony\Component\Yaml\Yaml;
 class Jpgrapher {
 
     private $graph=null;
+    private $numberOfPlots=0;
+    private $numberOfEmptyPlots=0;
     private $config_file;
     //private $viewer_file;
     private $options;
@@ -230,7 +232,8 @@ class Jpgrapher {
     
 
     public function createGraphPlot($style_name, $ydata, $xdata = null, $custom = array()) {
-
+        $this->numberOfPlots++;
+        
         if (!isset($this->options[$style_name])) {
             throw new \Exception('DafuerJpgraphBundle says: ' . $style_name . ' style does not exists.');
         } else {
@@ -241,6 +244,7 @@ class Jpgrapher {
             
             // If the plot are empty return null;
             if(count($ydata)==0){
+                $this->numberOfEmptyPlots++;
                 return null;
             }
             
@@ -492,20 +496,41 @@ class Jpgrapher {
         if (!isset($this->options[$style_name])) {
             throw new \Exception('DafuerDafuerJpgraphBundle says: ' . $style_name . ' style does not exists.');
         } else {
-
             // Setting up variable values
             $values = $this->getOptions($style_name, $custom);
-              
+            
+            if($this->numberOfPlots==$this->numberOfEmptyPlots){ // If all plots are empty
+                if($values['graph']!='piegraph' && $values['graph']!='ganttgraph'){ // If graph is piegraph or ganttgraph there are no problem if it is empty
+                    if(!isset($values['graph_empty'])){
+                        throw new \Exception('DafuerDafuerJpgraphBundle says: The property graph_empty must be defined.');
+                    }
+
+                    if($values['graph_empty']=='AXIS'){
+                        require_once ($this->path.'jpgraph_scatter.php');
+                        $scatter_for_no_empty = new \ScatterPlot(array(0));
+                        $scatter_for_no_empty->mark->SetWidth(0);
+                        $scatter_for_no_empty->setColor('black');
+                        $this->graph->add($scatter_for_no_empty);   
+                        $values['graph_scale']='intint';
+                        $values['graph_yaxis_pos']='min';
+                        //$this->createGraphPlot($style_name, array(0), null, $custom);
+                    }else{
+                        $this->createImg($values['graph_empty'], $values);
+                        return null;
+                    }
+                }
+            }            
+
             // If I only want the legend, I make a bypass
             if(isset($values['graph_legend_only'])){
-                 if($values['graph_legend_only']===true || strtolower($values['graph_legend_only'])==='true'){
-                   $this->prepareLegend($values);
-                   $this->graph->legend->SetAbsPos(0, 0, 'left');
-                   $this->graph->legend->Hide(false);
-                   $this->graph->doPrestrokeAdjustments();
-                   $this->graph->legend->Stroke($this->graph->img);
-                   return $this->graph->cache->PutAndStream($this->graph->img,$this->graph->cache_name,$this->graph->inline,null);
-                 }
+                if($values['graph_legend_only']===true || strtolower($values['graph_legend_only'])==='true'){
+                  $this->prepareLegend($values);
+                  $this->graph->legend->SetAbsPos(0, 0, 'left');
+                  $this->graph->legend->Hide(false);
+                  $this->graph->doPrestrokeAdjustments();
+                  $this->graph->legend->Stroke($this->graph->img);
+                  return $this->graph->cache->PutAndStream($this->graph->img,$this->graph->cache_name,$this->graph->inline,null);
+                }
             }
             
             // In other case, I continue preparing            
@@ -514,14 +539,14 @@ class Jpgrapher {
             
             // Mandatory: The color margin must be defined after set scale
             $this->prepareGraph($values);
-            if ( count($this->graph->plots) > 0 || $values['graph']=='piegraph' || $values['graph']=='ganttgraph') {
+            //if ( count($this->graph->plots) > 0 || $values['graph']=='piegraph' || $values['graph']=='ganttgraph') {
                 $this->prepareAxis($values);
                 $this->prepareGrid($values);
                 
                 return $this->graph->Stroke();
-            } else {
+            /*} else {
                 return false;
-            }
+            }*/
         }
     }
 
@@ -821,6 +846,7 @@ class Jpgrapher {
             // If there are vertical zebras
             if($this->zebra_x_min != null){  
                  // if exist y autoscale 
+                require_once ($this->path.'jpgraph_scatter.php');
                 if($ymin!=null){
                      $scatter_for_scale = new \ScatterPlot(array(($ymin+$ymax/2),($ymin+$ymax/2)), array($this->zebra_x_min,$this->zebra_x_max));
                      $scatter_for_scale->mark->SetWidth(0);
@@ -837,6 +863,7 @@ class Jpgrapher {
             // If there are horizontal zebras
             if($this->zebra_y_min != null){  
                  // if exist y autoscale 
+                require_once ($this->path.'jpgraph_scatter.php');
                 if($xmin!=null){
                      $scatter_for_scale = new \ScatterPlot(array($this->zebra_y_min,$this->zebra_y_max), array(($xmin+$xmax/2),($xmin+$xmax/2)));
                      $scatter_for_scale->mark->SetWidth(0);
@@ -980,7 +1007,7 @@ class Jpgrapher {
         }          
     }
 
-    function createErrorImg($style_name, $custom) {
+    function createImg($style_name, $custom) {
         require_once ($this->path.'jpgraph.php');
         require_once ($this->path.'jpgraph_canvas.php');
         require_once ($this->path.'jpgraph_canvtools.php');

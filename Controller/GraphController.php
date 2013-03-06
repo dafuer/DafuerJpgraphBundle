@@ -121,9 +121,10 @@ class GraphController extends Controller {
         //Stroke the graph        
         $x = $jpgrapher->strokeGraph($firststyle, $base_style);
            
-        if ($x == false) {
-            $this->forward('DafuerJpgraphBundle:Graph:imgerrordraw', array('style' => 'error_graph', 'custom' => array()));
-        }
+        /*if ($x == false) {
+            //$this->forward('DafuerJpgraphBundle:Graph:imgerrordraw', array('style' => 'error_graph', 'custom' => array()));
+            throw new \Exception("DafuerJpgraphBundle can't make a graph");
+        }*/
         
         $response=new \Symfony\Component\HttpFoundation\Response('');
         $response->headers->set('Content-Type', 'image/png');        
@@ -223,7 +224,7 @@ class GraphController extends Controller {
         $custom = $jpgrapher->parseQueryParameters($this->get('request')->query);
 
 
-        $x = $jpgrapher->createErrorImg($style, $custom);
+        $x = $jpgrapher->createImg($style, $custom);
         
         $response=new \Symfony\Component\HttpFoundation\Response('');
         $response->headers->set('Content-Type', 'image/png');
