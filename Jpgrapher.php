@@ -486,6 +486,7 @@ class Jpgrapher {
             // Setting up variable values
             $values = $this->getOptions($style_name, $custom);
               
+            // If I only want the legend, I make a bypass
             if(isset($values['graph_legend_only'])){
                  if($values['graph_legend_only']===true || strtolower($values['graph_legend_only'])==='true'){
                    $this->prepareLegend($graph, $values);
@@ -497,35 +498,21 @@ class Jpgrapher {
                  }
             }
             
-            
+            // In other case, I continue preparing
             
             $this->prepareScale($graph, $values);
             
             $this->prepareLegend($graph, $values);
             
             // Mandatory: The color margin must be defined after set scale
-            if (isset($values['graph_margincolor'])) {
-                //frame with not implemented yet 
-                $graph->SetFrame(true, $values['graph_margincolor'], 0);
-                $graph->SetColor($values['graph_margincolor']);
-                $graph->SetMarginColor($values['graph_margincolor']);
-                
-                // not implemented yet 
-                //$graph->SetBackgroundGradient('darkred:0.7', 'black', 2, BGRAD_MARGIN);
-            }
-        
+            $this->prepareGraph($graph, $values);
 
             if ( count($graph->plots) > 0 || $values['graph']=='piegraph' || $values['graph']=='ganttgraph') {
 
                 $this->prepareAxis($graph, $values);
-
-                if (isset($values['graph_color'])) {
-                    $graph->SetColor($values['graph_color']); 
-                }
                 
                 $this->prepareGrid($graph, $values);
-      
-
+                
                 return $graph->Stroke();
             } else {
                 return false;
@@ -533,6 +520,23 @@ class Jpgrapher {
         }
     }
 
+    private function prepareGraph($graph, $values){
+        // Mandatory: The color margin must be defined after set scale
+        if (isset($values['graph_margincolor'])) {
+            //frame with not implemented yet 
+            $graph->SetFrame(true, $values['graph_margincolor'], 0);
+            $graph->SetColor($values['graph_margincolor']);
+            $graph->SetMarginColor($values['graph_margincolor']);
+
+            // not implemented yet 
+            //$graph->SetBackgroundGradient('darkred:0.7', 'black', 2, BGRAD_MARGIN);
+        }
+
+        if (isset($values['graph_color'])) {
+            $graph->SetColor($values['graph_color']); 
+        }          
+    }    
+    
     private function prepareGrid($graph, $values){    
         if (isset($values['graph_ygrid_fill'])) {
             $graph->ygrid->SetFill($values['graph_ygrid_fill'][0], $values['graph_ygrid_fill'][1], $values['graph_ygrid_fill'][2]);   
