@@ -498,19 +498,14 @@ class Jpgrapher {
                  }
             }
             
-            // In other case, I continue preparing
-            
-            $this->prepareScale($graph, $values);
-            
+            // In other case, I continue preparing            
+            $this->prepareScale($graph, $values);            
             $this->prepareLegend($graph, $values);
             
             // Mandatory: The color margin must be defined after set scale
             $this->prepareGraph($graph, $values);
-
             if ( count($graph->plots) > 0 || $values['graph']=='piegraph' || $values['graph']=='ganttgraph') {
-
                 $this->prepareAxis($graph, $values);
-                
                 $this->prepareGrid($graph, $values);
                 
                 return $graph->Stroke();
