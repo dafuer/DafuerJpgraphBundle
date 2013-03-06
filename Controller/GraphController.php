@@ -82,7 +82,7 @@ class GraphController extends Controller {
             $base_style = array_merge($firstcustom, $params[0]);
             
             // Create graph
-            $graph = $jpgrapher->createGraph($firststyle, $base_style);
+            //$graph = $jpgrapher->createGraph($firststyle, $base_style);
 
 
         }else{ // If there are not database data only create graph
@@ -91,14 +91,14 @@ class GraphController extends Controller {
             $firststyle = $styledata[$index];
             $firstcustom = $customdata[$index];
             $base_style = array_merge($firstcustom, $customdata[$index]);      
-            $graph = $jpgrapher->createGraph($styledata[$index],$customdata[$index]);
+            //$graph = $jpgrapher->createGraph($styledata[$index],$customdata[$index]);
         }
 
         
         // Add plots stored in database
         foreach ($datas as $i => $data) {
             foreach ($data['ydata'] as $j => $line) {
-                if (count($data['ydata'][$j]) > 0) {
+                //if (count($data['ydata'][$j]) > 0) {
                     $style_line = array_merge($data['custom'][$j], $params[$i]);
                     if(isset($data['xdata'][$j])){
                         $xdata=$data['xdata'][$j];
@@ -106,7 +106,7 @@ class GraphController extends Controller {
                         $xdata=null;
                     }
                     $lineplot = $jpgrapher->createGraphPlot($data['style'][$j], $data['ydata'][$j], $xdata, $style_line);
-                }
+                //}
             }
         }        
         
@@ -119,7 +119,7 @@ class GraphController extends Controller {
         
 
         //Stroke the graph        
-        $x = $jpgrapher->strokeGraph($firststyle, $base_style, $graph);
+        $x = $jpgrapher->strokeGraph($firststyle, $base_style);
            
         if ($x == false) {
             $this->forward('DafuerJpgraphBundle:Graph:imgerrordraw', array('style' => 'error_graph', 'custom' => array()));

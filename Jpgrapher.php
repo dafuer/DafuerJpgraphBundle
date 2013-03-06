@@ -134,7 +134,7 @@ class Jpgrapher {
         return $values;
     }
 
-    public function createGraph($style_name, $custom = array()) {
+    private function createGraph($style_name, $custom = array()) {
 
         if (!isset($this->options[$style_name])) {
             throw new \Exception('DafuerJpgraphBundle says: ' . $style_name . ' style does not exists.');
@@ -234,7 +234,16 @@ class Jpgrapher {
         if (!isset($this->options[$style_name])) {
             throw new \Exception('DafuerJpgraphBundle says: ' . $style_name . ' style does not exists.');
         } else {
-
+            // If the graph don't exist, create it.
+            if($this->graph===null){
+                $this->createGraph($style_name, $custom);
+            }
+            
+            // If the plot are empty return null;
+            if(count($ydata)==0){
+                return null;
+            }
+            
             // Setting up variable values
             $values = $this->getOptions($style_name, $custom);
 
