@@ -35,11 +35,11 @@
     setUpdateListener('{{ formname }}','{{ graphroute }}');
 
     {% if combined is null %}
-    addSingleFormTo('{{ formname }}','{{ formviewpath }}','{{ graphroute }}');
+    addSingleFormTo('{{ formname }}','{{ formviewpath }}','{{ graphroute }}', false);
     {% else %}
         {% for i in range(0,combined-1) %}   
 
-            addSingleFormTo('{{ formname }}','{{ formviewpath }}','{{ graphroute }}');
+            addSingleFormTo('{{ formname }}','{{ formviewpath }}','{{ graphroute }}', false);
         {% endfor %} 
 
     {% endif %} 

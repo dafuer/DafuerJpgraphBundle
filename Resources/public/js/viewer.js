@@ -105,8 +105,11 @@ function update_all(graphroute){
 /**
  * Add line to graph
  */
-function addSingleFormTo(formname,ruta,graphroute){//,urlopts){
-    
+function addSingleFormTo(formname,ruta,graphroute,updategraphs){
+    if(updategraphs == undefined) {
+        updategraphs = true;
+    }
+
     urlopts=getURLoptions(formname);
     base=Routing.generate(ruta);
 
@@ -126,7 +129,10 @@ function addSingleFormTo(formname,ruta,graphroute){//,urlopts){
     setUpdateListener(formname,graphroute); 
     
     updateFormValues(formname);  
-    update(formname,graphroute);
+    
+    if(updategraphs){
+        update(formname,graphroute);
+    }
 }     
 
 
@@ -236,7 +242,6 @@ function setUpdateListener(formname,graphroute){
             $(form.elements[i]).change(function() {
                 update(formname,graphroute);
             });
-            //$(form.elements[i]).watermark('Default Value');
         }
     }
 }
