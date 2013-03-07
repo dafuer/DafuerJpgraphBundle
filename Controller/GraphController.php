@@ -32,7 +32,7 @@ class GraphController extends Controller {
             }
             $response=new \Symfony\Component\HttpFoundation\Response('');
             $response->headers->set('Content-Type', 'image/png');        
-            return $response;              
+            return $response;
         }
         
         // First, extract manual data from url
@@ -47,7 +47,7 @@ class GraphController extends Controller {
             $styledata[$index] = $request->query->get('style' . $name, 'lineplot_timeserie');
             $request->query->remove('style' . $name);
             $customdata[$index] = $request->query->get('custom' . $name, array());
-            $request->query->remove('custom' . $name);      
+            $request->query->remove('custom' . $name);  
             $c++;
         }
         $index=$minindex;
@@ -57,7 +57,6 @@ class GraphController extends Controller {
         $jpgrapher = $this->get('jpgraph');
 
         $params = $jpgrapher->parseQueryParameters($request->query);
-
         
         // Combined parameter is mandatory except for single graph
         $combined = $request->query->get('combined', (int)(count($ydata[$index])==0));
@@ -80,7 +79,7 @@ class GraphController extends Controller {
             $firstcustom = $datas[0]['custom'][$firstkey];
 
             $base_style = array_merge($firstcustom, $params[0]);
-            
+
             // Create graph
             //$graph = $jpgrapher->createGraph($firststyle, $base_style);
 

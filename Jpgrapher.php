@@ -15,6 +15,7 @@ class Jpgrapher {
     private $graph=null;
     private $numberOfPlots=0;
     private $numberOfEmptyPlots=0;
+    private $numberOfErrorPlots=0;
     private $config_file;
     //private $viewer_file;
     private $options;
@@ -101,13 +102,13 @@ class Jpgrapher {
       
         // I set the custom value
         foreach ($custom as $asociated_name => $asociated_value) {
-            if ($asociated_value != "%%%") { // If value is equal %%% then remove this parameter
+            if ($asociated_value !== "%%%") { // If value is equal %%% then remove this parameter
                 $values[$asociated_name] = $asociated_value;
             } else {
                 unset($values[$asociated_name]);
             }
         }
-        
+
         // Last, I replace value of the linked attributes
         // performance penalty
         $finished=false;
@@ -132,7 +133,7 @@ class Jpgrapher {
             }
         }
         
-        
+
         return $values;
     }
 
@@ -233,7 +234,7 @@ class Jpgrapher {
 
     public function createGraphPlot($style_name, $ydata, $xdata = null, $custom = array()) {
         $this->numberOfPlots++;
-        
+
         if (!isset($this->options[$style_name])) {
             throw new \Exception('DafuerJpgraphBundle says: ' . $style_name . ' style does not exists.');
         } else {
@@ -241,15 +242,23 @@ class Jpgrapher {
             if($this->graph===null){
                 $this->createGraph($style_name, $custom);
             }
+           
             
+            // Setting up variable values
+            $values = $this->getOptions($style_name, $custom);
+
+            // If the plot has errors return null;
+            if(isset($values['lineplot_error'])){
+                if($values['lineplot_error']===true || strtolower($values['lineplot_error'])==='true'){
+                    $this->numberOfErrorPlots++;
+                    return null;
+                }
+            }   
             // If the plot are empty return null;
             if(count($ydata)==0){
                 $this->numberOfEmptyPlots++;
                 return null;
-            }
-            
-            // Setting up variable values
-            $values = $this->getOptions($style_name, $custom);
+            }                  
 
             //if($this->graph==null) $this->graph=$this->createGraph ($style_name, $custom);
             // Check mandatory vars
@@ -498,6 +507,30 @@ class Jpgrapher {
         } else {
             // Setting up variable values
             $values = $this->getOptions($style_name, $custom);
+            
+            if($this->numberOfErrorPlots>0){ // If there are errors
+                if($this->numberOfPlots==$this->numberOfErrorPlots){ // If all plots has errors
+                    if(!isset($values['graph_error'])){
+                        throw new \Exception('DafuerDafuerJpgraphBundle says: The property graph_error must be defined.');
+                    }
+                    
+                    $this->createImg($values['graph_error'], $values);
+                    return null;                    
+                }else{
+                    if(!isset($values['graph_error_multiple'])){
+                        throw new \Exception('DafuerDafuerJpgraphBundle says: The property graph_error_multiple must be defined.');
+                    }
+                    
+                    // Obtain modifcations
+                    $newoptions=$this->getOptions($values['graph_error_multiple'], array());
+    
+                    // And it apply to value array
+                    foreach($newoptions as $keyoption=>$valueoption){
+                        $values[$keyoption]=$valueoption;
+                    }
+  
+                }
+            }
             
             if($this->numberOfPlots==$this->numberOfEmptyPlots){ // If all plots are empty
                 if($values['graph']!='piegraph' && $values['graph']!='ganttgraph'){ // If graph is piegraph or ganttgraph there are no problem if it is empty

@@ -116,6 +116,8 @@ graph_timeserie:
     graph_frame: [false,'#555555', 1]
     graph_clipping: true    
     graph_empty: 'AXIS'   # or canvas style name, example: empty_graph 
+    graph_error: 'empty_graph' # Name of canvas style to display an image error
+    graph_error_multiple: 'error_multiple_graph'    # Name of style to modify normal display or graph
     
 empty_graph:
     canvasgraph_width: 10

@@ -32,6 +32,10 @@ class BaseDataAccess{
         return array('xdata' => array(array()), 'ydata' => array(array()));
     }
     
+    public function errorResult(){
+        return array('xdata' => array(array()), 'ydata' => array(array()), 'custom' => array(array('lineplot_error'=>true)));
+    }    
+    
     
     public function getGraphList(){
         $result=array();
@@ -98,7 +102,7 @@ class BaseDataAccess{
             throw new AccessDeniedException();  
         }         
         $data=$this->getData($id, $params);
-                
+
         if(is_null($data)) throw new \Exception("Can't read graph. Perhaps there is no parameter dataserie.");
 
         foreach($data['ydata'] as $i=>$values){
@@ -138,7 +142,6 @@ class BaseDataAccess{
                 $data['custom'][$i]=$customstyle;
             }
         } 
-        
         // Last, set up user parameters
         $data['custom'][$i]=array_merge($data['custom'][$i],$params);
 
