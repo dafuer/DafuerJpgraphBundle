@@ -26,7 +26,6 @@ class Jpgrapher {
     private $zebra_y_min=null;
     private $zebra_y_max=null;
 
-    //private $viewer;
 
     public function getCallFunctions() {
         $callbacks = array();
@@ -251,6 +250,7 @@ class Jpgrapher {
             if(isset($values['lineplot_error'])){
                 if($values['lineplot_error']===true || strtolower($values['lineplot_error'])==='true'){
                     $this->numberOfErrorPlots++;
+                    $this->numberOfEmptyPlots++;
                     return null;
                 }
             }   
