@@ -30,16 +30,15 @@ class Configuration implements ConfigurationInterface
                             ->prototype('scalar')->end()
                         ->end()
                     ->end()
-                ->end() 
-                ->children()
+                
                     ->arrayNode('graph_viewer_default')
-                    ->canBeUnset()
-                        ->children()
-                            ->scalarNode('graph_width')->defaultValue(null)->end()
-                            ->scalarNode('graph_height')->defaultValue(null)->end()
-                        ->end()
+                        ->canBeUnset()
+                        ->useAttributeAsKey('key')
+                            ->prototype('scalar')->end()      
+                         ->end()
                     ->end()
                 ->end()
+            
                 ;
 
         return $treeBuilder;
