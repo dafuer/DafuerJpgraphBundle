@@ -205,9 +205,7 @@ class Jpgrapher {
                 }
             }
             
-            if (isset($values['graph_box'])) {
-                $this->graph->SetBox($values['graph_box']);
-            }
+
             if (isset($values['graph_xgrid_show']))
                 $this->graph->xgrid->Show($values['graph_xgrid_show']);
             if (isset($values['graph_xgrid_color']))
@@ -218,8 +216,6 @@ class Jpgrapher {
             //    $this->graph->img->SetAntiAliasing($values['graph_img_antialiasing']);
             if (isset($values['graph_legend_frameweight']))
                 $this->graph->legend->SetFrameWeight($values['graph_legend_frameweight']);
-            if (isset($values['graph_frame'][0]) && isset($values['graph_frame'][1]))
-                $this->graph->SetFrame($values['graph_frame'][0], $values['graph_frame'][1], $values['graph_frame'][2]);
             if (isset($values['graph_clipping']))
                 $this->graph->SetClipping($values['graph_clipping']);
 
@@ -586,11 +582,17 @@ class Jpgrapher {
     private function prepareGraph($values){
         // Mandatory: The color margin must be defined after set scale
         if (isset($values['graph_margincolor'])) {
-            //frame with not implemented yet 
-            $this->graph->SetFrame(true, $values['graph_margincolor'], 0);
+            if (isset($values['graph_frame'][0]) && isset($values['graph_frame'][1])){
+                $this->graph->SetFrame($values['graph_frame'][0], 'red', $values['graph_frame'][2]);
+            }
+
             $this->graph->SetColor($values['graph_margincolor']);
             $this->graph->SetMarginColor($values['graph_margincolor']);
-
+            
+            if (isset($values['graph_box'])) {
+                $this->graph->SetBox($values['graph_box'][0],$values['graph_box'][1],$values['graph_box'][2]);
+            }
+            
             // not implemented yet 
             //$this->graph->SetBackgroundGradient('darkred:0.7', 'black', 2, BGRAD_MARGIN);
         }

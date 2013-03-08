@@ -13,7 +13,7 @@
 #    graph_width: integer
 #    graph_height: integer
 #    graph_scale: XXXXXXXXXXXXX
-#    graph_box: boolean
+#    graph_box: [true, '#E3E3E3', 1]
 #    graph_title: string
 #    graph_title_font: string XXXX
 #    graph_xaxis_ticklabels: array # Array de valores o %XDATA% para referirse a los valores del array de X_
@@ -74,7 +74,7 @@ graph_example:
     graph_width: 300   
     graph_height: 250
     graph_scale: "texlin" 
-    graph_box: false
+    graph_box:  [true, '#E3E3E3', 1]
     graph_antialiasing: false
     graph_title: "My graph"    
 
@@ -83,7 +83,7 @@ graph_example2:
     graph_width: 600   
     graph_height: 400
     graph_scale: "intlin" 
-    graph_box: false
+    graph_box: [true, '#E3E3E3', 1]
     graph_antialiasing: false
        
 xaxis_example: 
@@ -105,7 +105,7 @@ graph_timeserie:
     graph_width: 400   
     graph_height: 250
     graph_scale: "intlin" 
-    graph_box: false
+    graph_box: [true, '#E3E3E3', 1]
     graph_title: ''
     graph_img_antialiasing: false
     graph_img_margin_left: 60
