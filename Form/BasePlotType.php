@@ -6,7 +6,7 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilder;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
-abstract class BaseSingleElementType extends AbstractType
+abstract class BasePlotType extends AbstractType
 {
     
     private $name;
