@@ -233,7 +233,16 @@ function removeSingleFormTo(formname,graphroute){
  */
 function setUpdateListener(formname,graphroute){
     var i;
-    
+
+    $('[data-linkedto]').each(function(element){
+        var linked=$(this);
+        var root=$("#"+linked.attr('data-linkedto'));
+        //alert("root value="+root.val());
+        root.change(function() {
+             linked.val($(this).val());
+        });
+    });
+
     var form=document.getElementById('form_'+formname);
 
     for (i=0;i<form.elements.length;i++)
@@ -244,6 +253,8 @@ function setUpdateListener(formname,graphroute){
             });
         }
     }
+    
+
 }
 
 

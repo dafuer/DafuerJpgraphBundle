@@ -17,6 +17,17 @@ abstract class BasePlotType extends AbstractType
         $this->subnum=$subnum;
     }
 
+    public function addUniqueField(FormBuilder $builder, $name, $type, $options){
+        if($this->subnum!=0){ // Hide it
+            $type='hidden';
+            $options=array('attr'=>array('data-linkedto'=>$this->name."_0_".$name));
+        }
+        
+        $builder
+            ->add($name,$type,$options)
+        ;
+        return $this;
+    }
     
     public function addColor(FormBuilder $builder, array $options){
         $builder
