@@ -105,7 +105,7 @@ function update_all(graphroute){
 /**
  * Add line to graph
  */
-function addSingleFormTo(formname,ruta,graphroute,updategraphs){
+function addPlotTo(formname,ruta,graphroute,updategraphs){
     if(updategraphs == undefined) {
         updategraphs = true;
     }
@@ -219,7 +219,7 @@ function getURLoptions(formname){
 /**
  * Remove a line from a graph
  */
-function removeSingleFormTo(formname,graphroute){
+function removePlotTo(formname,graphroute){
     if(singleformsnum[formname]>1){
         singleformsnum[formname]--;
         console.debug($("[id='"+formname+"_"+singleformsnum[formname]+"'],input:not([id$='_properties_0']"));
@@ -347,36 +347,4 @@ function updateFormValues(formname){
     }
     
 }
-
-
-
-/**
- * Update the last(biggest num) form with penultimate form values
- * BUG: if you insert forms disorder does not work.
- * Possible solution: take the form value that is created to decide which update. In this case if it coincides with the last
- */
-/*
-function updateFormValuesLast(){
-    // Look for bigest index -1
-    fromnum=0;
-    fromsingleform=0;
-    
-    tonum=num-1;
-    tosingleform=singleformsnum[(num-1)+"_graphviewer"]-1;
-    
-    if(tosingleform-1<0){
-        if(tonum>1){
-            fromnum=tonum-1;
-            fromsingleform=0;
-        }
-    }else{
-        fromnum=tonum;
-        fromsingleform=tosingleform-1;
-    }
-    
-    alert(fromnum+'_graphviewer_'+fromsingleform+" / "+tonum+'_graphviewer_'+tosingleform);
-
-    copyForms(fromnum+'_graphviewer_'+fromsingleform,tonum+'_graphviewer_'+tosingleform);
-}
-*/
 

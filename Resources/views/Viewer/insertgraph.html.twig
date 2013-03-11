@@ -12,8 +12,8 @@
                 {% endif %}
                 
                 <input type="button" onclick="update('{{ formname }}','{{ graphroute }}',true)" name="{{ formname }}[update]" value="Update" class="btn-primary" />                
-                <input type="button" onclick="addSingleFormTo('{{ formname }}','{{ formviewpath }}','{{ graphroute }}')" name="{{ formname }}[add]" class="btn-success" value="Add Values" />
-                <input type="button" onclick="removeSingleFormTo('{{ formname }}','{{ graphroute }}')" name="{{ formname }}[remove]" class="btn-danger" value="Remove Values" />
+                <input type="button" onclick="addPlotTo('{{ formname }}','{{ formviewpath }}','{{ graphroute }}')" name="{{ formname }}[add]" class="btn-success" value="Add Values" />
+                <input type="button" onclick="removePlotTo('{{ formname }}','{{ graphroute }}')" name="{{ formname }}[remove]" class="btn-danger" value="Remove Values" />
                 <br/>
                 <label class="checkbox">
                 <input type="checkbox" id="autoupdate_{{ formname }}" name="{{ formname }}[autoupdate]" checked="true">
@@ -35,11 +35,11 @@
     setUpdateListener('{{ formname }}','{{ graphroute }}');
 
     {% if combined is null %}
-    addSingleFormTo('{{ formname }}','{{ formviewpath }}','{{ graphroute }}', false);
+    addPlotTo('{{ formname }}','{{ formviewpath }}','{{ graphroute }}', false);
     {% else %}
         {% for i in range(0,combined-1) %}   
 
-            addSingleFormTo('{{ formname }}','{{ formviewpath }}','{{ graphroute }}', false);
+            addPlotTo('{{ formname }}','{{ formviewpath }}','{{ graphroute }}', false);
         {% endfor %} 
 
     {% endif %} 
