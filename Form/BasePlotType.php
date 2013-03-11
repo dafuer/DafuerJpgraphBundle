@@ -30,8 +30,19 @@ abstract class BasePlotType extends AbstractType
     }
     
     public function addColor(FormBuilder $builder, array $options){
+        $colors=array(''=>'','blue'=>'Blue','red'=>'Red', 'black'=>'Black', 'green'=>'Green', 'yellow'=>'Yellow', 'aqua'=>'Aqua', 'brown'=>'Brown','blueviolet'=>'BlueViolet', 'coral'=>'Coral');
+        
+        $c=0;$autocolor="";
+        foreach($colors as $colorindex=>$color){
+            if($c==$this->subnum){
+                $autocolor=$colorindex;
+                break;
+            }
+            $c++;
+        }
+        
         $builder
-            ->add('lineplot_color', 'choice',array('choices' => array(''=>'','blue'=>'Blue','red'=>'Red', 'black'=>'Black', 'green'=>'Green', 'yellow'=>'Yellow', 'aqua'=>'Aqua', 'brown'=>'Brown','blueviolet'=>'BlueViolet', 'coral'=>'Coral'),'attr' => array('placeholder' => "Default")))
+            ->add('lineplot_color', 'choice',array('choices' => $colors, 'data'=>$autocolor,'attr' => array('placeholder' => "Default")))
         ;
         return $this;
     }    

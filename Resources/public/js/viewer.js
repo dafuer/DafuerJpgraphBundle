@@ -149,7 +149,7 @@ function getURLoptions(formname){
    
 
     
-    form=$("[id^='"+formname+"_']:input,input:not([id$='_properties_0'])").toArray();
+    form=$("[id^='"+formname+"_']:input").not("[id$='_properties_0']").toArray();
     
     for (i=0;i<form.length;i++)
     {
@@ -222,8 +222,8 @@ function getURLoptions(formname){
 function removePlotTo(formname,graphroute){
     if(singleformsnum[formname]>1){
         singleformsnum[formname]--;
-        console.debug($("[id='"+formname+"_"+singleformsnum[formname]+"'],input:not([id$='_properties_0']"));
-        $("[id^='"+formname+"_"+singleformsnum[formname]+"'],input:not([id$='_properties_0']").remove();
+        
+        $("[id^='"+formname+"_"+singleformsnum[formname]+"']").not("[id$='_properties_0']").remove();
         //var table=document.getElementById(formname+"_"+singleformsnum[formname]);
         //console.debug(formname+"_"+singleformsnum[formname]);
         //var padre=table.parentNode;
@@ -248,7 +248,7 @@ function setUpdateListener(formname,graphroute){
         });
     });
 
-    var form=$("[id^='"+formname+"_']:input,input:not([id$='_properties_0'])").toArray();
+    var form=$("[id^='"+formname+"_']:input").not("[id$='_properties_0']").toArray();
     
     for (i=0;i<form.length;i++)
     {
@@ -305,8 +305,8 @@ function refreshURL(viewerurl){
 function copyForms(formfrom,formto){
     var i;
     
-    var elements=$("[name^="+formfrom+"]");
-
+    var elements=$("[name^='"+formfrom+"']").not("[id*='lineplot_color']");
+    console.debug(elements);
     for (i=0;i<elements.length;i++)
     {
         if(typeof elements[i]  !== "undefined"){
