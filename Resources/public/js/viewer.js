@@ -148,31 +148,33 @@ function getURLoptions(formname){
     else urlopts="?combined="+singleformsnum[formname]+"&format=html";
    
 
-    var form=document.getElementById('form_'+formname);
-
-    for (i=0;i<form.elements.length;i++)
+    
+    form=$("[id^='"+formname+"_']:input,input:not([id$='_properties_0'])").toArray();
+    
+    for (i=0;i<form.length;i++)
     {
-        if(typeof form.elements[i]  !== "undefined"){
-            if( form.elements[i].value!=""){
+        if(typeof form[i]  !== "undefined"){
+            if( form[i].value!=""){
                 // Find var name
-                var from=form.elements[i].name.lastIndexOf('[')+1;
-                var to=form.elements[i].name.lastIndexOf(']');
-                var elementname=form.elements[i].name.substring(from,to);
+                var from=form[i].name.lastIndexOf('[')+1;
+                var to=form[i].name.lastIndexOf(']');
+                var elementname=form[i].name.substring(from,to);
                 // Find associated form name
-                var concreteform=form.elements[i].name.substring(0,from-1);   
+                var concreteform=form[i].name.substring(0,from-1);   
                 // Find number of associated form
                 to=from;
                 from=concreteform.lastIndexOf('_')+1;
-                number=form.elements[i].name.substring(from,to-1);
+                number=form[i].name.substring(from,to-1);
                 // If is number make array
                 if(isFinite(number)) number="["+number+"]";
                 else number="";              
                 // Add obteined value to result
-                urlopts+="&"+elementname+number+"="+form.elements[i].value;
+                urlopts+="&"+elementname+number+"="+form[i].value;
                 
             }
         }
     }
+    
     
     form=document.getElementById('form_graphviewer_graph_properties_0');
     var options=new Array();
@@ -220,9 +222,12 @@ function getURLoptions(formname){
 function removeSingleFormTo(formname,graphroute){
     if(singleformsnum[formname]>1){
         singleformsnum[formname]--;
-        var table=document.getElementById(formname+"_"+singleformsnum[formname]);
-        var padre=table.parentNode;
-        var removed=padre.removeChild(table);
+        console.debug($("[id='"+formname+"_"+singleformsnum[formname]+"'],input:not([id$='_properties_0']"));
+        $("[id^='"+formname+"_"+singleformsnum[formname]+"'],input:not([id$='_properties_0']").remove();
+        //var table=document.getElementById(formname+"_"+singleformsnum[formname]);
+        //console.debug(formname+"_"+singleformsnum[formname]);
+        //var padre=table.parentNode;
+        //var removed=padre.removeChild(table);
         update(formname,graphroute);
     }
 }
@@ -243,12 +248,12 @@ function setUpdateListener(formname,graphroute){
         });
     });
 
-    var form=document.getElementById('form_'+formname);
-
-    for (i=0;i<form.elements.length;i++)
+    var form=$("[id^='"+formname+"_']:input,input:not([id$='_properties_0'])").toArray();
+    
+    for (i=0;i<form.length;i++)
     {
-        if(typeof form.elements[i]  !== "undefined"){
-            $(form.elements[i]).change(function() {
+        if(typeof form[i]  !== "undefined"){
+            $(form[i]).change(function() {
                 update(formname,graphroute);
             });
         }
