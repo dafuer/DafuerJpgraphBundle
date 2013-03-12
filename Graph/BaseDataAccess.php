@@ -28,9 +28,61 @@ class BaseDataAccess{
     }
     
     
-    public function emptyResult(){
-        return array('xdata' => array(array()), 'ydata' => array(array()));
+    /*
+     * This function return if this graph is only legend
+     */
+    public function readOnlyLegend($params){
+        if(isset($params['graph_legend_only']) && ($params['graph_legend_only']===true || strtolower($params['graph_legend_only'])==='true')){
+            return true;
+        }else{
+            return false;
+        }
     }
+    
+    /*
+     * This function create a result in funtion of legend_only parameter
+     */
+    public function createResult($params, $plotNames=array()){
+        if($this->readOnlyLegend($params)){
+            return $this->createOneResult($plotNames);
+        }else{
+            return $this->createEmptyResult($plotNames);
+        }
+    }
+    
+    public function createEmptyResult($plotNames=array()){
+        $result=array('xdata' => array(), 'ydata' => array(), 'custom'=>array() );
+        if(count($plotNames)==0){
+            $result['xdata'][0]=array();
+            $result['ydata'][0]=array();
+            $result['custom'][0]=array();
+        }else{
+            foreach($plotNames as $name){
+                $result['xdata'][$name.'']=array();
+                $result['ydata'][$name.'']=array();
+                $result['custom'][$name.'']=array();                    
+            }
+        }
+        
+        return $result;
+    }
+    
+    public function createOneResult($plotNames=array()){
+        $result=array('xdata' => array(), 'ydata' => array(), 'custom'=>array() );
+        if(count($plotNames)==0){
+            $result['xdata'][0]=array(0);
+            $result['ydata'][0]=array(0);
+            $result['custom'][0]=array(0);
+        }else{
+            foreach($plotNames as $name){
+                $result['xdata'][$name.'']=array(0);
+                $result['ydata'][$name.'']=array(0);
+                $result['custom'][$name.'']=array(0);                    
+            }
+        }
+        
+        return $result;
+    }    
     
     public function errorResult(){
         return array('xdata' => array(array()), 'ydata' => array(array()), 'custom' => array(array('lineplot_error'=>true)));
