@@ -556,6 +556,8 @@ class Jpgrapher {
                   $this->prepareLegend($values);
                   $this->graph->legend->SetAbsPos(0, 0, 'left');
                   $this->graph->legend->Hide(false);
+                  $this->graph->legend->SetShadow(false,0);
+                  $this->graph->legend->SetFrameWeight(0);
                   $this->graph->doPrestrokeAdjustments();
                   $this->graph->legend->Stroke($this->graph->img);
                   return $this->graph->cache->PutAndStream($this->graph->img,$this->graph->cache_name,$this->graph->inline,null);
