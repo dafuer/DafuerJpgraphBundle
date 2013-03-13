@@ -18,7 +18,7 @@
             <BR />
 
             {% if viewerformpath is not null %}                
-                {% render viewerformpath  %}
+                {{ render(controller(viewerformpath))  }}
             {% endif %}   
             
             <input type="button" value="Update All" class="btn-primary" onClick="update_all('{{ graphroute }}')" />                

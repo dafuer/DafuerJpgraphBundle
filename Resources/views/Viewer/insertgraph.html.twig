@@ -8,7 +8,7 @@
                 <div id="more_{{ formname }}"></div>
                 
                 {% if formgraphpath is not null %}                
-                    {% render formgraphpath  with {'formname': formname } %}
+                    {{ render(controller(formgraphpath, {'formname': formname })) }}
                 {% endif %}
                 
                 <input type="button" onclick="update('{{ formname }}','{{ graphroute }}',true)" name="{{ formname }}[update]" value="Update" class="btn-primary" />                
