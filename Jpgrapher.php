@@ -305,6 +305,10 @@ class Jpgrapher {
             if ($values['lineplot'] == "errorlineplot") {
                 require_once ($this->path.'jpgraph_line.php');
                 require_once ($this->path.'jpgraph_error.php');
+                // Add control for graphs with one data
+                if(count($ydata)==1 && $ydata[0]==0){
+                    $ydata[]=0;
+                }
                 if (is_null($xdata) || count($xdata)==0) {
                     $lineplot = new \ErrorLinePlot($ydata);
                 } else {
@@ -314,6 +318,13 @@ class Jpgrapher {
 
             if ($values['lineplot'] == "boxplot") {
                 require_once ($this->path.'jpgraph_stock.php');
+                // Add control for graphs with one data
+                if(count($ydata)==1 && $ydata[0]==0){
+                    $ydata[]=0;
+                    $ydata[]=0;
+                    $ydata[]=0;
+                    $ydata[]=0;
+                }                
                 if (!isset($xdata)|| count($xdata)==0) {
                     $lineplot = new \BoxPlot($ydata);
                 } else {
