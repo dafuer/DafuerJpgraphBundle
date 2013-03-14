@@ -687,8 +687,8 @@ class Jpgrapher {
 
         // X-Axis
 
-        if (isset($values['graph_xaxis_ticklabels'])) {
-            $this->graph->xaxis->SetTickLabels($values["graph_xaxis_ticklabels"]);
+        if (isset($values['graph_xaxis_tick_labels'])) {
+            $this->graph->xaxis->SetTickLabels($values["graph_xaxis_tick_labels"]);
         }
 
         if (isset($values['graph_yaxis_ticklabels'])) {

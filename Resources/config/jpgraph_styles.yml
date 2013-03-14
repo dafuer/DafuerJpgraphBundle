@@ -16,7 +16,7 @@
 #    graph_box: [true, '#E3E3E3', 1]
 #    graph_title: string
 #    graph_title_font: string XXXX
-#    graph_xaxis_ticklabels: array # Array de valores o %XDATA% para referirse a los valores del array de X_
+#    graph_xaxis_tick_labels: array # Array de valores o %XDATA% para referirse a los valores del array de X_
 #    graph_xgrid_show: true
 #    graph_xgrid_linestyle: "solid"
 #    graph_xgrid_color: '#E3E3E3'   
@@ -89,7 +89,7 @@ graph_example2:
     graph_antialiasing: false
        
 xaxis_example: 
-    graph_xaxis_ticklabels: [ 'A', 'B', 'C', 'D' ]
+    graph_xaxis_tick_labels: [ 'A', 'B', 'C', 'D' ]
     graph_xaxis_linestyle: "solid"
       
 lineplot_example:
@@ -143,7 +143,7 @@ legend_timeserie:
     graph_legend_show:          true            # true    
   
 xaxis_timeserie: 
-    #graph_xaxis_ticklabels: [ 'a', 'b', 'c', 'd' ]
+    #graph_xaxis_tick_labels: [ 'a', 'b', 'c', 'd' ]
     graph_xaxis_title: ''
     graph_xaxis_labelangle: 90 
     graph_xaxis_labelformatcallback: AutoTimeCallback
