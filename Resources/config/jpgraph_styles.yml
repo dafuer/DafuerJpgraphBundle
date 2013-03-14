@@ -97,7 +97,7 @@ lineplot_example:
     lineplot: lineplot
     lineplot_color: "#6495ED"
     lineplot_legend: 'Line1'
-    graph_xaxis_labelangle: 0 
+    graph_xaxis_label_angle: 0 
 
 ##### FIN DE EXAMPLES #####################
 
@@ -145,7 +145,7 @@ legend_timeserie:
 xaxis_timeserie: 
     #graph_xaxis_tick_labels: [ 'a', 'b', 'c', 'd' ]
     graph_xaxis_title: ''
-    graph_xaxis_labelangle: 90 
+    graph_xaxis_label_angle: 90 
     graph_xaxis_labelformatcallback: AutoTimeCallback
     graph_xaxis_pos: min    
 
@@ -182,7 +182,7 @@ lineplot_timeserie:
     lineplot_legend: ''
     graph_yscale_autoticks: true
     graph_xaxis_labelformatcallback:  AutoTimeCallback
-    graph_xaxis_labelangle: 90    
+    graph_xaxis_label_angle: 90    
 
 errorlineplot_timeserie:
     style: [ lineplot_timeserie ]

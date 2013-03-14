@@ -660,8 +660,8 @@ class Jpgrapher {
 
         // Y- Axis
 
-        if (isset($values['graph_xaxis_labelangle'])) {
-            $this->graph->xaxis->SetLabelAngle($values["graph_xaxis_labelangle"]);
+        if (isset($values['graph_xaxis_label_angle'])) {
+            $this->graph->xaxis->SetLabelAngle($values["graph_xaxis_label_angle"]);
         }
 
         if (isset($values['graph_yaxis_title'])){
