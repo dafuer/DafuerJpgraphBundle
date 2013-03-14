@@ -632,12 +632,12 @@ class Jpgrapher {
     }
     
     private function prepareAxis($values){
-        if (isset($values['graph_xaxis_labelformatcallback'])) { // If it has labelformatcallback
-            if (is_callable($values['graph_xaxis_labelformatcallback'])) {
-                $this->graph->xaxis->SetLabelFormatCallback($values['graph_xaxis_labelformatcallback']);
+        if (isset($values['graph_xaxis_label_formatcallback'])) { // If it has labelformatcallback
+            if (is_callable($values['graph_xaxis_label_formatcallback'])) {
+                $this->graph->xaxis->SetLabelFormatCallback($values['graph_xaxis_label_formatcallback']);
             } else {
                 $callbacks = $this->getCallFunctions();
-                if ($values['graph_xaxis_labelformatcallback'] == 'AutoTimeCallback') { // If it
+                if ($values['graph_xaxis_label_formatcallback'] == 'AutoTimeCallback') { // If it
                     $xminmax = $this->graph->GetXMinMax();
                     if ($xminmax[0] != null) {
                         $tpo = $xminmax[1] - $xminmax[0];
@@ -650,7 +650,7 @@ class Jpgrapher {
                         }
                     }
                 } else {
-                    $this->graph->xaxis->SetLabelFormatCallback($callbacks[$values['graph_xaxis_labelformatcallback']]);
+                    $this->graph->xaxis->SetLabelFormatCallback($callbacks[$values['graph_xaxis_label_formatcallback']]);
                 }
             }
         }
