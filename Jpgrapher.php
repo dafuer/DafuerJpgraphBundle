@@ -672,16 +672,16 @@ class Jpgrapher {
         if (isset($values['graph_yaxis_titlemargin'])){
             $this->graph->yaxis->SetTitleMargin($values["graph_yaxis_titlemargin"]);
         }
-        if (isset($values['graph_yaxis_hideline'])){
-            $this->graph->yaxis->HideLine($values['graph_yaxis_hideline']);                
+        if (isset($values['graph_yaxis_showline'])){
+            $this->graph->yaxis->HideLine(!$values['graph_yaxis_showline']);                
         }
 
-        if (isset($values['graph_yaxis_hidelabels'])){
-            $this->graph->yaxis->HideLabels($values['graph_yaxis_hidelabels']);      
+        if (isset($values['graph_yaxis_showlabels'])){
+            $this->graph->yaxis->HideLabels(!$values['graph_yaxis_showlabels']);      
         }
 
-        if (isset($values['graph_xaxis_hidelabels'])){
-            $this->graph->xaxis->HideLabels($values['graph_xaxis_hidelabels']);                
+        if (isset($values['graph_xaxis_showlabels'])){
+            $this->graph->xaxis->HideLabels(!$values['graph_xaxis_showlabels']);                
         }                
 
 
@@ -730,28 +730,28 @@ class Jpgrapher {
             $this->graph->yaxis->SetTickSide(constant($values['graph_yaxis_tickside']));
         }                 
 
-        if (isset($values['graph_xaxis_tick_hide_minor']) || isset($values['graph_xaxis_tick_hide_major'])) {
-            if(!isset($values['graph_xaxis_tick_hide_minor'])){
-                $values['graph_xaxis_tick_hide_minor']=true;
-                $values['graph_yaxis_tick_hide_major']=true;
+        if (isset($values['graph_xaxis_tick_show_minor']) || isset($values['graph_xaxis_tick_show_major'])) {
+            if(!isset($values['graph_xaxis_tick_show_minor'])){
+                $values['graph_xaxis_tick_show_minor']=false;
+                $values['graph_yaxis_tick_show_major']=false;
             } 
-            if(!isset($values['graph_xaxis_tick_hide_major'])){
-                $values['graph_xaxis_tick_hide_major']=true;
+            if(!isset($values['graph_xaxis_tick_show_major'])){
+                $values['graph_xaxis_tick_show_major']=false;
             }
 
-            $this->graph->xaxis->HideTicks($values['graph_xaxis_tick_hide_minor'], $values['graph_xaxis_tick_hide_major']);
+            $this->graph->xaxis->HideTicks(!$values['graph_xaxis_tick_show_minor'], !$values['graph_xaxis_tick_show_major']);
         }                 
 
-        if (isset($values['graph_yaxis_tick_hide_minor']) || isset($values['graph_yaxis_tick_hide_major'])) {
-            if(!isset($values['graph_yaxis_tick_hide_minor'])){
-                $values['graph_yaxis_tick_hide_minor']=true;
-                $values['graph_yaxis_tick_hide_major']=true;
+        if (isset($values['graph_yaxis_tick_show_minor']) || isset($values['graph_yaxis_tick_show_major'])) {
+            if(!isset($values['graph_yaxis_tick_show_minor'])){
+                $values['graph_yaxis_tick_show_minor']=false;
+                $values['graph_yaxis_tick_show_major']=false;
             } 
-            if(!isset($values['graph_yaxis_tick_hide_major'])){
-                $values['graph_yaxis_tick_hide_major']=true;
+            if(!isset($values['graph_yaxis_tick_show_major'])){
+                $values['graph_yaxis_tick_show_major']=false;
             }
 
-            $this->graph->yaxis->HideTicks($values['graph_yaxis_tick_hide_minor'], $values['graph_yaxis_tick_hide_major']);
+            $this->graph->yaxis->HideTicks(!$values['graph_yaxis_tick_show_minor'], !$values['graph_yaxis_tick_show_major']);
         }                 
 
         if (isset($values['graph_xaxis_tick_size_minor']) || isset($values['graph_xaxis_tick_size_major'])) {
@@ -1028,16 +1028,16 @@ class Jpgrapher {
             $this->graph->legend->SetFillColor($values['graph_legend_fillcolor']);
         }
 
-        if (isset($values['graph_legend_hide'])) {
-            if(is_string($values['graph_legend_hide'])){
-                $val=strtolower($values['graph_legend_hide']);
+        if (isset($values['graph_legend_show'])) {
+            if(is_string($values['graph_legend_show'])){
+                $val=strtolower($values['graph_legend_show']);
                 if ($val=="false"){
-                    $this->graph->legend->Hide(false);
-                }else{
                     $this->graph->legend->Hide(true);
+                }else{
+                    $this->graph->legend->Hide(false);
                 }
             }else{
-                $this->graph->legend->Hide($values['graph_legend_hide']);
+                $this->graph->legend->Hide(!$values['graph_legend_show']);
             }
         }                
 

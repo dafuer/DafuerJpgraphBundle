@@ -17,8 +17,6 @@
 #    graph_title: string
 #    graph_title_font: string XXXX
 #    graph_xaxis_ticklabels: array # Array de valores o %XDATA% para referirse a los valores del array de X_
-#    graph_yaxis_hidezerolabel: boolean
-#    graph_yaxis_hideline: boolean
 #    graph_xgrid_show: true
 #    graph_xgrid_linestyle: "solid"
 #    graph_xgrid_color: '#E3E3E3'   
@@ -31,14 +29,10 @@
 #    graph_xaxis_pos: min
 #    graph_yaxis_pos: min
 #    graph_xaxis_tickside: SIDE_DOWN
-#    graph_xaxis_tick_hide_major: false
-#    graph_xaxis_tick_hide_minor: false
 #    graph_xaxis_tick_size_major: 15
 #    graph_xaxis_tick_size_minor: 10
 #    
 #    graph_yaxis_tickside: SIDE_LEFT
-#    graph_yaxis_tick_hide_major: false
-#    graph_yaxis_tick_hide_minor: false
 #    graph_yaxis_tick_size_major: 15
 #    graph_yaxis_tick_size_minor: 10  
 #    graph_xaxis_tick_color:
@@ -54,7 +48,15 @@
 #    graph_xaxis_label_color
 #    graph_yaxis_label_color
 #    graph_legend_only: Only print a legend
-
+#graph_yaxis_tick_show_major
+#graph_yaxis_tick_show_minor
+#
+#graph_legend_show
+#
+#graph_yaxis_showline
+#
+#graph_yaxis_showlabels
+#graph_xaxis_showlabels
 #generic_lineplot:
 #    lineplot_color: color
 #    lineplot_weight: integer
@@ -138,7 +140,7 @@ legend_timeserie:
     graph_legend_layout:        LEGEND_VERT     # LEGEND_VERT
     graph_legend_shadow:        darkgray@0.5    # 'darkgray@0.5'
     graph_legend_fillcolor:     white@0         # 'white@0'
-    graph_legend_hide:          true            # true    
+    graph_legend_show:          true            # true    
   
 xaxis_timeserie: 
     #graph_xaxis_ticklabels: [ 'a', 'b', 'c', 'd' ]
@@ -149,8 +151,7 @@ xaxis_timeserie:
 
 yaxis_timeserie: 
     graph_yaxis_number: 0
-    graph_yaxis_hidezerolabel: true
-    graph_yaxis_hideline: false
+    graph_yaxis_showline: false
     graph_yaxis_title: ''
     graph_yaxis_titlemargin: 45   
                              
