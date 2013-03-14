@@ -669,8 +669,8 @@ class Jpgrapher {
         }
 
 
-        if (isset($values['graph_yaxis_titlemargin'])){
-            $this->graph->yaxis->SetTitleMargin($values["graph_yaxis_titlemargin"]);
+        if (isset($values['graph_yaxis_title_margin'])){
+            $this->graph->yaxis->SetTitleMargin($values["graph_yaxis_title_margin"]);
         }
         if (isset($values['graph_yaxis_showline'])){
             $this->graph->yaxis->HideLine(!$values['graph_yaxis_showline']);                
@@ -705,8 +705,8 @@ class Jpgrapher {
             }
         } 
 
-        if (isset($values['graph_xaxis_titlemargin'])){
-            $this->graph->xaxis->SetTitleMargin($values["graph_xaxis_titlemargin"]);
+        if (isset($values['graph_xaxis_title_margin'])){
+            $this->graph->xaxis->SetTitleMargin($values["graph_xaxis_title_margin"]);
         }
 
         if (isset($values['graph_axis_tickposition'])) {
@@ -722,12 +722,12 @@ class Jpgrapher {
             $this->graph->yaxis->SetTickPositions($values['graph_yaxis_tickposition'][0],$values['graph_yaxis_tickposition'][1],$values['graph_yaxis_tickposition'][2]);
         }          
 
-        if (isset($values['graph_xaxis_tickside'])) {
-            $this->graph->xaxis->SetTickSide(constant($values['graph_xaxis_tickside']));
+        if (isset($values['graph_xaxis_tick_side'])) {
+            $this->graph->xaxis->SetTickSide(constant($values['graph_xaxis_tick_side']));
         } 
 
-        if (isset($values['graph_yaxis_tickside'])) {
-            $this->graph->yaxis->SetTickSide(constant($values['graph_yaxis_tickside']));
+        if (isset($values['graph_yaxis_tick_side'])) {
+            $this->graph->yaxis->SetTickSide(constant($values['graph_yaxis_tick_side']));
         }                 
 
         if (isset($values['graph_xaxis_tick_show_minor']) || isset($values['graph_xaxis_tick_show_major'])) {

@@ -28,11 +28,11 @@
 #    graph_yaxis_tick_interval
 #    graph_xaxis_pos: min
 #    graph_yaxis_pos: min
-#    graph_xaxis_tickside: SIDE_DOWN
+#    graph_xaxis_tick_side: SIDE_DOWN
 #    graph_xaxis_tick_size_major: 15
 #    graph_xaxis_tick_size_minor: 10
 #    
-#    graph_yaxis_tickside: SIDE_LEFT
+#    graph_yaxis_tick_side: SIDE_LEFT
 #    graph_yaxis_tick_size_major: 15
 #    graph_yaxis_tick_size_minor: 10  
 #    graph_xaxis_tick_color:
@@ -64,7 +64,16 @@
 #    lineplot_max_ptos_to_mark: integer #If #points < max_ptos_to_mark, marks are used_ If -1 never used_ if 0 never use mark_ if -1 always use mark_
 #    lineplot_mark_color: color
 #    lineplot_mark_width: integer
-
+#graph_xaxis_tick_labels 
+#graph_yaxis_tick_labels
+#graph_xaxis_tick_labellogtype 
+#graph_yaxis_tick_labellogtype
+#graph_xaxis_label_angle 
+#graph_xaxis_label_formatcallback
+#graph_yaxis_tick_side
+#graph_xaxis_tick_side
+#graph_xaxis_title_margin
+#graph_yaxis_title_margin
 
 #graph_yscale_min
 #...
@@ -153,7 +162,7 @@ yaxis_timeserie:
     graph_yaxis_number: 0
     graph_yaxis_showline: false
     graph_yaxis_title: ''
-    graph_yaxis_titlemargin: 45   
+    graph_yaxis_title_margin: 45   
                              
 title_timeserie: 
     graph_title: ''
