@@ -691,8 +691,8 @@ class Jpgrapher {
             $this->graph->xaxis->SetTickLabels($values["graph_xaxis_tick_labels"]);
         }
 
-        if (isset($values['graph_yaxis_ticklabels'])) {
-            $this->graph->yaxis->SetTickLabels($values["graph_yaxis_ticklabels"]);
+        if (isset($values['graph_yaxis_tick_labels'])) {
+            $this->graph->yaxis->SetTickLabels($values["graph_yaxis_tick_labels"]);
         }
 
 
@@ -812,12 +812,12 @@ class Jpgrapher {
         }                     
         //$this->graph->ynaxis[0]->SetColor('#E3E3E3','blue');
 
-        if(isset($values['graph_xaxis_tick_labellogtype']) && get_class($this->graph->xaxis->scale->ticks)=='LogTicks'){
-            $this->graph->xaxis->scale->ticks->SetLabelLogType(constant($values['graph_xaxis_tick_labellogtype']));
+        if(isset($values['graph_xaxis_tick_label_logtype']) && get_class($this->graph->xaxis->scale->ticks)=='LogTicks'){
+            $this->graph->xaxis->scale->ticks->SetLabelLogType(constant($values['graph_xaxis_tick_label_logtype']));
         }
 
-        if(isset($values['graph_yaxis_tick_labellogtype']) && get_class($this->graph->yaxis->scale->ticks)=='LogTicks'){
-            $this->graph->yaxis->scale->ticks->SetLabelLogType(constant($values['graph_yaxis_tick_labellogtype']));
+        if(isset($values['graph_yaxis_tick_label_logtype']) && get_class($this->graph->yaxis->scale->ticks)=='LogTicks'){
+            $this->graph->yaxis->scale->ticks->SetLabelLogType(constant($values['graph_yaxis_tick_label_logtype']));
         }
 
 
