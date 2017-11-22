@@ -22,7 +22,7 @@ class InstallconstantsCommand extends Command
     {
         $container = $this->getApplication()->getKernel()->getContainer();
         $constants=$container->getParameter("dafuer_jpgraph.constants");
-        $path=$container->getParameter("kernel.root_dir").'/../vendor/asial/jpgraph/src/';
+        $path=$container->getParameter("kernel.root_dir").'/../vendor/jpgraph/jpgraph/src/';
         
         
         foreach($constants as $file=>$constant){

@@ -21,7 +21,7 @@ class FixantialiaserrorCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $container = $this->getApplication()->getKernel()->getContainer();
-        $path=$container->getParameter("kernel.root_dir").'/../vendor/asial/jpgraph/src/';
+        $path=$container->getParameter("kernel.root_dir").'/../vendor/jpgraph/jpgraph/src/';
         
         $text=file_get_contents($path.'gd_image.inc.php');
         
