@@ -53,7 +53,7 @@ class Jpgrapher {
         $this->config_file = $config_file;
         //$this->viewer_file = $viewer_file;
         $this->options = Yaml::parse($this->config_file);
-        $this->path=  $kernel_path."/../vendor/asial/jpgraph/src/";
+        $this->path=  $kernel_path."/../vendor/jpgraph/jpgraph/src/";
         //$this->viewer = Yaml::parse($this->viewer_file);
     }
 
